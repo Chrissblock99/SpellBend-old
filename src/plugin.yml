@@ -1,0 +1,6 @@
+main: com.SpellBend.PluginMain
+name: SpellBend
+author: Chriss99
+description: SpellBend in Java
+version: 0.1
+api-version: 1.17
