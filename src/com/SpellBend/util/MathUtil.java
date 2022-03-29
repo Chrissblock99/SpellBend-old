@@ -1,6 +1,9 @@
 package com.SpellBend.util;
 
 public class MathUtil {
+    public static final double DEGTORAD = Math.PI/180;
+    public static final double RADTODEG = 180/Math.PI;
+
     public static double random(double min, double max) {
         return Math.random() * (max-min) + min;
     }

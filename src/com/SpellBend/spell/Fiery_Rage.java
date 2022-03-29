@@ -3,9 +3,12 @@ package com.SpellBend.spell;
 import com.SpellBend.PluginMain;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.organize.Enums;
+import com.SpellBend.util.MathUtil;
 import com.SpellBend.util.playerDataUtil;
 import com.SpellBend.util.VectorConversion;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -43,14 +46,23 @@ public class Fiery_Rage extends Spell implements killable {
                 location.setYaw(startRot + time);
                 player.teleport(location);
 
-                //summon particles here
+                Particle.DustTransition dustOptions = new Particle.DustTransition(
+                        Color.fromRGB((int) MathUtil.random(210d, 255d), (int) MathUtil.random(80d, 120d), (int) MathUtil.random(0d, 40d)),
+                        Color.fromRGB((int) MathUtil.random(210d, 255d), (int) MathUtil.random(80d, 120d), (int) MathUtil.random(0d, 40d)),
+                        (float) MathUtil.random(1.3d, 2d));
+                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos(time*MathUtil.DEGTORAD+Math.PI),
+                        time/180f, Math.sin(time*MathUtil.DEGTORAD+Math.PI)), 1, dustOptions);
+                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos((time)*MathUtil.DEGTORAD+Math.PI*(2f/3f)),
+                        time/180f, Math.sin((time)*MathUtil.DEGTORAD+Math.PI*(2f/3f))), 1, dustOptions);
+                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos((time)*MathUtil.DEGTORAD+Math.PI*(1f/3f)),
+                        time/180f, Math.sin((time)*MathUtil.DEGTORAD+Math.PI*(1f/3f))), 1, dustOptions);
 
                 if (time == 360) {
                     windupTask.cancel();
                     launchPlayer();
                     activate();
                 }
-                time += 18;
+                time++/* += 18*/;
             }
         }.runTaskTimer(PluginMain.getInstance(), 0, 1);
     }
@@ -71,20 +83,24 @@ public class Fiery_Rage extends Spell implements killable {
         playerDataUtil.addDmgMod(player, "spell", 1.5f);
 
         activeTask = new BukkitRunnable() {
-            int time = 0;
+            int time = 200;
 
             @Override
             public void run() {
-                //summon particles here
+                Particle.DustTransition dustOptions = new Particle.DustTransition(
+                        Color.fromRGB((int) MathUtil.random(210d, 255d), (int) MathUtil.random(80d, 120d), (int) MathUtil.random(0d, 40d)),
+                        Color.fromRGB((int) MathUtil.random(210d, 255d), (int) MathUtil.random(80d, 120d), (int) MathUtil.random(0d, 40d)),
+                        (float) (0.2d + MathUtil.random(time/80d, 1d+time/80d)));
+                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(0d, 1d, 0d), 1, dustOptions);
 
-                if (time == 200) {
+                if (time == 0) {
                     playerDataUtil.removeDmgMod(player, "spell", 1.5f);
                     playerDataUtil.setCoolDown(player, spellType, 30f, "cooldown");
 
                     activeTask.cancel();
                     SpellHandler.activeSpells.get(player.getUniqueId()).remove(instance);
                 }
-                time++;
+                time--;
             }
         }.runTaskTimer(PluginMain.getInstance(), 0, 1);
     }

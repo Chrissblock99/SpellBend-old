@@ -357,10 +357,12 @@ public class playerDataUtil {
             try {
                 coolDowns.put(Enums.SpellType.valueOf(entry[0]), new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
                 Bukkit.getLogger().info(entry[0] + ": " + new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
+            } catch (NumberFormatException exception) {
+                Bukkit.getLogger().warning("String \"" + infoStrings[0] + "\" is supposed to be a Float but isn't! " + exception);
             } catch (IllegalArgumentException exception) {
-                Bukkit.getLogger().warning("String \"" + entry[0] + "\" is supposed to be a SpellType but isn't!");
+                Bukkit.getLogger().warning("String \"" + entry[0] + "\" is supposed to be a SpellType but isn't! " + exception);
             } catch (ParseException exception) {
-                Bukkit.getLogger().warning("String \"" + infoStrings[1] + "\" is supposed to be a Date but isn't!");
+                Bukkit.getLogger().warning("String \"" + infoStrings[1] + "\" is supposed to be a Date but isn't! " + exception);
             }
         }
 
