@@ -17,7 +17,7 @@ public class onFoodLevelChange implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
 
-        if (player.getGameMode() == GameMode.ADVENTURE) return;
+        if (player.getGameMode() != GameMode.ADVENTURE) return;
         event.setCancelled(true);
         player.setFoodLevel(20);
     }
