@@ -330,7 +330,6 @@ public class playerDataUtil {
             Bukkit.getLogger().warning(player.getDisplayName() + " is already loaded when loading coolDowns, skipping loading!");
             return;
         }
-        HashMap<Enums.SpellType, CoolDownEntry> coolDowns = new HashMap<>();
         ArrayList<String> coolDownEntries;
 
         PersistentDataContainer data = player.getPersistentDataContainer();
@@ -346,22 +345,30 @@ public class playerDataUtil {
             return;
         }
 
+        HashMap<Enums.SpellType, CoolDownEntry> coolDowns = new HashMap<>();
+
         for (String coolDownEntry : coolDownEntries) {
             String[] entry = coolDownEntry.split(": ");
             String[] infoStrings = entry[1].split("; ");
 
+            Bukkit.getLogger().info(entry[0]);
+            for (String string : infoStrings) Bukkit.getLogger().info(string);
+
             try {
                 coolDowns.put(Enums.SpellType.valueOf(entry[0]), new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
+                Bukkit.getLogger().info(entry[0] + ": " + new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
             } catch (IllegalArgumentException exception) {
                 Bukkit.getLogger().warning("String \"" + entry[0] + "\" is supposed to be a SpellType but isn't!");
-                return;
             } catch (ParseException exception) {
                 Bukkit.getLogger().warning("String \"" + infoStrings[1] + "\" is supposed to be a Date but isn't!");
-                return;
             }
         }
 
         persistentPlayerSessionStorage.coolDowns.put(player.getUniqueId(), coolDowns);
+        for (String coolDownEntry : coolDownEntries) {
+            String[] entry = coolDownEntry.split(": ");
+            Bukkit.getLogger().info(entry[0] + ": " + getCoolDownEntry(player, Enums.SpellType.valueOf(entry[0])));
+        }
     }
 
     public static void setCoolDown(@NotNull Player player, @NotNull Enums.SpellType spellType, float timeInSeconds, String CDType) {
@@ -465,7 +472,8 @@ public class playerDataUtil {
         }
         HashMap<Enums.SpellType, CoolDownEntry> coolDowns = persistentPlayerSessionStorage.coolDowns.get(player.getUniqueId());
         for (Map.Entry<Enums.SpellType, CoolDownEntry> entry : coolDowns.entrySet())
-            if (entry.getValue().getRemainingCoolDownTime() <= 0.1f) coolDowns.remove(entry.getKey());
+            if (entry.getValue().getRemainingCoolDownTime() <= 0.1f)
+                coolDowns.remove(entry.getKey());
         return coolDowns;
     }
 

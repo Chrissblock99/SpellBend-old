@@ -1,5 +1,7 @@
 package com.SpellBend.organize;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Date;
 
 public class CoolDownEntry {
@@ -13,11 +15,16 @@ public class CoolDownEntry {
         this.coolDownType = coolDownType;
     }
 
-    public boolean equals(CoolDownEntry compareTo) {
+    public boolean equals(@NotNull CoolDownEntry compareTo) {
         return timeInS == compareTo.timeInS && startDate.equals(compareTo.startDate) && coolDownType.equals(compareTo.coolDownType);
     }
 
     public float getRemainingCoolDownTime() {
         return timeInS-(new Date().getTime()-startDate.getTime())/1000f;
+    }
+
+    @Override
+    public String toString () {
+        return timeInS + ", " + startDate + ", " + coolDownType;
     }
 }
