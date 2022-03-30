@@ -50,19 +50,19 @@ public class Fiery_Rage extends Spell implements killable {
                         Color.fromRGB((int) MathUtil.random(210d, 255d), (int) MathUtil.random(80d, 120d), (int) MathUtil.random(0d, 40d)),
                         Color.fromRGB((int) MathUtil.random(210d, 255d), (int) MathUtil.random(80d, 120d), (int) MathUtil.random(0d, 40d)),
                         (float) MathUtil.random(1.3d, 2d));
-                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos(time*MathUtil.DEGTORAD+Math.PI),
-                        time/180f, Math.sin(time*MathUtil.DEGTORAD+Math.PI)), 1, dustOptions);
-                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos((time)*MathUtil.DEGTORAD+Math.PI*(2f/3f)),
-                        time/180f, Math.sin((time)*MathUtil.DEGTORAD+Math.PI*(2f/3f))), 1, dustOptions);
-                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos((time)*MathUtil.DEGTORAD+Math.PI*(1f/3f)),
-                        time/180f, Math.sin((time)*MathUtil.DEGTORAD+Math.PI*(1f/3f))), 1, dustOptions);
+                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos((time*(1f/3f))*MathUtil.DEGTORAD+Math.PI*(1f/3f)),
+                        time/180f, Math.sin((time*(1f/3f))*MathUtil.DEGTORAD+Math.PI*(1f/3f))), 1, dustOptions);
+                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos((time*(1f/3f))*MathUtil.DEGTORAD+Math.PI),
+                        time/180f, Math.sin((time*(1f/3f))*MathUtil.DEGTORAD+Math.PI)), 1, dustOptions);
+                player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(Math.cos((time*(1f/3f))*MathUtil.DEGTORAD+Math.PI*(5f/3f)),
+                        time/180f, Math.sin((time*(1f/3f))*MathUtil.DEGTORAD+Math.PI*(5f/3f))), 1, dustOptions);
 
                 if (time == 360) {
                     windupTask.cancel();
                     launchPlayer();
                     activate();
                 }
-                time++/* += 18*/;
+                time += 18;
             }
         }.runTaskTimer(PluginMain.getInstance(), 0, 1);
     }

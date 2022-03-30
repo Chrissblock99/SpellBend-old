@@ -56,7 +56,7 @@ public class test {
         subCommands.put("memory tasks", new advancedSubCommand(new Class[]{String.class}, new String[]{"filter"}) {
             @Override
             public boolean onCommand(CommandSender sender, ArrayList<Object> arguments) {
-                boolean filtering = !((String) arguments.get(0)).equals("all");
+                boolean filtering = !arguments.get(0).equals("all");
                 String filter = null;
                 if (filtering) filter = (String) arguments.get(0);
                 int printed = 0;
@@ -124,10 +124,10 @@ public class test {
         subCommands.put("value cooldown get", new advancedSubCommand(new Class[]{String.class, Player.class}, new String[]{"coolDownType", "player"}) {
             @Override
             public boolean onCommand(CommandSender sender, ArrayList<Object> arguments) {
-                String type = (String) arguments.get(0);
+                String type = ((String) arguments.get(0)).toUpperCase();
                 Player player = (Player) arguments.get(1);
 
-                if (type.equals("all")) {
+                if (type.equals("ALL")) {
                     sender.sendMessage("active Cooldowns of " + player.getDisplayName() + ":");
                     Set<Map.Entry<Enums.SpellType, CoolDownEntry>> entrySet = playerDataUtil.getCoolDowns(player).entrySet();
                     if (entrySet.size() == 0) {

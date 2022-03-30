@@ -179,7 +179,7 @@ public abstract class advancedCommandBase extends BukkitCommand implements Comma
             if (parseTo.getSuperclass() == Enum.class) {
                 try {
                     //noinspection rawtypes, unchecked
-                    Enum type = Enum.valueOf(parseTo, parseFrom);
+                    Enum type = Enum.valueOf(parseTo, parseFrom.toUpperCase());
                     parsedArguments.add(type);
                     continue;
                 } catch (IllegalArgumentException exception) {
