@@ -11,17 +11,17 @@ public class EventUtil {
     }
 
     public static void registerAllEvents() {
-        new onPlayerJoin();
-        new onPlayerChat();
-        new onInventoryClick();
-        new onPlayerQuit();
+        new playerJoin();
+        new playerChat();
+        new inventoryClick();
+        new playerLeave();
 
-        new onPlayerLevelChange();
+        new playerLevelChange();
         //new onHangingBreak();    //cancels all so we can't use it
-        new onHangingBreakByEntity();
-        new onPlayerInteract();
-        new onFoodLevelChange();
-        new onPlayerInteractEntity();
-        new onEntityDamageByEntity();
+        new entityBreakPainting();
+        new playerInteractBlock();
+        new foodLevelChange();
+        new playerInteractEntity();
+        new entityDamageEntity();
     }
 }

@@ -6,8 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class onPlayerInteractEntity implements Listener {
-    public onPlayerInteractEntity() {
+public class playerInteractEntity implements Listener {
+    public playerInteractEntity() {
         EventUtil.register(this);
     }
 

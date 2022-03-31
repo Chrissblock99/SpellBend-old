@@ -16,11 +16,11 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 
-public class onInventoryClick implements Listener {
+public class inventoryClick implements Listener {
     private final HashMap<String, Interfaces.PlayerFunction> StringToFunction = Maps.itemNameToPlayerFunctionMap;
     public static final NamespacedKey itemActionKey = new NamespacedKey(PluginMain.getInstance(), "itemAction"); //<- DO NOT CHANGE!!
 
-    public onInventoryClick() {
+    public inventoryClick() {
         EventUtil.register(this);
     }
 
@@ -30,6 +30,7 @@ public class onInventoryClick implements Listener {
         if (!event.getCurrentItem().hasItemMeta()) return;
         ItemMeta meta = event.getCurrentItem().getItemMeta();
 
+        //noinspection ConstantConditions
         if (!meta.hasCustomModelData()) return;
         int CMD = meta.getCustomModelData();
 

@@ -1,6 +1,5 @@
 package com.SpellBend.events;
 
-import com.SpellBend.organize.RankObj;
 import com.SpellBend.util.EventUtil;
 import com.SpellBend.util.playerDataUtil;
 import org.bukkit.entity.Player;
@@ -8,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class onPlayerChat implements Listener {
-    public onPlayerChat() {
+public class playerChat implements Listener {
+    public playerChat() {
         EventUtil.register(this);
     }
 

@@ -7,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class onEntityDamageByEntity implements Listener {
-    public onEntityDamageByEntity() {
+public class entityDamageEntity implements Listener {
+    public entityDamageEntity() {
         EventUtil.register(this);
     }
 
@@ -23,6 +23,5 @@ public class onEntityDamageByEntity implements Listener {
             return;
         }
         if (!(event.getEntity() instanceof Player) && !(event.getDamager() instanceof Player)) event.setCancelled(true);
-        return;
     }
 }

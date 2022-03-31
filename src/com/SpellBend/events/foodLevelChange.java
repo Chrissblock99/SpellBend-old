@@ -7,15 +7,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
-public class onFoodLevelChange implements Listener {
-    public onFoodLevelChange() {
+public class foodLevelChange implements Listener {
+    public foodLevelChange() {
         EventUtil.register(this);
     }
 
     @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
-        Player player = (Player) event.getEntity();
+        if (!(event.getEntity() instanceof Player player)) return;
 
         if (player.getGameMode() != GameMode.ADVENTURE) return;
         event.setCancelled(true);

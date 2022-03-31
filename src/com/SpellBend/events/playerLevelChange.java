@@ -7,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 
-public class onPlayerLevelChange implements Listener {
-    public onPlayerLevelChange() {
+public class playerLevelChange implements Listener {
+    public playerLevelChange() {
         EventUtil.register(this);
     }
 

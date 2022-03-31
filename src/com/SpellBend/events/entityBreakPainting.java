@@ -7,19 +7,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
-public class onHangingBreakByEntity implements Listener {
-  public onHangingBreakByEntity() {
+public class entityBreakPainting implements Listener {
+  public entityBreakPainting() {
     EventUtil.register(this);
   }
   
   @EventHandler
   public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
-    if (!(event.getEntity() instanceof Player)) {
+    if (!(event.getEntity() instanceof Player player)) {
       event.setCancelled(true);
       return;
     }
-    Player player = (Player) event.getEntity();
-    
+
     if (player.getGameMode() == GameMode.ADVENTURE) event.setCancelled(true);
   }
 }

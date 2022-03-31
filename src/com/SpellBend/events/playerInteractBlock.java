@@ -8,12 +8,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class onPlayerInteract implements Listener {
-    public onPlayerInteract() {
+public class playerInteractBlock implements Listener {
+    public playerInteractBlock() {
         EventUtil.register(this);
     }
 
-    @SuppressWarnings("MethodNameSameAsClassName")
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.ADVENTURE)  {
