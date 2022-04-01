@@ -1,6 +1,6 @@
 package com.SpellBend.commands;
 
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.Ranks;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,13 +28,13 @@ public class rank {
                 return true;
             }
 
-            if (playerDataUtil.hasRank(player, rankName)) {
+            if (Ranks.hasRank(player, rankName)) {
                 sender.sendMessage("§4" + playerName + " already has Rank \"" + rankName + "\"!");
                 return true;
             }
 
-            playerDataUtil.addRank(player, rankName);
-            if (!playerDataUtil.hasRank(player, rankName)) {
+            Ranks.addRank(player, rankName);
+            if (!Ranks.hasRank(player, rankName)) {
                 Bukkit.getLogger().warning("Something went wrong when adding Rank \"" + rankName + "\" to " + playerName + "!");
                 sender.sendMessage("§4Something went wrong when adding Rank \"" + rankName + "\" to " + playerName + "!");
                 return true;
@@ -56,7 +56,7 @@ public class rank {
                 return true;
             }
 
-            sender.sendMessage(playerName + ((playerDataUtil.hasRank(player, rankName)) ? " §ahas" : " §4does not have") + " §fRank \"" + rankName + "\".");
+            sender.sendMessage(playerName + ((Ranks.hasRank(player, rankName)) ? " §ahas" : " §4does not have") + " §fRank \"" + rankName + "\".");
             return true;
         });
         subCommands.put("remove", (sender, arguments) -> {
@@ -73,13 +73,13 @@ public class rank {
                 return true;
             }
 
-            if (!playerDataUtil.hasRank(player, rankName)) {
+            if (!Ranks.hasRank(player, rankName)) {
                 sender.sendMessage("§4" + playerName + " doesn't have Rank \"" + rankName + "\"!");
                 return true;
             }
 
-            playerDataUtil.removeRank(player, rankName);
-            if (playerDataUtil.hasRank(player, rankName)) {
+            Ranks.removeRank(player, rankName);
+            if (Ranks.hasRank(player, rankName)) {
                 Bukkit.getLogger().warning("Something went wrong when removing Rank \"" + rankName + "\" from " + playerName + "!");
                 sender.sendMessage("§4Something went wrong when removing Rank \"" + rankName + "\" from " + playerName + "!");
                 return true;
@@ -100,7 +100,7 @@ public class rank {
                 return true;
             }
 
-            sender.sendMessage(String.join(", ", playerDataUtil.getRanks(player)));
+            sender.sendMessage(String.join(", ", Ranks.getRanks(player)));
             return true;
         });
 

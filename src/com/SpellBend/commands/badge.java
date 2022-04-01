@@ -1,6 +1,6 @@
 package com.SpellBend.commands;
 
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.Badges;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,13 +28,13 @@ public class badge {
                 return true;
             }
 
-            if (playerDataUtil.hasBadge(player, badgeName)) {
+            if (Badges.hasBadge(player, badgeName)) {
                 sender.sendMessage("§4" + playerName + " already has Badge \"" + badgeName + "\"!");
                 return true;
             }
 
-            playerDataUtil.addBadge(player, badgeName);
-            if (!playerDataUtil.hasBadge(player, badgeName)) {
+            Badges.addBadge(player, badgeName);
+            if (!Badges.hasBadge(player, badgeName)) {
                 Bukkit.getLogger().warning("Something went wrong when adding Badge \"" + badgeName + "\" to " + playerName + "!");
                 sender.sendMessage("§4Something went wrong when adding Badge \"" + badgeName + "\" to " + playerName + "!");
                 return true;
@@ -56,7 +56,7 @@ public class badge {
                 return true;
             }
 
-            sender.sendMessage(playerName + ((playerDataUtil.hasBadge(player, badgeName)) ? " §ahas" : " §4does not have") + " §fBadge \"" + badgeName + "\".");
+            sender.sendMessage(playerName + ((Badges.hasBadge(player, badgeName)) ? " §ahas" : " §4does not have") + " §fBadge \"" + badgeName + "\".");
             return true;
         });
         subCommands.put("remove", (sender, arguments) -> {
@@ -73,13 +73,13 @@ public class badge {
                 return true;
             }
 
-            if (!playerDataUtil.hasBadge(player, badgeName)) {
+            if (!Badges.hasBadge(player, badgeName)) {
                 sender.sendMessage("§4" + playerName + " doesn't have Badge \"" + badgeName + "\"!");
                 return true;
             }
 
-            playerDataUtil.removeBadge(player, badgeName);
-            if (playerDataUtil.hasBadge(player, badgeName)) {
+            Badges.removeBadge(player, badgeName);
+            if (Badges.hasBadge(player, badgeName)) {
                 Bukkit.getLogger().warning("Something went wrong when removing Badge \"" + badgeName + "\" from " + playerName + "!");
                 sender.sendMessage("§4Something went wrong when removing Badge \"" + badgeName + "\" from " + playerName + "!");
                 return true;
@@ -100,7 +100,7 @@ public class badge {
               return true;
             }
 
-            sender.sendMessage(playerDataUtil.getBadgesString(player));
+            sender.sendMessage(Badges.getBadgesString(player));
             return true;
         });
 

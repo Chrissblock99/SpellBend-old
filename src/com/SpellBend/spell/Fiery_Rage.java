@@ -4,7 +4,8 @@ import com.SpellBend.PluginMain;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.organize.Enums;
 import com.SpellBend.util.MathUtil;
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.CoolDowns;
+import com.SpellBend.util.playerData.DmgMods;
 import com.SpellBend.util.VectorConversion;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -34,7 +35,7 @@ public class Fiery_Rage extends Spell implements killable {
 
     private void windup() {
         player.setGravity(false);
-        playerDataUtil.setCoolDown(player, spellType, 1f, "windup");
+        CoolDowns.setCoolDown(player, spellType, 1f, "windup");
 
         windupTask = new BukkitRunnable() {
             final int startRot = Math.round(player.getLocation().getYaw());
@@ -79,8 +80,8 @@ public class Fiery_Rage extends Spell implements killable {
     }
 
     private void activate() {
-        playerDataUtil.setCoolDown(player, spellType, 10f, "active");
-        playerDataUtil.addDmgMod(player, "spell", 1.5f);
+        CoolDowns.setCoolDown(player, spellType, 10f, "active");
+        DmgMods.addDmgMod(player, "spell", 1.5f);
 
         activeTask = new BukkitRunnable() {
             int time = 200;
@@ -94,8 +95,8 @@ public class Fiery_Rage extends Spell implements killable {
                 player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation().add(0d, 1d, 0d), 1, dustOptions);
 
                 if (time == 0) {
-                    playerDataUtil.removeDmgMod(player, "spell", 1.5f);
-                    playerDataUtil.setCoolDown(player, spellType, 30f, "cooldown");
+                    DmgMods.removeDmgMod(player, "spell", 1.5f);
+                    CoolDowns.setCoolDown(player, spellType, 30f, "cooldown");
 
                     activeTask.cancel();
                     SpellHandler.activeSpells.get(player.getUniqueId()).remove(instance);
@@ -107,16 +108,16 @@ public class Fiery_Rage extends Spell implements killable {
 
     @Override
     public void onUserDeath(Player killer) {
-        playerDataUtil.setCoolDown(player, spellType, 30f, "cooldown");
+        CoolDowns.setCoolDown(player, spellType, 30f, "cooldown");
         cancelSpell();
     }
 
     @Override
     public void onUserLeave() {
-        CoolDownEntry entry = playerDataUtil.getCoolDownEntry(player, spellType);
+        CoolDownEntry entry = CoolDowns.getCoolDownEntry(player, spellType);
         switch (entry.coolDownType) {
-            case ("windup") -> playerDataUtil.setCoolDown(player, spellType, entry.timeInS+40f, "cooldown");
-            case ("active") -> playerDataUtil.setCoolDown(player, spellType, entry.timeInS+30f, "cooldown");
+            case ("windup") -> CoolDowns.setCoolDown(player, spellType, entry.timeInS+40f, "cooldown");
+            case ("active") -> CoolDowns.setCoolDown(player, spellType, entry.timeInS+30f, "cooldown");
         }
         cancelSpell();
     }
@@ -130,7 +131,7 @@ public class Fiery_Rage extends Spell implements killable {
             return;
         }
         if (!activeTask.isCancelled()) {
-            playerDataUtil.removeDmgMod(player, "spell", 1.5f);
+            DmgMods.removeDmgMod(player, "spell", 1.5f);
             activeTask.cancel();
         }
         SpellHandler.activeSpells.get(player.getUniqueId()).remove(instance);

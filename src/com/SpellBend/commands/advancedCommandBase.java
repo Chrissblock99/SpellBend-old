@@ -2,7 +2,9 @@ package com.SpellBend.commands;
 
 import com.SpellBend.organize.BadgeObj;
 import com.SpellBend.organize.RankObj;
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.Badges;
+import com.SpellBend.util.playerData.Ranks;
+import com.SpellBend.util.playerData.playerDataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -79,12 +81,12 @@ public abstract class advancedCommandBase extends BukkitCommand implements Comma
             }
 
             if (rankNeeded != null) {
-                if (playerDataUtil.hasRank(((Player) sender), rankNeeded.rankName)) shallReturn = false;
+                if (Ranks.hasRank(((Player) sender), rankNeeded.rankName)) shallReturn = false;
                 else ErrorMsg = "§cYou do not have the required Rank to use this command! " + rankNeeded.rankName;
             }
 
             if (badgeNeeded != null) {
-                if (playerDataUtil.hasBadge(((Player) sender), badgeNeeded.badgeName)) shallReturn = false;
+                if (Badges.hasBadge(((Player) sender), badgeNeeded.badgeName)) shallReturn = false;
                 else ErrorMsg = "§cYou do not have the required Badge to use this command! " + badgeNeeded.badgeName;
             }
 

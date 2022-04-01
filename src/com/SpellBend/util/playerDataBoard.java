@@ -1,6 +1,10 @@
 package com.SpellBend.util;
 
 import com.SpellBend.organize.RankObj;
+import com.SpellBend.util.playerData.Gems;
+import com.SpellBend.util.playerData.Gold;
+import com.SpellBend.util.playerData.Ranks;
+import com.SpellBend.util.playerData.playerDataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
@@ -20,14 +24,14 @@ public class playerDataBoard implements Listener {
 
     public static void createBoard(Player player) {
         try {
-            RankObj playerRank = playerDataUtil.getMainRank(player);
+            RankObj playerRank = Ranks.getMainRank(player);
             Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
             Objective obj = board.registerNewObjective("playerDataBoard", "dummy",  playerDataUtil.constructDisplayString(player));
             obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
             Score line1 = obj.getScore("§3§m-------------"); line1.setScore(11);
-            Score coins = obj.getScore("  §eGold: §b" + playerDataUtil.getGold(player)); coins.setScore(10);
-            Score gems = obj.getScore("  §3Gems: §b" + playerDataUtil.getGems(player)); gems.setScore(9);
+            Score coins = obj.getScore("  §eGold: §b" + Gold.getGold(player)); coins.setScore(10);
+            Score gems = obj.getScore("  §3Gems: §b" + Gems.getGems(player)); gems.setScore(9);
             Score line2 = obj.getScore("§3§m-------------§r" + ""); line2.setScore(8);
             Score kills = obj.getScore("  §cKills: §b" + player.getStatistic(Statistic.PLAYER_KILLS)); kills.setScore(7);
             Score deaths = obj.getScore("  §4Deaths: §b" + player.getStatistic(Statistic.DEATHS)); deaths.setScore(6);

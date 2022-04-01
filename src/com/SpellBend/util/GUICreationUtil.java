@@ -4,6 +4,7 @@ import com.SpellBend.data.Lists;
 import com.SpellBend.organize.ElementObj;
 import com.SpellBend.organize.Enums;
 import com.SpellBend.data.Maps;
+import com.SpellBend.util.playerData.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,9 +16,9 @@ public class GUICreationUtil {
     private final static Inventory DEFAULT_SHOP = createDefaultShop();
 
     private static @NotNull String[] createOwnageLore(@NotNull Player player, @NotNull Enums.Element element) {
-        if (playerDataUtil.getSpellsOwned(player, element) == 0) {
+        if (SpellsOwned.getSpellsOwned(player, element) == 0) {
             int price = Maps.elementToPriceMap.get(element);
-            return new String[]{"§8-----------", "§e$ §b" + price + " §3Gems", (playerDataUtil.getGems(player)>price) ? "§2You can buy this." : "§cYou can't §ebuy §cthis yet!"};
+            return new String[]{"§8-----------", "§e$ §b" + price + " §3Gems", (Gems.getGems(player)>price) ? "§2You can buy this." : "§cYou can't §ebuy §cthis yet!"};
         }
         return new String[]{"§8----------------", "§a§lSHIFT CLICK TO EQUIP"};
     }
@@ -32,13 +33,13 @@ public class GUICreationUtil {
         for (int i = 0;i<elementList.size();i++) shop.setItem(10+(9*(i/7))+(i%7), elementList.get(i).getItem());
 
         //Patron Cosmetics
-        if (playerDataUtil.hasRank(player, "patron")) shop.setItem(37, Item.create(Material.ENDER_CHEST, "§b§lPATRON COSMETICS", 301));
+        if (Ranks.hasRank(player, "patron")) shop.setItem(37, Item.create(Material.ENDER_CHEST, "§b§lPATRON COSMETICS", 301));
 
         //Legend Cosmetics
-        if (playerDataUtil.hasRank(player, "legend")) shop.setItem(38, Item.create(Material.LODESTONE, "§e§lLEGEND COSMETICS", 301));
+        if (Ranks.hasRank(player, "legend")) shop.setItem(38, Item.create(Material.LODESTONE, "§e§lLEGEND COSMETICS", 301));
 
         //Builder Cosmetics
-        if (playerDataUtil.hasBadge(player, "builder")) shop.setItem(43, Item.create(Material.COMPOSTER, "§6§lBUILDER COSMETICS", 301));
+        if (Badges.hasBadge(player, "builder")) shop.setItem(43, Item.create(Material.COMPOSTER, "§6§lBUILDER COSMETICS", 301));
         
         return shop;
     }

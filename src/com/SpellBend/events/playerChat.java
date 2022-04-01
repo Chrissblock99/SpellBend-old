@@ -1,7 +1,7 @@
 package com.SpellBend.events;
 
 import com.SpellBend.util.EventUtil;
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.playerDataUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

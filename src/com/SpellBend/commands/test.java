@@ -7,7 +7,8 @@ import com.SpellBend.spell.Spell;
 import com.SpellBend.spell.SpellHandler;
 import com.SpellBend.util.Item;
 import com.SpellBend.util.MathUtil;
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.CoolDowns;
+import com.SpellBend.util.playerData.DmgMods;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -98,7 +99,7 @@ public class test {
                     return true;
                 }
 
-                sender.sendMessage("DmgModifier " + dmgMod + " of " + player.getDisplayName() + ": " + playerDataUtil.getDmgMod(player, dmgMod));
+                sender.sendMessage("DmgModifier " + dmgMod + " of " + player.getDisplayName() + ": " + DmgMods.getDmgMod(player, dmgMod));
                 return true;
             }
         });
@@ -115,7 +116,7 @@ public class test {
                     return true;
                 }
 
-                playerDataUtil.setDmgMod(player, dmgMod, num);
+                DmgMods.setDmgMod(player, dmgMod, num);
                 sender.sendMessage("Chriss go implement some more info here and check if it actually has been set (or if setting was rejected)");
                 return true;
             }
@@ -129,7 +130,7 @@ public class test {
 
                 if (type.equals("ALL")) {
                     sender.sendMessage("active Cooldowns of " + player.getDisplayName() + ":");
-                    Set<Map.Entry<Enums.SpellType, CoolDownEntry>> entrySet = playerDataUtil.getCoolDowns(player).entrySet();
+                    Set<Map.Entry<Enums.SpellType, CoolDownEntry>> entrySet = CoolDowns.getCoolDowns(player).entrySet();
                     if (entrySet.size() == 0) {
                         sender.sendMessage("none");
                         return true;
@@ -141,7 +142,7 @@ public class test {
                     return true;
                 }
                 try {
-                    CoolDownEntry coolDownEntry = playerDataUtil.getCoolDownEntry(player, Enums.SpellType.valueOf(type));
+                    CoolDownEntry coolDownEntry = CoolDowns.getCoolDownEntry(player, Enums.SpellType.valueOf(type));
                     sender.sendMessage("Cooldown " + arguments.get(0) + " of " + player.getDisplayName() + ": "
                             + coolDownEntry.getRemainingCoolDownTime() + ", " + coolDownEntry.timeInS + ", " + coolDownEntry.coolDownType);
                 } catch (IllegalArgumentException exception) {
@@ -162,8 +163,8 @@ public class test {
                 Integer timeInTicks = (Integer) arguments.get(2);
                 String CDType = (String) arguments.get(3);
 
-                playerDataUtil.setCoolDown(player, spellType, timeInTicks, CDType);
-                if (!playerDataUtil.getCoolDownEntry(player, spellType).equals(new CoolDownEntry(timeInTicks, new Date(), CDType))) {
+                CoolDowns.setCoolDown(player, spellType, timeInTicks, CDType);
+                if (!CoolDowns.getCoolDownEntry(player, spellType).equals(new CoolDownEntry(timeInTicks, new Date(), CDType))) {
                     sender.sendMessage("§4Something went wrong when setting " + player.getDisplayName() + "'s cooldown!");
                     return true;
                 }
@@ -181,14 +182,14 @@ public class test {
                 Integer timeInSeconds = (Integer) arguments.get(2);
                 String CDType = (String) arguments.get(3);
 
-                if (playerDataUtil.getCoolDownEntry(player, spellType).timeInS != 0) {
+                if (CoolDowns.getCoolDownEntry(player, spellType).timeInS != 0) {
                     sender.sendMessage("§eWarning: This coolDown is already set, assigning the larger one!");
-                    CoolDownEntry oldValues = playerDataUtil.getCoolDownEntry(player, spellType);
+                    CoolDownEntry oldValues = CoolDowns.getCoolDownEntry(player, spellType);
                     if (MathUtil.ASmallerB(
                             new long[]{Lists.getCoolDownTypeByName(oldValues.coolDownType).typeInt*(-1), (long) oldValues.timeInS*1000-(new Date().getTime()-oldValues.startDate.getTime())},
                             new long[]{Lists.getCoolDownTypeByName(CDType).typeInt *(-1), (long) timeInSeconds*1000}))
-                        playerDataUtil.setCoolDown(player, spellType, timeInSeconds, CDType);
-                    if (playerDataUtil.getCoolDownEntry(player, spellType).equals(new CoolDownEntry(timeInSeconds, new Date(), CDType))) {
+                        CoolDowns.setCoolDown(player, spellType, timeInSeconds, CDType);
+                    if (CoolDowns.getCoolDownEntry(player, spellType).equals(new CoolDownEntry(timeInSeconds, new Date(), CDType))) {
                         sender.sendMessage("§4Something went wrong when setting " + player.getDisplayName() + "'s cooldown!");
                         return true;
                     }
@@ -196,8 +197,8 @@ public class test {
                     return true;
                 }
 
-                playerDataUtil.setCoolDown(player, spellType, timeInSeconds, CDType);
-                if (playerDataUtil.getCoolDownEntry(player, spellType).equals(new CoolDownEntry(timeInSeconds, new Date(), CDType))) {
+                CoolDowns.setCoolDown(player, spellType, timeInSeconds, CDType);
+                if (CoolDowns.getCoolDownEntry(player, spellType).equals(new CoolDownEntry(timeInSeconds, new Date(), CDType))) {
                     sender.sendMessage("§4Something went wrong when setting " + player.getDisplayName() + "'s cooldown!");
                     return true;
                 }

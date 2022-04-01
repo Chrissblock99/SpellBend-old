@@ -1,6 +1,6 @@
 package com.SpellBend.commands;
 
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.Nick;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,8 +20,8 @@ public class nick {
                     Player player = (Player) sender;
                     String name = arguments[0];
 
-                    playerDataUtil.setNick(player, name);
-                    if (!playerDataUtil.getNick(player).equals(name)) {
+                    Nick.setNick(player, name);
+                    if (!Nick.getNick(player).equals(name)) {
                         Bukkit.getLogger().warning("Something went wrong when setting " + player.getDisplayName() + "'s nick to " + name + "!");
                         player.sendMessage("§4Something went wrong when setting your nick to " + name + ".");
                         return true;
@@ -36,8 +36,8 @@ public class nick {
                         return true;
                     }
 
-                    playerDataUtil.setNick(player, name);
-                    if (!playerDataUtil.getNick(player).equals(name)) {
+                    Nick.setNick(player, name);
+                    if (!Nick.getNick(player).equals(name)) {
                         Bukkit.getLogger().warning("Something went wrong when setting " + player.getDisplayName() + "'s nick to " + name + "!");
                         sender.sendMessage("§4Something went wrong when setting " + player.getDisplayName() + "'s nick to " + name + ".");
                         return true;

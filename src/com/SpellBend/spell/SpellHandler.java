@@ -2,7 +2,7 @@ package com.SpellBend.spell;
 
 import com.SpellBend.PluginMain;
 import com.SpellBend.organize.Enums;
-import com.SpellBend.util.playerDataUtil;
+import com.SpellBend.util.playerData.CoolDowns;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -147,7 +147,7 @@ public class SpellHandler {
             return;
         }
         spellType = Enums.SpellType.valueOf(spellTypeString);
-        if (playerDataUtil.getCoolDown(player, spellType)[0] != 0) {
+        if (CoolDowns.getCoolDown(player, spellType)[0] != 0) {
             return;
         }
 
