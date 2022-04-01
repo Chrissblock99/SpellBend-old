@@ -51,6 +51,6 @@ public class Crystals {
             persistentPlayerSessionStorage.crystals.remove(player.getUniqueId());
             return;
         }
-        Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToGold map when saving, saving skipped!");
+        Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToCrystals map when saving, saving skipped!");
     }
 }

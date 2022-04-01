@@ -16,4 +16,5 @@ public class persistentPlayerSessionStorage {
     public static HashMap<UUID, String> nick = new HashMap<>();
     public static HashMap<UUID, String> suffix = new HashMap<>();
     public static HashMap<UUID, Integer> crystals = new HashMap<>();
+    public static HashMap<UUID, Integer> crystalShards = new HashMap<>();
 }

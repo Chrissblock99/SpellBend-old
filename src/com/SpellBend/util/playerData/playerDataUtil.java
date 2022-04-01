@@ -24,7 +24,8 @@ public class playerDataUtil {
     public final static NamespacedKey nickKey = new NamespacedKey(plugin, "nick");
     public static final NamespacedKey suffixKey = new NamespacedKey(plugin, "suffix");
     public final static NamespacedKey crystalsKey = new NamespacedKey(plugin, "crystals");
-                                                                //DO NOT CHANGE THOSE  /\
+    public final static NamespacedKey crystalShardsKey = new NamespacedKey(plugin, "crystalShards");
+                                                                        //DO NOT CHANGE THOSE  /\
     public final static SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
 
     public static void setupAll(@NotNull Player player) {
@@ -39,6 +40,7 @@ public class playerDataUtil {
         data.set(nickKey, PersistentDataType.STRING, player.getDisplayName());
         data.set(suffixKey, PersistentDataType.STRING, "");
         data.set(crystalsKey, PersistentDataType.INTEGER, 0);
+        data.set(crystalShardsKey, PersistentDataType.INTEGER, 0);
     }
 
     public static void loadAll(@NotNull Player player) {
@@ -53,6 +55,7 @@ public class playerDataUtil {
         Nick.loadNick(player);
         Suffix.loadSuffix(player);
         Crystals.loadCrystals(player);
+        CrystalShards.loadCrystalShards(player);
     }
 
     public static void saveAll(@NotNull Player player) {
@@ -67,6 +70,7 @@ public class playerDataUtil {
         Nick.saveNick(player);
         Suffix.saveSuffix(player);
         Crystals.saveCrystals(player);
+        CrystalShards.saveCrystalShards(player);
     }
 
     public static @NotNull String constructDisplayString(@NotNull Player player) {
@@ -89,8 +93,6 @@ public class playerDataUtil {
         int r2 = (Badges.getMainBadge(player) == null) ? 0 : Badges.getMainBadge(player).ranking;
         return Math.max(r1, r2);
     }
-
-    //crystalShards
 
     //cosmetics
 }
