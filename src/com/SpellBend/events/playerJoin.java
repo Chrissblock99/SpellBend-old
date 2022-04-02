@@ -2,11 +2,11 @@ package com.SpellBend.events;
 
 import com.SpellBend.organize.RankObj;
 import com.SpellBend.spell.SpellHandler;
-import com.SpellBend.util.playerData.Nick;
-import com.SpellBend.util.playerData.Ranks;
+import com.SpellBend.playerData.Nick;
+import com.SpellBend.playerData.Ranks;
 import com.SpellBend.util.playerDataBoard;
 import com.SpellBend.util.EventUtil;
-import com.SpellBend.util.playerData.playerDataUtil;
+import com.SpellBend.playerData.playerDataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +25,7 @@ public class playerJoin implements Listener {
         Player player = event.getPlayer();
         boolean isNew = !player.hasPlayedBefore();
 
-        if (isNew) playerDataUtil.setupAll(player);
+        if (isNew) playerDataUtil.setupPlayerData(player);
         playerDataUtil.loadAll(player);
         RankObj playerRank = Ranks.getMainRank(player);
 

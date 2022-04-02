@@ -1,9 +1,8 @@
-package com.SpellBend.util.playerData;
+package com.SpellBend.playerData;
 
 import com.SpellBend.data.Lists;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.organize.Enums;
-import com.SpellBend.organize.persistentPlayerSessionStorage;
 import com.SpellBend.util.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

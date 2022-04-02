@@ -1,6 +1,5 @@
-package com.SpellBend.util.playerData;
+package com.SpellBend.playerData;
 
-import com.SpellBend.organize.persistentPlayerSessionStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;

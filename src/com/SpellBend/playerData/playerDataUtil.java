@@ -1,7 +1,9 @@
-package com.SpellBend.util.playerData;
+package com.SpellBend.playerData;
 
 import com.SpellBend.PluginMain;
+import com.SpellBend.data.Elements;
 import com.SpellBend.organize.*;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -28,7 +30,7 @@ public class playerDataUtil {
                                                                         //DO NOT CHANGE THOSE  /\
     public final static SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
 
-    public static void setupAll(@NotNull Player player) {
+    public static void setupPlayerData(@NotNull Player player) {
         PersistentDataContainer data = player.getPersistentDataContainer();
         data.set(gemsKey, PersistentDataType.INTEGER, 150);
         data.set(goldKey, PersistentDataType.INTEGER, 650);
@@ -82,9 +84,44 @@ public class playerDataUtil {
                 + "§7[§b" + player.getLevel() + "§7]";
     }
 
-    public static boolean buyElement(@NotNull Player player, Enums.Element element) {
+    public static void buyElement(@NotNull Player player, Enums.Element element) {
+        ElementObj Element = Elements.getElementByEnum(element);
+        if (SpellsOwned.getSpellsOwned(player, element) != 0) {
+            Bukkit.getLogger().warning(player.getDisplayName() + " somehow had access to the buy function of " + element + " after buying it!");
+            //noinspection ConstantConditions
+            player.sendMessage("§9SHOP §8» §cYou already own " + Element.getItem().getItemMeta().getDisplayName() + "§c!");
+            return;
+        }
+        int price = Element.getPrice();
+        if (Gems.getGems(player)<price) {
+            player.sendMessage("§9SHOP §8» §cNot Enough §bGems§c! Need §b" + (price - Gems.getGems(player)) + " §cmore!");
+            return;
+        }
 
-        return true;
+        SpellsOwned.setSpellsOwned(player, element, 1);
+        Gems.addGems(player, -price);
+        //noinspection ConstantConditions
+        player.sendMessage("§9SHOP §8» §ePurchased " + Element.getItem().getItemMeta().getDisplayName() + " §6for §b" + price + " Gems§e!");
+    }
+
+    public static void buySpell(@NotNull Player player, Enums.Element element, int index) {
+        SpellObj Spell = Elements.getElementByEnum(element).getSpell(index);
+        if (SpellsOwned.getSpellsOwned(player, element) == index && index != 0) {  //TODO overthink if this actually works because i hae no clue
+            Bukkit.getLogger().warning(player.getDisplayName() + " somehow had access to the buy function of " + Spell.getName() + " after buying it!");
+            //noinspection ConstantConditions
+            player.sendMessage("§9SHOP §8» §cYou already own " + Spell.getItem().getItemMeta().getDisplayName() + "§c!");
+            return;
+        }
+        int price = Spell.getPrice();
+        if (Gold.getGold(player)<price) {
+            player.sendMessage("§9SHOP §8» §cNot Enough §eGold§c! Need §e" + (price - Gold.getGold(player)) + " §cmore!");
+            return;
+        }
+
+        SpellsOwned.setSpellsOwned(player, element, index+1);
+        Gold.addGold(player, -price);
+        //noinspection ConstantConditions
+        player.sendMessage("§9SHOP §8» §ePurchased " + Spell.getItem().getItemMeta().getDisplayName() + " §6for §e" + price + " Gold§e!");
     }
 
     public static int getRanking(@NotNull Player player) {

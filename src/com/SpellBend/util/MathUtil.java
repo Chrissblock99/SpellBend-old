@@ -1,11 +1,23 @@
 package com.SpellBend.util;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+
 public class MathUtil {
     public static final double DEGTORAD = Math.PI/180;
     public static final double RADTODEG = 180/Math.PI;
 
     public static double random(double min, double max) {
         return Math.random() * (max-min) + min;
+    }
+
+    public static Object randomEntry(Object[] a) {
+        return a[(int) Math.round(random(0, a.length-1))];
+    }
+
+    public static Object randomEntry(@NotNull ArrayList<Object> a) {
+        return a.get((int) Math.round(random(0, a.size()-1)));
     }
 
     public static boolean ALargerB(int[] a, int[] b) {

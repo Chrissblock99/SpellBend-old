@@ -1,6 +1,6 @@
 package com.SpellBend.commands;
 
-import com.SpellBend.util.playerData.Ranks;
+import com.SpellBend.playerData.Ranks;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

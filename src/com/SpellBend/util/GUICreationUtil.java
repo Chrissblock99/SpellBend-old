@@ -1,10 +1,10 @@
 package com.SpellBend.util;
 
-import com.SpellBend.data.Lists;
+import com.SpellBend.data.Elements;
 import com.SpellBend.organize.ElementObj;
 import com.SpellBend.organize.Enums;
 import com.SpellBend.data.Maps;
-import com.SpellBend.util.playerData.*;
+import com.SpellBend.playerData.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -26,7 +26,7 @@ public class GUICreationUtil {
     public static @NotNull Inventory createShop(@NotNull Player player) {
         Inventory shop = DEFAULT_SHOP;
 
-        ArrayList<ElementObj> elementList = Lists.elementList;
+        ArrayList<ElementObj> elementList = Elements.elementList;
         /*int x = i%7;
         int y = i/7;
         shop.setItem(10+(9*y)+x, elementList.get(i).getItem());*/

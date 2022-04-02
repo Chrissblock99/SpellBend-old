@@ -1,8 +1,8 @@
 package com.SpellBend.events;
 
 import com.SpellBend.util.EventUtil;
-import com.SpellBend.util.playerData.Gems;
-import com.SpellBend.util.playerData.Gold;
+import com.SpellBend.playerData.Gems;
+import com.SpellBend.playerData.Gold;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

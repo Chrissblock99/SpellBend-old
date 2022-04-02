@@ -1,10 +1,10 @@
 package com.SpellBend.util;
 
 import com.SpellBend.organize.RankObj;
-import com.SpellBend.util.playerData.Gems;
-import com.SpellBend.util.playerData.Gold;
-import com.SpellBend.util.playerData.Ranks;
-import com.SpellBend.util.playerData.playerDataUtil;
+import com.SpellBend.playerData.Gems;
+import com.SpellBend.playerData.Gold;
+import com.SpellBend.playerData.Ranks;
+import com.SpellBend.playerData.playerDataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;

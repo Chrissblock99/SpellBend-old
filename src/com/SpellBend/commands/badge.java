@@ -1,6 +1,6 @@
 package com.SpellBend.commands;
 
-import com.SpellBend.util.playerData.Badges;
+import com.SpellBend.playerData.Badges;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

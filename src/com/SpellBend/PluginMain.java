@@ -4,7 +4,7 @@ import com.SpellBend.commands.*;
 import com.SpellBend.spell.SpellHandler;
 import com.SpellBend.util.EventUtil;
 import com.SpellBend.util.playerDataBoard;
-import com.SpellBend.util.playerData.playerDataUtil;
+import com.SpellBend.playerData.playerDataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

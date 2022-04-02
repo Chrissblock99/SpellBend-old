@@ -1,4 +1,7 @@
-package com.SpellBend.organize;
+package com.SpellBend.playerData;
+
+import com.SpellBend.organize.CoolDownEntry;
+import com.SpellBend.organize.Enums;
 
 import java.util.ArrayList;
 import java.util.HashMap;
