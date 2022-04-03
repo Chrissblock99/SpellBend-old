@@ -1,4 +1,4 @@
-package com.SpellBend.organize;
+package com.SpellBend.data;
 
 public class Enums {          //Mana:★
     public enum Element {

@@ -2,7 +2,7 @@ package com.SpellBend.playerData;
 
 import com.SpellBend.data.Lists;
 import com.SpellBend.organize.CoolDownEntry;
-import com.SpellBend.organize.Enums;
+import com.SpellBend.data.Enums;
 import com.SpellBend.util.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -127,6 +127,12 @@ public class CoolDowns {
         coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
     }
 
+    /**
+     *
+     * @param player The player to get the CoolDown from
+     * @param spellType The CoolDown to get
+     * @return A float[3] containing {remainingCooldownTime, TimeInS, CoolDownType}
+     */
     public static float[] getCoolDown(@NotNull Player player, @NotNull Enums.SpellType spellType) {
         if (!persistentPlayerSessionStorage.coolDowns.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not loaded in coolDowns map, now fixing!");
@@ -144,6 +150,12 @@ public class CoolDowns {
         return new float[]{0, 0, Lists.getCoolDownTypeByName("cooldown").typeInt};
     }
 
+    /**
+     *
+     * @param player The player to get the CoolDown from
+     * @param spellType The CoolDown to get
+     * @return A CoolDownEntry containing {TimeInS, startDate, CoolDownType}
+     */
     public static CoolDownEntry getCoolDownEntry(@NotNull Player player, @NotNull Enums.SpellType spellType) {
         if (!persistentPlayerSessionStorage.coolDowns.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not loaded in coolDowns map, now fixing!");
@@ -160,6 +172,11 @@ public class CoolDowns {
         return new CoolDownEntry(0, new Date(), "cooldown");
     }
 
+    /**
+     *
+     * @param player The player to get the CoolDown from
+     * @return All CoolDownEntries containing {TimeInS, startDate, CoolDownType}
+     */
     public static HashMap<Enums.SpellType, CoolDownEntry> getCoolDowns(@NotNull Player player) {
         if (!persistentPlayerSessionStorage.coolDowns.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not loaded in coolDowns map, now fixing!");

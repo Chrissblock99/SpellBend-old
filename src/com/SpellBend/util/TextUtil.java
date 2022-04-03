@@ -2,13 +2,14 @@ package com.SpellBend.util;
 
 import com.SpellBend.data.FilterTexts;
 import com.SpellBend.organize.AllowedWord;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class TextUtil {
-    public static String filterMessage(String message) { //TODO make this work
+    public static @NotNull String filterMessage(@NotNull Player player, @NotNull String message) { //TODO make this work
         message = message.toLowerCase().replace(" ", "").replace(".", "").replace(",", "").replace("?", "");
         for (int i = FilterTexts.aliases.size()-1;i>=0;i--) {
             for (Map.Entry<String, String> entry : FilterTexts.aliases.get(i).entrySet()) message = message.replace(entry.getKey(), entry.getValue());

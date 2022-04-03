@@ -1,7 +1,6 @@
 package com.SpellBend.data;
 
 import com.SpellBend.organize.ElementObj;
-import com.SpellBend.organize.Enums;
 import com.SpellBend.organize.SpellObj;
 import com.SpellBend.util.Item;
 import org.bukkit.Material;

@@ -1,7 +1,7 @@
 package com.SpellBend.commands;
 
 import com.SpellBend.organize.CoolDownEntry;
-import com.SpellBend.organize.Enums;
+import com.SpellBend.data.Enums;
 import com.SpellBend.data.Lists;
 import com.SpellBend.spell.Spell;
 import com.SpellBend.spell.SpellHandler;
@@ -9,6 +9,7 @@ import com.SpellBend.util.Item;
 import com.SpellBend.util.MathUtil;
 import com.SpellBend.playerData.CoolDowns;
 import com.SpellBend.playerData.DmgMods;
+import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -34,6 +35,19 @@ public class test {
                 Inventory inv = ((Player) sender).getInventory();
                 inv.addItem(Item.create(Material.CAMPFIRE, "§c§lFiery Rage", 1, new String[]{"spellName", "spellType"}, new String[]{"Fiery_Rage", "AURA"}));
                 inv.addItem(Item.create(Material.GOLDEN_HORSE_ARMOR, "§c§lEmber Blast", 1, new String[]{"spellName", "spellType"}, new String[]{"Ember_Blast", "BLAST"}));
+                return true;
+            }
+        });
+
+        subCommands.put("sidebar", new advancedSubCommand(new Class[0]) {
+            @Override
+            public boolean onCommand(CommandSender sender, ArrayList<Object> arguments) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§4Only players can use this subCommand!");
+                    return true;
+                }
+
+                playerDataBoard.updateBoard((Player) sender);
                 return true;
             }
         });

@@ -1,6 +1,5 @@
 package com.SpellBend.data;
 
-import com.SpellBend.organize.Enums;
 import com.SpellBend.organize.Interfaces.PlayerFunction;
 import com.SpellBend.util.GUICreationUtil;
 import org.jetbrains.annotations.NotNull;

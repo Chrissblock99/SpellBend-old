@@ -1,7 +1,7 @@
 package com.SpellBend.spell;
 
 import com.SpellBend.PluginMain;
-import com.SpellBend.organize.Enums;
+import com.SpellBend.data.Enums;
 import com.SpellBend.playerData.CoolDowns;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

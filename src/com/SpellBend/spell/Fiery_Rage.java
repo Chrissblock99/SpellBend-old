@@ -2,7 +2,7 @@ package com.SpellBend.spell;
 
 import com.SpellBend.PluginMain;
 import com.SpellBend.organize.CoolDownEntry;
-import com.SpellBend.organize.Enums;
+import com.SpellBend.data.Enums;
 import com.SpellBend.util.MathUtil;
 import com.SpellBend.playerData.CoolDowns;
 import com.SpellBend.playerData.DmgMods;

@@ -2,13 +2,17 @@ package com.SpellBend.playerData;
 
 import com.SpellBend.PluginMain;
 import com.SpellBend.data.Elements;
+import com.SpellBend.data.Enums;
 import com.SpellBend.organize.*;
+import com.SpellBend.spell.SpellHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
 
@@ -94,7 +98,7 @@ public class playerDataUtil {
         }
         int price = Element.getPrice();
         if (Gems.getGems(player)<price) {
-            player.sendMessage("§9SHOP §8» §cNot Enough §bGems§c! Need §b" + (price - Gems.getGems(player)) + " §cmore!");
+            player.sendMessage("§9SHOP §8» §cNot Enough §bGems§c! Need §b" + (price - Gems.getGems(player)) + "§c more!");
             return;
         }
 
@@ -114,7 +118,7 @@ public class playerDataUtil {
         }
         int price = Spell.getPrice();
         if (Gold.getGold(player)<price) {
-            player.sendMessage("§9SHOP §8» §cNot Enough §eGold§c! Need §e" + (price - Gold.getGold(player)) + " §cmore!");
+            player.sendMessage("§9SHOP §8» §cNot Enough §eGold§c! Need §e" + (price - Gold.getGold(player)) + "§c more!");
             return;
         }
 
@@ -124,12 +128,22 @@ public class playerDataUtil {
         player.sendMessage("§9SHOP §8» §ePurchased " + Spell.getItem().getItemMeta().getDisplayName() + " §6for §e" + price + " Gold§e!");
     }
 
+    public static @Nullable Enums.SpellType getHeldSpellType(@NotNull Player player) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item.getItemMeta() == null) return null;
+        if (!item.getItemMeta().getPersistentDataContainer().has(SpellHandler.spellTypeKey, PersistentDataType.STRING)) return null;
+        try {
+            return Enums.SpellType.valueOf(item.getItemMeta().getPersistentDataContainer().get(SpellHandler.spellTypeKey, PersistentDataType.STRING));
+        } catch (IllegalArgumentException exception) {
+            Bukkit.getLogger().warning(player.getDisplayName() + " has item " + item.getItemMeta().getDisplayName() + "§e that has an invalid SpellType!");
+            return null;
+        }
+    }
+
     public static int getRanking(@NotNull Player player) {
         int r1 = Ranks.getMainRank(player).ranking;
         //noinspection ConstantConditions
         int r2 = (Badges.getMainBadge(player) == null) ? 0 : Badges.getMainBadge(player).ranking;
         return Math.max(r1, r2);
     }
-
-    //cosmetics
 }

@@ -1,6 +1,6 @@
 package com.SpellBend.commands;
 
-import com.SpellBend.organize.Enums;
+import com.SpellBend.data.Enums;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

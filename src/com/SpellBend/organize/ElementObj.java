@@ -1,5 +1,6 @@
 package com.SpellBend.organize;
 
+import com.SpellBend.data.Enums;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

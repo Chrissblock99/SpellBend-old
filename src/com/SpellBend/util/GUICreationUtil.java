@@ -2,7 +2,7 @@ package com.SpellBend.util;
 
 import com.SpellBend.data.Elements;
 import com.SpellBend.organize.ElementObj;
-import com.SpellBend.organize.Enums;
+import com.SpellBend.data.Enums;
 import com.SpellBend.data.Maps;
 import com.SpellBend.playerData.*;
 import org.bukkit.Material;
