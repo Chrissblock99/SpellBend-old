@@ -1,15 +1,19 @@
 package com.SpellBend.util;
 
 import com.SpellBend.PluginMain;
+import com.SpellBend.data.Enums;
+import com.SpellBend.spell.SpellHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -154,5 +158,17 @@ public class Item {
     public static @NotNull ItemStack edit(@NotNull ItemStack item, @NotNull String[] lore) {
         item.getItemMeta().setLore(Arrays.asList(lore));
         return item;
+    }
+
+    public static @Nullable Enums.SpellType getSpellType(@Nullable ItemStack item) {
+        if (item == null) return null;
+        if (item.getItemMeta() == null) return null;
+        if (!item.getItemMeta().getPersistentDataContainer().has(SpellHandler.spellTypeKey, PersistentDataType.STRING)) return null;
+        try {
+            return Enums.SpellType.valueOf(item.getItemMeta().getPersistentDataContainer().get(SpellHandler.spellTypeKey, PersistentDataType.STRING));
+        } catch (IllegalArgumentException exception) {
+            Bukkit.getLogger().warning("Item " + item.getItemMeta().getDisplayName() + "§e that has an invalid SpellType!");
+            return null;
+        }
     }
 }

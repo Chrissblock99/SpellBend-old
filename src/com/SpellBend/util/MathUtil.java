@@ -12,11 +12,11 @@ public class MathUtil {
         return Math.random() * (max-min) + min;
     }
 
-    public static Object randomEntry(Object[] a) {
+    public static @NotNull Object randomEntry(@NotNull Object[] a) {
         return a[(int) Math.round(random(0, a.length-1))];
     }
 
-    public static Object randomEntry(@NotNull ArrayList<Object> a) {
+    public static @NotNull Object randomEntry(@NotNull ArrayList<?> a) {
         return a.get((int) Math.round(random(0, a.size()-1)));
     }
 

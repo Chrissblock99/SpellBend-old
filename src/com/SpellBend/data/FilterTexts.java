@@ -32,7 +32,8 @@ public class FilterTexts {
         aliasesMap.put("0", "o");
         aliasesMap.put("5", "s");
 
-        aliasesList.add(aliasesMap);
+        //noinspection unchecked
+        aliasesList.add((HashMap<String, String>) aliasesMap.clone());
         aliasesMap.clear();
 
         aliasesMap.put("/\\", "a");
@@ -69,7 +70,8 @@ public class FilterTexts {
         filteredMap.put("ez", allowedList);
 
         allowedList.add(new AllowedWord("documentary", 2, 3, 6));
-        filteredMap.put("cum", allowedList);
+        //noinspection unchecked
+        filteredMap.put("cum", (ArrayList<AllowedWord>) allowedList.clone());
         allowedList.clear();
 
         filteredMap.put("sex", allowedList);

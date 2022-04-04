@@ -4,6 +4,7 @@ import com.SpellBend.data.Lists;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.data.Enums;
 import com.SpellBend.util.MathUtil;
+import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -66,14 +67,28 @@ public class CoolDowns {
         }
     }
 
+    /**Sets the cooldown of the player
+     * regardless of present cooldown
+     *
+     * @param player The player to add the cooldown to
+     * @param spellType The SpellType to cool down
+     * @param timeInSeconds The time to cool down
+     * @param CDType The CoolDownType
+     */
     public static void setCoolDown(@NotNull Player player, @NotNull Enums.SpellType spellType, float timeInSeconds, String CDType) {
         if (!persistentPlayerSessionStorage.coolDowns.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not loaded in coolDowns map, now fixing!");
             loadCoolDowns(player);
         }
         persistentPlayerSessionStorage.coolDowns.get(player.getUniqueId()).put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
+        if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
     }
 
+    /**
+     *
+     * @param player The player to remove a cooldown from
+     * @param spellType The cooldown to remove
+     */
     public static void removeCoolDown(@NotNull Player player, @NotNull Enums.SpellType spellType) {
         if (!persistentPlayerSessionStorage.coolDowns.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not loaded in coolDowns map, now fixing!");
@@ -82,6 +97,14 @@ public class CoolDowns {
         persistentPlayerSessionStorage.coolDowns.get(player.getUniqueId()).remove(spellType);
     }
 
+    /**Adds a cooldown to the player
+     * if a cooldown is already present the larger one is assigned
+     *
+     * @param player The player to add the cooldown to
+     * @param spellType The SpellType to cool down
+     * @param timeInSeconds The time to cool down
+     * @param CDType The CoolDownType
+     */
     public static void extendCoolDown(@NotNull Player player, @NotNull Enums.SpellType spellType, float timeInSeconds, String CDType) {
         if (!persistentPlayerSessionStorage.coolDowns.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not loaded in coolDowns map, now fixing!");
@@ -91,18 +114,31 @@ public class CoolDowns {
         if (coolDowns.containsKey(spellType)) {
             if (coolDowns.get(spellType).getRemainingCoolDownTime() <= 0.1f) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
+                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
                 return;
             }
             CoolDownEntry oldValues = coolDowns.get(spellType);
             if (MathUtil.ASmallerB(
                     new long[]{Lists.getCoolDownTypeByName(oldValues.coolDownType).typeInt*(-1), (long) oldValues.timeInS*1000-(new Date().getTime()-oldValues.startDate.getTime())},
-                    new long[]{Lists.getCoolDownTypeByName(CDType).typeInt *(-1), (long) timeInSeconds*1000}))
+                    new long[]{Lists.getCoolDownTypeByName(CDType).typeInt *(-1), (long) timeInSeconds*1000})) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
+                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+            }
             return;
         }
         persistentPlayerSessionStorage.coolDowns.get(player.getUniqueId()).put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
+        if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
     }
 
+
+    /**Adds a cooldown to the player but warning console if one is already present
+     * if already present the larger cooldown is assigned
+     *
+     * @param player The player to add the cooldown to
+     * @param spellType The SpellType to cool down
+     * @param timeInSeconds The time to cool down
+     * @param CDType The CoolDownType
+     */
     public static void addCoolDown(@NotNull Player player, @NotNull Enums.SpellType spellType, float timeInSeconds, String CDType) {
         if (!persistentPlayerSessionStorage.coolDowns.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not loaded in coolDowns map, now fixing!");
@@ -112,6 +148,7 @@ public class CoolDowns {
         if (coolDowns.containsKey(spellType)) {
             if (coolDowns.get(spellType).getRemainingCoolDownTime() <= 0.1f) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
+                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
                 return;
             }
             CoolDownEntry oldValues = coolDowns.get(spellType);
@@ -120,11 +157,14 @@ public class CoolDowns {
                     + ") when adding (" + timeInSeconds + ", " + CDType + ") to " + player.getDisplayName() + ", assigning larger coolDown!");
             if (MathUtil.ASmallerB(
                     new long[]{Lists.getCoolDownTypeByName(oldValues.coolDownType).typeInt*(-1), (long) oldValues.timeInS*1000-(new Date().getTime()-oldValues.startDate.getTime())},
-                    new long[]{Lists.getCoolDownTypeByName(CDType).typeInt *(-1), (long) timeInSeconds*1000}))
+                    new long[]{Lists.getCoolDownTypeByName(CDType).typeInt *(-1), (long) timeInSeconds*1000})) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
+                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+            }
             return;
         }
         coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
+        if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
     }
 
     /**

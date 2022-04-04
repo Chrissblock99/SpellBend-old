@@ -16,8 +16,8 @@ public class EventUtil {
         new inventoryClick();
         new playerLeave();
 
+        new playerSwitchHeldItem();
         new playerLevelChange();
-        //new onHangingBreak();    //cancels all so we can't use it
         new entityBreakPainting();
         new playerInteractBlock();
         new foodLevelChange();

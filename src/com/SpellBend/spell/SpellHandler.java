@@ -3,6 +3,7 @@ package com.SpellBend.spell;
 import com.SpellBend.PluginMain;
 import com.SpellBend.data.Enums;
 import com.SpellBend.playerData.CoolDowns;
+import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -155,6 +156,7 @@ public class SpellHandler {
 
         try {
             activeSpells.get(player.getUniqueId()).add((Spell) Class.forName("com.SpellBend.spell." + spellName).getDeclaredConstructor(new Class[]{Player.class, ItemStack.class}).newInstance(player, item));
+            playerDataBoard.registerPlayer(player, spellType);
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
             Bukkit.getLogger().warning("An Error occurred in the SpellHandler when instancing " + spellName + " for " + player.getDisplayName() + ": " + exception);
         }

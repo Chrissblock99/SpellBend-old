@@ -34,6 +34,10 @@ public class playerDataUtil {
                                                                         //DO NOT CHANGE THOSE  /\
     public final static SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
 
+    /**Sets up all the PersistentData of the player
+     *
+     * @param player The player who's PersistentData to set up
+     */
     public static void setupPlayerData(@NotNull Player player) {
         PersistentDataContainer data = player.getPersistentDataContainer();
         data.set(gemsKey, PersistentDataType.INTEGER, 150);
@@ -49,6 +53,10 @@ public class playerDataUtil {
         data.set(crystalShardsKey, PersistentDataType.INTEGER, 0);
     }
 
+    /**Loads all the persistentData of the player
+     *
+     * @param player The player to load the PersistentData of
+     */
     public static void loadAll(@NotNull Player player) {
         Gems.loadGems(player);
         Gold.loadGold(player);
@@ -64,6 +72,10 @@ public class playerDataUtil {
         CrystalShards.loadCrystalShards(player);
     }
 
+    /**Saves all PersistentData of the player
+     *
+     * @param player The player to save the PersistentData of
+     */
     public static void saveAll(@NotNull Player player) {
         Gems.saveGems(player);
         Gold.saveGold(player);
@@ -79,6 +91,12 @@ public class playerDataUtil {
         CrystalShards.saveCrystalShards(player);
     }
 
+    /**Constructs a String containing the Players rank, name, badges, suffix and level
+     * should mostly be used in chat
+     *
+     * @param player The player to Construct the DisplayString of
+     * @return The String showing the players rank, badges etc
+     */
     public static @NotNull String constructDisplayString(@NotNull Player player) {
         RankObj playerRank = Ranks.getMainRank(player);
         return playerRank.bracketsCC + "[" + playerRank.CCedRankName + playerRank.bracketsCC + "] " + playerRank.playerNameCC + Nick.getNick(player)
@@ -88,46 +106,67 @@ public class playerDataUtil {
                 + "§7[§b" + player.getLevel() + "§7]";
     }
 
-    public static void buyElement(@NotNull Player player, Enums.Element element) {
+    /**Buys the specified spell for the player doing safety checks
+     *
+     * @param player The player to buy a spell
+     * @param element The element to buy
+     * @return If the element was bought or not
+     */
+    public static boolean buyElement(@NotNull Player player, Enums.Element element) {
         ElementObj Element = Elements.getElementByEnum(element);
         if (SpellsOwned.getSpellsOwned(player, element) != 0) {
             Bukkit.getLogger().warning(player.getDisplayName() + " somehow had access to the buy function of " + element + " after buying it!");
             //noinspection ConstantConditions
             player.sendMessage("§9SHOP §8» §cYou already own " + Element.getItem().getItemMeta().getDisplayName() + "§c!");
-            return;
+            return false;
         }
         int price = Element.getPrice();
         if (Gems.getGems(player)<price) {
             player.sendMessage("§9SHOP §8» §cNot Enough §bGems§c! Need §b" + (price - Gems.getGems(player)) + "§c more!");
-            return;
+            return false;
         }
 
         SpellsOwned.setSpellsOwned(player, element, 1);
         Gems.addGems(player, -price);
         //noinspection ConstantConditions
         player.sendMessage("§9SHOP §8» §ePurchased " + Element.getItem().getItemMeta().getDisplayName() + " §6for §b" + price + " Gems§e!");
+        return true;
     }
 
-    public static void buySpell(@NotNull Player player, Enums.Element element, int index) {
+    /**Buys the specified spell for the player doing safety checks
+     *
+     * @param player The player to buy a spell
+     * @param element The element to buy the spell from
+     * @param index The spell to buy
+     * @return If the spell was bought or not
+     */
+    public static boolean buySpell(@NotNull Player player, Enums.Element element, int index) {
         SpellObj Spell = Elements.getElementByEnum(element).getSpell(index);
         if (SpellsOwned.getSpellsOwned(player, element) == index && index != 0) {  //TODO overthink if this actually works because i hae no clue
             Bukkit.getLogger().warning(player.getDisplayName() + " somehow had access to the buy function of " + Spell.getName() + " after buying it!");
             //noinspection ConstantConditions
             player.sendMessage("§9SHOP §8» §cYou already own " + Spell.getItem().getItemMeta().getDisplayName() + "§c!");
-            return;
+            return false;
         }
         int price = Spell.getPrice();
         if (Gold.getGold(player)<price) {
             player.sendMessage("§9SHOP §8» §cNot Enough §eGold§c! Need §e" + (price - Gold.getGold(player)) + "§c more!");
-            return;
+            return false;
         }
 
         SpellsOwned.setSpellsOwned(player, element, index+1);
         Gold.addGold(player, -price);
         //noinspection ConstantConditions
         player.sendMessage("§9SHOP §8» §ePurchased " + Spell.getItem().getItemMeta().getDisplayName() + " §6for §e" + price + " Gold§e!");
+        return true;
     }
 
+    /**Returns the SpellType of the item the player is holding
+     * and null if it isn't a Spell
+     *
+     * @param player The player to get the SpellType from
+     * @return The SpellType of the current hold item
+     */
     public static @Nullable Enums.SpellType getHeldSpellType(@NotNull Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null) return null;
@@ -140,6 +179,11 @@ public class playerDataUtil {
         }
     }
 
+    /**Returns the highest ranking of the players badges and Ranks
+     *
+     * @param player The player to get the ranking of
+     * @return The ranking
+     */
     public static int getRanking(@NotNull Player player) {
         int r1 = Ranks.getMainRank(player).ranking;
         //noinspection ConstantConditions

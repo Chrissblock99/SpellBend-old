@@ -6,6 +6,7 @@ import com.SpellBend.util.EventUtil;
 import com.SpellBend.playerData.Nick;
 import com.SpellBend.playerData.Ranks;
 import com.SpellBend.playerData.playerDataUtil;
+import com.SpellBend.util.playerDataBoard;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,6 +22,7 @@ public class playerLeave implements Listener {
         Player player = event.getPlayer();
         RankObj playerRank = Ranks.getMainRank(player);
         event.setQuitMessage("§8[§6-§8] " + playerRank.bracketsCC + "[" + playerRank.CCedRankName + playerRank.bracketsCC + "] §7" + Nick.getNick(player));
+        playerDataBoard.deRegisterPlayer(player);
         SpellHandler.deRegisterPlayer(player);
         playerDataUtil.saveAll(player);
     }
