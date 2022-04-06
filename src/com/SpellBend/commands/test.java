@@ -6,7 +6,7 @@ import com.SpellBend.data.Lists;
 import com.SpellBend.spell.Spell;
 import com.SpellBend.spell.SpellHandler;
 import com.SpellBend.util.Item;
-import com.SpellBend.util.MathUtil;
+import com.SpellBend.util.math.MathUtil;
 import com.SpellBend.playerData.CoolDowns;
 import com.SpellBend.playerData.DmgMods;
 import com.SpellBend.util.playerDataBoard;

@@ -1,14 +1,20 @@
 package com.SpellBend.data;
 
 import com.SpellBend.organize.AllowedWord;
+//import com.SpellBend.util.TextUtil;
+//import com.SpellBend.util.math.NumArrayBase;
+//import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+//import java.util.Map;
 
 public class FilterTexts {
-    public static final ArrayList<HashMap<String, String>> aliases = createAliasesList();
+    public static final ArrayList<HashMap<String, String>> aliases = createAliasesList()/*dealiasAliasesList(createAliasedAliasesList())*/;
+    //public static final HashMap<String, ArrayList<String>> aliasesAliases = createAliasesAliasesList();
     public static final HashMap<String, ArrayList<AllowedWord>> filtered = createFilteredMap();
+    @SuppressWarnings("SpellCheckingInspection")
     public static final String[] funSentence = {"Pump it up DJ!", "I love sitting by the lake on Tuesdays.", "You're good at this!", "Big, big, chungus...", "I'm a big fan!",
             "I've always despised pineapple Pizza...", "I should be in class...", "This milk tastes horrible.", "Sheesh!", "Me and your MOM!", "Is water wet?", "So toxic...",
             "That was not easy, in fact, you held up quite a good fight!", "Good game indeed!", "White chocolate; it's fake!", "Dark chocolate; you know it, you love it...", "Real...",
@@ -22,15 +28,23 @@ public class FilterTexts {
         HashMap<String, String> aliasesMap = new HashMap<>();
 
         aliasesMap.put("4", "a");
-        aliasesMap.put("{", "c");
-        aliasesMap.put("[", "c");
+        aliasesMap.put("8", "b");
         aliasesMap.put("(", "c");
+        aliasesMap.put("[", "c");
+        aliasesMap.put("{", "c");
+        aliasesMap.put("<", "c");
         aliasesMap.put("3", "e");
+        aliasesMap.put("6", "g");
+        aliasesMap.put("9", "g");
         aliasesMap.put("!", "i");
         aliasesMap.put("|", "i");
+        aliasesMap.put("/", "i");
+        aliasesMap.put("\\", "i");
         aliasesMap.put("1", "i");
         aliasesMap.put("0", "o");
         aliasesMap.put("5", "s");
+        aliasesMap.put("$", "s");
+        aliasesMap.put("2", "z");
 
         //noinspection unchecked
         aliasesList.add((HashMap<String, String>) aliasesMap.clone());
@@ -40,29 +54,263 @@ public class FilterTexts {
         aliasesMap.put("|)", "d");
         aliasesMap.put("|]", "d");
         aliasesMap.put("|}", "d");
-        aliasesMap.put("1)", "d");
-        aliasesMap.put("1]", "d");
-        aliasesMap.put("1}", "d");
-        aliasesMap.put("!)", "d");
-        aliasesMap.put("!]", "d");
-        aliasesMap.put("!}", "d");
+        aliasesMap.put("|>", "d");
         aliasesMap.put("i)", "d");
         aliasesMap.put("i]", "d");
         aliasesMap.put("i}", "d");
+        aliasesMap.put("i>", "d");
+        aliasesMap.put("1)", "d");
+        aliasesMap.put("1]", "d");
+        aliasesMap.put("1}", "d");
+        aliasesMap.put("1>", "d");
+        aliasesMap.put("!)", "d");
+        aliasesMap.put("!]", "d");
+        aliasesMap.put("!}", "d");
+        aliasesMap.put("!>", "d");
         aliasesMap.put("l)", "d");
         aliasesMap.put("l]", "d");
         aliasesMap.put("l}", "d");
+        aliasesMap.put("l>", "d");
+        aliasesMap.put("|(", "k");
+        aliasesMap.put("|[", "k");
+        aliasesMap.put("|{", "k");
         aliasesMap.put("|<", "k");
+        aliasesMap.put("i(", "k");
+        aliasesMap.put("i[", "k");
+        aliasesMap.put("i{", "k");
+        aliasesMap.put("i<", "k");
+        aliasesMap.put("1(", "k");
+        aliasesMap.put("1[", "k");
+        aliasesMap.put("1{", "k");
+        aliasesMap.put("1<", "k");
+        aliasesMap.put("!(", "k");
+        aliasesMap.put("![", "k");
+        aliasesMap.put("!{", "k");
+        aliasesMap.put("!<", "k");
+        aliasesMap.put("l(", "k");
+        aliasesMap.put("l[", "k");
+        aliasesMap.put("l{", "k");
+        aliasesMap.put("l<", "k");
         aliasesMap.put("()", "o");
+        aliasesMap.put("(]", "o");
+        aliasesMap.put("(}", "o");
+        aliasesMap.put("(>", "o");
+        aliasesMap.put("[)", "o");
         aliasesMap.put("[]", "o");
+        aliasesMap.put("[}", "o");
+        aliasesMap.put("[>", "o");
+        aliasesMap.put("{)", "o");
+        aliasesMap.put("{]", "o");
         aliasesMap.put("{}", "o");
+        aliasesMap.put("{>", "o");
+        aliasesMap.put("<)", "o");
+        aliasesMap.put("<]", "o");
+        aliasesMap.put("<}", "o");
+        aliasesMap.put("<>", "o");
+        aliasesMap.put("L|", "u");
+        aliasesMap.put("Li", "u");
+        aliasesMap.put("L1", "u");
+        aliasesMap.put("L!", "u");
+        aliasesMap.put("Ll", "u");
         aliasesMap.put("\\/", "v");
+
+        //noinspection unchecked
+        aliasesList.add((HashMap<String, String>) aliasesMap.clone());
+        aliasesMap.clear();
+
+        aliasesMap.put("/-/", "h");
+        aliasesMap.put("\\-\\", "h");
+        aliasesMap.put("|-|", "h");
+        aliasesMap.put("|-i", "h");
+        aliasesMap.put("|-1", "h");
+        aliasesMap.put("|-!", "h");
+        aliasesMap.put("|-l", "h");
+        aliasesMap.put("i-|", "h");
+        aliasesMap.put("i-i", "h");
+        aliasesMap.put("i-1", "h");
+        aliasesMap.put("i-!", "h");
+        aliasesMap.put("i-l", "h");
+        aliasesMap.put("1-|", "h");
+        aliasesMap.put("1-i", "h");
+        aliasesMap.put("1-1", "h");
+        aliasesMap.put("1-!", "h");
+        aliasesMap.put("1-l", "h");
+        aliasesMap.put("!-|", "h");
+        aliasesMap.put("!-i", "h");
+        aliasesMap.put("!-1", "h");
+        aliasesMap.put("!-!", "h");
+        aliasesMap.put("!-l", "h");
+        aliasesMap.put("l-|", "h");
+        aliasesMap.put("l-i", "h");
+        aliasesMap.put("l-1", "h");
+        aliasesMap.put("l-!", "h");
+        aliasesMap.put("l-l", "h");
+        aliasesMap.put("|\\|", "n");
+        aliasesMap.put("|\\i", "n");
+        aliasesMap.put("|\\1", "n");
+        aliasesMap.put("|\\!", "n");
+        aliasesMap.put("|\\l", "n");
+        aliasesMap.put("i\\|", "n");
+        aliasesMap.put("i\\i", "n");
+        aliasesMap.put("i\\1", "n");
+        aliasesMap.put("i\\!", "n");
+        aliasesMap.put("i\\l", "n");
+        aliasesMap.put("1\\|", "n");
+        aliasesMap.put("1\\i", "n");
+        aliasesMap.put("1\\1", "n");
+        aliasesMap.put("1\\!", "n");
+        aliasesMap.put("1\\l", "n");
+        aliasesMap.put("!\\|", "n");
+        aliasesMap.put("!\\i", "n");
+        aliasesMap.put("!\\1", "n");
+        aliasesMap.put("!\\!", "n");
+        aliasesMap.put("!\\l", "n");
+        aliasesMap.put("l\\|", "n");
+        aliasesMap.put("l\\i", "n");
+        aliasesMap.put("l\\1", "n");
+        aliasesMap.put("l\\!", "n");
+        aliasesMap.put("l\\l", "n");
+        aliasesMap.put("|/|", "n");
+        aliasesMap.put("|/i", "n");
+        aliasesMap.put("|/1", "n");
+        aliasesMap.put("|/!", "n");
+        aliasesMap.put("|/l", "n");
+        aliasesMap.put("i/|", "n");
+        aliasesMap.put("i/i", "n");
+        aliasesMap.put("i/1", "n");
+        aliasesMap.put("i/!", "n");
+        aliasesMap.put("i/l", "n");
+        aliasesMap.put("1/|", "n");
+        aliasesMap.put("1/i", "n");
+        aliasesMap.put("1/1", "n");
+        aliasesMap.put("1/!", "n");
+        aliasesMap.put("1/l", "n");
+        aliasesMap.put("!/|", "n");
+        aliasesMap.put("!/i", "n");
+        aliasesMap.put("!/1", "n");
+        aliasesMap.put("!/!", "n");
+        aliasesMap.put("!/l", "n");
+        aliasesMap.put("l/|", "n");
+        aliasesMap.put("l/i", "n");
+        aliasesMap.put("l/1", "n");
+        aliasesMap.put("l/!", "n");
+        aliasesMap.put("l/l", "n");
 
         aliasesList.add(aliasesMap);
 
         return aliasesList;
     }
 
+    /*private static @NotNull ArrayList<HashMap<String, String>> createAliasedAliasesList() {
+        ArrayList<HashMap<String, String>> aliasesList = new ArrayList<>();
+        HashMap<String, String> aliasesMap = new HashMap<>();
+
+        aliasesMap.put("4", "a");
+        aliasesMap.put("8", "b");
+        aliasesMap.put("§(", "c");
+        aliasesMap.put("3", "e");
+        aliasesMap.put("6", "g");
+        aliasesMap.put("9", "g");
+        aliasesMap.put("!", "i");
+        aliasesMap.put("|", "i");
+        aliasesMap.put("/", "i");
+        aliasesMap.put("\\", "i");
+        aliasesMap.put("1", "i");
+        aliasesMap.put("0", "o");
+        aliasesMap.put("5", "s");
+        aliasesMap.put("2", "z");
+
+        //noinspection unchecked
+        aliasesList.add((HashMap<String, String>) aliasesMap.clone());
+        aliasesMap.clear();
+
+        aliasesMap.put("/\\", "a");
+        aliasesMap.put("§|§)", "d");
+        aliasesMap.put("|<", "k");
+        aliasesMap.put("§(§)", "o");
+        aliasesMap.put("\\/", "v");
+
+        //noinspection unchecked
+        aliasesList.add((HashMap<String, String>) aliasesMap.clone());
+        aliasesMap.clear();
+
+        aliasesMap.put("/-/", "h");
+        aliasesMap.put("\\-\\", "h");
+        aliasesMap.put("§|-§|", "h");
+        aliasesMap.put("§|\\§|", "n");
+        aliasesMap.put("§|/§|", "n");
+
+        aliasesList.add(aliasesMap);
+
+        return aliasesList;
+    }
+
+    private static @NotNull ArrayList<HashMap<String, String>> dealiasAliasesList(@NotNull ArrayList<HashMap<String, String>> aliasedAliasesList) {
+        for (HashMap<String, String> aliasedAliases : aliasedAliasesList) {
+            for (Map.Entry<String, String> alias : aliasedAliases.entrySet()) {
+                if (!alias.getKey().contains("§")) continue;
+                aliasedAliases.remove(alias.getKey());
+
+                ArrayList<Integer> StringPossToDealias = TextUtil.getStringOccurrences(alias.getKey(), "§");
+                byte[] base = new byte[StringPossToDealias.size()];
+                for (int i = 0;i<base.length;i++) //noinspection ConstantConditions
+                    base[i] = (byte) aliasesAliases.get(String.valueOf(alias.getKey().charAt(StringPossToDealias.get(i)+1))).size();
+                NumArrayBase possibilities = new NumArrayBase(base);
+                int product = 1;
+                for (byte b : base) product *= b;
+                Bukkit.getLogger().info("§b" + product);
+
+                for (int i = 0;i<product;i++) {
+                    ArrayList<Byte> possibilitiesList = possibilities.getValue();
+                    StringBuilder stringBuilder = new StringBuilder(alias.getKey());
+                    for (int n = possibilitiesList.size()-1;n>=0;n--)
+                        stringBuilder.replace(StringPossToDealias.get(n), StringPossToDealias.get(n)+2, aliasedAliases.get(String.valueOf(alias.getKey().charAt(n+1))));
+                    aliasedAliases.put(stringBuilder.toString(), alias.getValue());
+
+                    possibilities.add(1);
+                }
+            }
+        }
+
+        return aliasedAliasesList;
+    }
+
+    private static @NotNull HashMap<String, ArrayList<String>> createAliasesAliasesList() {
+        HashMap<String, ArrayList<String>> aliasedAliasesMap = new HashMap<>();
+        ArrayList<String> aliasedAliasesList = new ArrayList<>();
+
+        aliasedAliasesList.add("i");
+        aliasedAliasesList.add("1");
+        aliasedAliasesList.add("!");
+        aliasedAliasesList.add("|");
+        aliasedAliasesList.add("l");
+        aliasedAliasesList.add("/");
+        aliasedAliasesList.add("\\");
+
+        //noinspection unchecked
+        aliasedAliasesMap.put("|", (ArrayList<String>) aliasedAliasesList.clone());
+        aliasedAliasesList.clear();
+
+        aliasedAliasesList.add(")");
+        aliasedAliasesList.add("}");
+        aliasedAliasesList.add("]");
+        aliasedAliasesList.add(">");
+
+        //noinspection unchecked
+        aliasedAliasesMap.put(")", (ArrayList<String>) aliasedAliasesList.clone());
+        aliasedAliasesList.clear();
+
+        aliasedAliasesList.add("(");
+        aliasedAliasesList.add("{");
+        aliasedAliasesList.add("[");
+        aliasedAliasesList.add("<");
+
+        aliasedAliasesMap.put("(", aliasedAliasesList);
+
+        return aliasedAliasesMap;
+    }*/
+
+    @SuppressWarnings("SpellCheckingInspection")
     private static @NotNull HashMap<String, ArrayList<AllowedWord>> createFilteredMap() {
         HashMap<String, ArrayList<AllowedWord>> filteredMap = new HashMap<>();
         ArrayList<AllowedWord> allowedList = new ArrayList<>();
@@ -105,6 +353,10 @@ public class FilterTexts {
         filteredMap.put("nigga", allowedList);
 
         filteredMap.put("nigg", allowedList);
+
+        allowedList.add(new AllowedWord("night", 0, 3, 2));
+        //noinspection unchecked
+        filteredMap.put("nig", (ArrayList<AllowedWord>) allowedList.clone());
 
         filteredMap.put("dick", allowedList);
 

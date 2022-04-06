@@ -3,7 +3,7 @@ package com.SpellBend.playerData;
 import com.SpellBend.data.Lists;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.data.Enums;
-import com.SpellBend.util.MathUtil;
+import com.SpellBend.util.math.MathUtil;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
