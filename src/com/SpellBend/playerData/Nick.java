@@ -1,5 +1,6 @@
 package com.SpellBend.playerData;
 
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,10 +21,10 @@ public class Nick {
 
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
-            persistentPlayerSessionStorage.nick.put(player.getUniqueId(), data.get(playerDataUtil.nickKey, PersistentDataType.STRING));
+            persistentPlayerSessionStorage.nick.put(player.getUniqueId(), data.get(PersistentDataKeys.nickKey, PersistentDataType.STRING));
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have Nick set up, setting Nick to " + player.getDisplayName() + "!");
-            data.set(playerDataUtil.nickKey, PersistentDataType.STRING, player.getDisplayName());
+            data.set(PersistentDataKeys.nickKey, PersistentDataType.STRING, player.getDisplayName());
             persistentPlayerSessionStorage.nick.put(player.getUniqueId(), player.getDisplayName());
         }
     }
@@ -44,7 +45,7 @@ public class Nick {
 
     public static void saveNick(@NotNull Player player) {
         if (persistentPlayerSessionStorage.nick.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.nickKey, PersistentDataType.STRING, persistentPlayerSessionStorage.nick.get(player.getUniqueId()));
+            player.getPersistentDataContainer().set(PersistentDataKeys.nickKey, PersistentDataType.STRING, persistentPlayerSessionStorage.nick.get(player.getUniqueId()));
             persistentPlayerSessionStorage.nick.remove(player.getUniqueId());
             return;
         }

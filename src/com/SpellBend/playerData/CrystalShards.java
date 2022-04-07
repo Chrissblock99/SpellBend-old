@@ -1,5 +1,6 @@
 package com.SpellBend.playerData;
 
+import com.SpellBend.data.PersistentDataKeys;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -19,10 +20,10 @@ public class CrystalShards {
 
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
-            persistentPlayerSessionStorage.crystalShards.put(player.getUniqueId(), data.get(playerDataUtil.crystalShardsKey, PersistentDataType.INTEGER));
+            persistentPlayerSessionStorage.crystalShards.put(player.getUniqueId(), data.get(PersistentDataKeys.crystalShardsKey, PersistentDataType.INTEGER));
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have CrystalShards set up, setting CrystalShards to 0!");
-            data.set(playerDataUtil.crystalShardsKey, PersistentDataType.INTEGER, 0);
+            data.set(PersistentDataKeys.crystalShardsKey, PersistentDataType.INTEGER, 0);
             persistentPlayerSessionStorage.crystalShards.put(player.getUniqueId(), 0);
         }
     }
@@ -46,7 +47,7 @@ public class CrystalShards {
 
     public static void saveCrystalShards(@NotNull Player player) {
         if (persistentPlayerSessionStorage.crystalShards.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.crystalShardsKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.crystalShards.get(player.getUniqueId()));
+            player.getPersistentDataContainer().set(PersistentDataKeys.crystalShardsKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.crystalShards.get(player.getUniqueId()));
             persistentPlayerSessionStorage.crystalShards.remove(player.getUniqueId());
             return;
         }

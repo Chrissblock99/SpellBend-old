@@ -1,6 +1,7 @@
 package com.SpellBend.playerData;
 
 import com.SpellBend.data.Lists;
+import com.SpellBend.data.PersistentDataKeys;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -22,14 +23,14 @@ public class DmgMods {
         try {
             Float[] dmgMods = new Float[3];
             //noinspection ConstantConditions
-            String[] stringFloats = data.get(playerDataUtil.dmgModsKey, PersistentDataType.STRING).split(", ");
+            String[] stringFloats = data.get(PersistentDataKeys.dmgModsKey, PersistentDataType.STRING).split(", ");
 
             for (int i = 0;i<stringFloats.length;i++) dmgMods[i] = Float.parseFloat(stringFloats[i]);
 
             persistentPlayerSessionStorage.dmgMods.put(player.getUniqueId(), dmgMods);
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have dmgMods set up, setting dmgMods to 1, 1, 1");
-            data.set(playerDataUtil.dmgModsKey, PersistentDataType.STRING, "1, 1, 1");
+            data.set(PersistentDataKeys.dmgModsKey, PersistentDataType.STRING, "1, 1, 1");
             persistentPlayerSessionStorage.dmgMods.put(player.getUniqueId(), new Float[]{1f, 1f, 1f});
         }
     }
@@ -102,7 +103,7 @@ public class DmgMods {
 
             for (int i = 0;i<dmgMods.length;i++) stringFloats[i] = String.valueOf(dmgMods[i]);
 
-            player.getPersistentDataContainer().set(playerDataUtil.dmgModsKey, PersistentDataType.STRING, String.join(", ", stringFloats));
+            player.getPersistentDataContainer().set(PersistentDataKeys.dmgModsKey, PersistentDataType.STRING, String.join(", ", stringFloats));
             persistentPlayerSessionStorage.dmgMods.remove(player.getUniqueId());
             return;
         }

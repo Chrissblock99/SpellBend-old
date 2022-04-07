@@ -1,12 +1,11 @@
 package com.SpellBend.playerData;
 
-import com.SpellBend.PluginMain;
 import com.SpellBend.data.Elements;
 import com.SpellBend.data.Enums;
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.*;
 import com.SpellBend.spell.SpellHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -14,43 +13,24 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.text.SimpleDateFormat;
-
-//@SuppressWarnings("unused")
 public class playerDataUtil {
-    private final static PluginMain plugin = PluginMain.getInstance();
-                                                          //DO NOT CHANGE THESE  v
-    public final static NamespacedKey gemsKey = new NamespacedKey(plugin, "gems");
-    public final static NamespacedKey goldKey = new NamespacedKey(plugin, "gold");
-    public final static NamespacedKey spellsOwnedKey = new NamespacedKey(plugin, "spellsOwned");
-    public static final NamespacedKey coolDownsKey = new NamespacedKey(plugin, "coolDowns");
-    public final static NamespacedKey dmgModsKey = new NamespacedKey(plugin, "dmgMods");
-    public final static NamespacedKey ranksKey = new NamespacedKey(plugin, "ranks");
-    public final static NamespacedKey badgesKey = new NamespacedKey(plugin, "badges");
-    public final static NamespacedKey nickKey = new NamespacedKey(plugin, "nick");
-    public static final NamespacedKey suffixKey = new NamespacedKey(plugin, "suffix");
-    public final static NamespacedKey crystalsKey = new NamespacedKey(plugin, "crystals");
-    public final static NamespacedKey crystalShardsKey = new NamespacedKey(plugin, "crystalShards");
-                                                                        //DO NOT CHANGE THOSE  /\
-    public final static SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
-
     /**Sets up all the PersistentData of the player
      *
      * @param player The player who's PersistentData to set up
      */
     public static void setupPlayerData(@NotNull Player player) {
         PersistentDataContainer data = player.getPersistentDataContainer();
-        data.set(gemsKey, PersistentDataType.INTEGER, 150);
-        data.set(goldKey, PersistentDataType.INTEGER, 650);
-        data.set(spellsOwnedKey, PersistentDataType.INTEGER_ARRAY, new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
-        data.set(coolDownsKey, PersistentDataType.STRING, "");
-        data.set(dmgModsKey, PersistentDataType.STRING, "1, 1, 1");
-        data.set(ranksKey, PersistentDataType.STRING, "player");
-        data.set(badgesKey, PersistentDataType.STRING, "");
-        data.set(nickKey, PersistentDataType.STRING, player.getDisplayName());
-        data.set(suffixKey, PersistentDataType.STRING, "");
-        data.set(crystalsKey, PersistentDataType.INTEGER, 0);
-        data.set(crystalShardsKey, PersistentDataType.INTEGER, 0);
+        data.set(PersistentDataKeys.gemsKey, PersistentDataType.INTEGER, 150);
+        data.set(PersistentDataKeys.goldKey, PersistentDataType.INTEGER, 650);
+        data.set(PersistentDataKeys.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY, new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+        data.set(PersistentDataKeys.coolDownsKey, PersistentDataType.STRING, "");
+        data.set(PersistentDataKeys.dmgModsKey, PersistentDataType.STRING, "1, 1, 1");
+        data.set(PersistentDataKeys.ranksKey, PersistentDataType.STRING, "player");
+        data.set(PersistentDataKeys.badgesKey, PersistentDataType.STRING, "");
+        data.set(PersistentDataKeys.nickKey, PersistentDataType.STRING, player.getDisplayName());
+        data.set(PersistentDataKeys.suffixKey, PersistentDataType.STRING, "");
+        data.set(PersistentDataKeys.crystalsKey, PersistentDataType.INTEGER, 0);
+        data.set(PersistentDataKeys.crystalShardsKey, PersistentDataType.INTEGER, 0);
     }
 
     /**Loads all the persistentData of the player

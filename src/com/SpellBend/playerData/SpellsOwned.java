@@ -2,6 +2,7 @@ package com.SpellBend.playerData;
 
 import com.SpellBend.data.Maps;
 import com.SpellBend.data.Enums;
+import com.SpellBend.data.PersistentDataKeys;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -25,10 +26,10 @@ public class SpellsOwned {
 
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
-            persistentPlayerSessionStorage.spellsOwned.put(player.getUniqueId(), data.get(playerDataUtil.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY));
+            persistentPlayerSessionStorage.spellsOwned.put(player.getUniqueId(), data.get(PersistentDataKeys.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY));
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have spellsOwned set up, setting spellsOwned to int array of 28 zeros!");
-            data.set(playerDataUtil.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY, new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
+            data.set(PersistentDataKeys.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY, new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
             persistentPlayerSessionStorage.spellsOwned.put(player.getUniqueId(), new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
         }
     }
@@ -72,7 +73,7 @@ public class SpellsOwned {
 
     public static void saveSpellsOwned(@NotNull Player player) {
         if (persistentPlayerSessionStorage.spellsOwned.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY, persistentPlayerSessionStorage.spellsOwned.get(player.getUniqueId()));
+            player.getPersistentDataContainer().set(PersistentDataKeys.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY, persistentPlayerSessionStorage.spellsOwned.get(player.getUniqueId()));
             persistentPlayerSessionStorage.spellsOwned.remove(player.getUniqueId());
             return;
         }

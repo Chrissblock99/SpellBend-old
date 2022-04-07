@@ -6,7 +6,6 @@ import com.SpellBend.spell.SpellHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -140,7 +139,7 @@ public class Item {
         return item;
     }
 
-    public static @NotNull ItemStack create(Material material, String name, String[] lore, int CustomModelData, @NotNull HashMap<NamespacedKey, String> persistentData) {
+    public static @NotNull ItemStack create(@NotNull Material material, @NotNull String name, @NotNull String[] lore, int CustomModelData, @NotNull HashMap<NamespacedKey, String> persistentData) {
         ItemStack item = new ItemStack(Material.STONE);
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
@@ -157,6 +156,21 @@ public class Item {
 
     public static @NotNull ItemStack edit(@NotNull ItemStack item, @NotNull String[] lore) {
         item.getItemMeta().setLore(Arrays.asList(lore));
+        return item;
+    }
+
+    public static @NotNull ItemStack edit(@NotNull ItemStack item, @NotNull String key, @NotNull String customData) {
+        item.getItemMeta().getPersistentDataContainer().set(new NamespacedKey(plugin, key), PersistentDataType.STRING, customData);
+        return item;
+    }
+
+    public static @NotNull ItemStack edit(@NotNull ItemStack item, int CustomModelData, @NotNull String[] lore, @NotNull NamespacedKey key, @NotNull String customData) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) throw new NullPointerException("The meta of item to edit was null!");
+        meta.setCustomModelData(CustomModelData);
+        meta.setLore(Arrays.asList(lore));
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, customData);
+        item.setItemMeta(meta);
         return item;
     }
 

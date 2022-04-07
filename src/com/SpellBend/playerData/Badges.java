@@ -1,6 +1,7 @@
 package com.SpellBend.playerData;
 
 import com.SpellBend.data.Lists;
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.BadgeObj;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
@@ -28,13 +29,13 @@ public class Badges {
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
             //noinspection ConstantConditions
-            ArrayList<String> badgesArray = new ArrayList<>(Arrays.asList(data.get(playerDataUtil.badgesKey, PersistentDataType.STRING).split(", ")));
+            ArrayList<String> badgesArray = new ArrayList<>(Arrays.asList(data.get(PersistentDataKeys.badgesKey, PersistentDataType.STRING).split(", ")));
             //noinspection RedundantCollectionOperation
             if (badgesArray.contains("")) badgesArray.remove("");
             persistentPlayerSessionStorage.badges.put(player.getUniqueId(), badgesArray);
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have Badges set up, setting Badges to \"\"");
-            data.set(playerDataUtil.badgesKey, PersistentDataType.STRING, "");
+            data.set(PersistentDataKeys.badgesKey, PersistentDataType.STRING, "");
             persistentPlayerSessionStorage.badges.put(player.getUniqueId(), new ArrayList<>());
         }
     }
@@ -125,7 +126,7 @@ public class Badges {
 
     public static void saveBadges(@NotNull Player player) {
         if (persistentPlayerSessionStorage.badges.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.badgesKey, PersistentDataType.STRING, String.join(", ", persistentPlayerSessionStorage.badges.get(player.getUniqueId())));
+            player.getPersistentDataContainer().set(PersistentDataKeys.badgesKey, PersistentDataType.STRING, String.join(", ", persistentPlayerSessionStorage.badges.get(player.getUniqueId())));
             persistentPlayerSessionStorage.badges.remove(player.getUniqueId());
             return;
         }

@@ -1,5 +1,6 @@
 package com.SpellBend.playerData;
 
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,10 +21,10 @@ public class Gold {
 
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
-            persistentPlayerSessionStorage.gold.put(player.getUniqueId(), data.get(playerDataUtil.goldKey, PersistentDataType.INTEGER));
+            persistentPlayerSessionStorage.gold.put(player.getUniqueId(), data.get(PersistentDataKeys.goldKey, PersistentDataType.INTEGER));
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have Gold set up, setting Gold to 650!");
-            data.set(playerDataUtil.goldKey, PersistentDataType.INTEGER, 650);
+            data.set(PersistentDataKeys.goldKey, PersistentDataType.INTEGER, 650);
             persistentPlayerSessionStorage.gold.put(player.getUniqueId(), 650);
         }
     }
@@ -48,7 +49,7 @@ public class Gold {
 
     public static void saveGold(@NotNull Player player) {
         if (persistentPlayerSessionStorage.gold.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.goldKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.gold.get(player.getUniqueId()));
+            player.getPersistentDataContainer().set(PersistentDataKeys.goldKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.gold.get(player.getUniqueId()));
             persistentPlayerSessionStorage.gold.remove(player.getUniqueId());
             return;
         }

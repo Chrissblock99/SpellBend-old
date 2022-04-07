@@ -1,32 +1,12 @@
 package com.SpellBend.data;
 
-import com.SpellBend.organize.Interfaces.PlayerFunction;
-import com.SpellBend.util.GUICreationUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public class Maps {
-    public final static HashMap<String, PlayerFunction> itemNameToPlayerFunctionMap = createItemNameToPlayerFunctionMap();
     public final static HashMap<Enums.Element, Integer> elementToIndexMap = createElementToIndexMap();
     public final static HashMap<Enums.Element, Integer> elementToPriceMap = createElementToPriceMap();
-
-    private static @NotNull HashMap<String, PlayerFunction> createItemNameToPlayerFunctionMap() {
-        HashMap<String, PlayerFunction> ItemToPlayerFunctionMap = new HashMap<>();
-
-        ItemToPlayerFunctionMap.put("EmberElement", (player) -> player.openInventory(GUICreationUtil.createEmberGUI(player)));
-        ItemToPlayerFunctionMap.put("WaterElement", (player) -> player.openInventory(GUICreationUtil.createWaterGUI(player)));
-        ItemToPlayerFunctionMap.put("NatureElement", (player) -> player.sendMessage("Nature"));
-        ItemToPlayerFunctionMap.put("EarthElement", (player) -> player.sendMessage("Earth"));
-        ItemToPlayerFunctionMap.put("ElectroElement", (player) -> player.sendMessage("Electro"));
-        ItemToPlayerFunctionMap.put("IceElement", (player) -> player.sendMessage("Ice"));
-        ItemToPlayerFunctionMap.put("AetherElement", (player) -> player.sendMessage("Aether"));
-        ItemToPlayerFunctionMap.put("SoulElement", (player) -> player.sendMessage("Soul"));
-        ItemToPlayerFunctionMap.put("TimeElement", (player) -> player.sendMessage("Time"));
-        ItemToPlayerFunctionMap.put("MetalElement", (player) -> player.sendMessage("Metal"));
-
-        return ItemToPlayerFunctionMap;
-    }
 
     private static @NotNull HashMap<Enums.Element, Integer> createElementToIndexMap() {
         HashMap<Enums.Element, Integer> elementToIndexMap= new HashMap<>();

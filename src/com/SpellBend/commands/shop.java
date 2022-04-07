@@ -1,7 +1,7 @@
 package com.SpellBend.commands;
 
 import com.SpellBend.util.EventUtil;
-import com.SpellBend.util.GUICreationUtil;
+import com.SpellBend.GUI.GUICreationUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;

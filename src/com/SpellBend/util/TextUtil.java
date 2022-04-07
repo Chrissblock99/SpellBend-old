@@ -3,17 +3,19 @@ package com.SpellBend.util;
 import com.SpellBend.data.FilterTexts;
 import com.SpellBend.organize.AllowedWord;
 import com.SpellBend.util.math.MathUtil;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class TextUtil {
     public static final String[] lowerCaseABC = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
     public static final String[] upperCaseABC = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    public static final ArrayList<String> lowerCaseABCList = new ArrayList<>(Arrays.asList(lowerCaseABC));
+    public static final ArrayList<String> upperCaseABCList = new ArrayList<>(Arrays.asList(upperCaseABC));
     public static final String[] formattingSymbols = {" ", ".", ",", "?", "!", ":", "\""};
     public static final String[] notAliasedFormattingSymbols = {" ", ".", ",", "?", ":", "\""};
 
@@ -38,6 +40,10 @@ public class TextUtil {
         if (hasBadWord(removeOtherStrings(message, upperCaseABC))) return (String) MathUtil.randomEntry(FilterTexts.funSentence);
         //Bukkit.getLogger().info("§blowerCaseABC");
         if (hasBadWord(removeOtherStrings(message, lowerCaseABC))) return (String) MathUtil.randomEntry(FilterTexts.funSentence);
+        //Bukkit.getLogger().info("§b1");
+        if (hasBadWord(removeOtherStrings(replaceAliases(removeStrings(switchCase(message), upperCaseABC)), lowerCaseABC))) return (String) MathUtil.randomEntry(FilterTexts.funSentence);
+        //Bukkit.getLogger().info("§b2");
+        if (hasBadWord(removeOtherStrings(replaceAliases(removeStrings(message, upperCaseABC)), lowerCaseABC))) return (String) MathUtil.randomEntry(FilterTexts.funSentence);
 
         //Bukkit.getLogger().info("§breplacing Aliases: " + message);
         message = removeOtherStrings(replaceAliases(removeStrings(message, notAliasedFormattingSymbols)).toLowerCase(), lowerCaseABC);
@@ -54,6 +60,7 @@ public class TextUtil {
      * @return if the String contains bad words or not
      */
     public static boolean hasBadWord(@NotNull String string) {
+        if (string.isEmpty()) return false;
         string = string.toLowerCase();
         for (Map.Entry<String, ArrayList<AllowedWord>> filteredWord : FilterTexts.filtered.entrySet()) {
             boolean hasMatch = false;
@@ -74,6 +81,28 @@ public class TextUtil {
             }
         }
         return false;
+    }
+
+    /**Replaces all aliases for alphabetic characters inside the String
+     *
+     * @param string The String to replace aliases
+     * @return The deAliased String
+     */
+    public static @NotNull String replaceAliases(@NotNull String string) {
+        for (int i = FilterTexts.aliases.size()-1;i>=0;i--)
+            for (Map.Entry<String, String> entry : FilterTexts.aliases.get(i).entrySet()) {
+                string = string.replace(entry.getKey(), entry.getValue());
+                //Bukkit.getLogger().info("§b" + string);
+            }
+        return string;
+    }
+
+    public static @NotNull String switchCase(@NotNull String string) {
+        String[] charList = string.split("");
+        for (int i = 0;i< charList.length;i++)
+            if (lowerCaseABCList.contains(charList[i])) charList[i] = charList[i].toUpperCase();
+            else charList[i] = charList[i].toLowerCase();
+        return String.join("", charList);
     }
 
     /**Removes all strings not contained in the list from the string
@@ -100,18 +129,6 @@ public class TextUtil {
         return string;
     }
 
-    /**Replaces all aliases for alphabetic characters inside the String
-     *
-     * @param string The String to replace aliases
-     * @return The deAliased String
-     */
-    public static @NotNull String replaceAliases(@NotNull String string) {
-        for (int i = FilterTexts.aliases.size()-1;i>=0;i--)
-            for (Map.Entry<String, String> entry : FilterTexts.aliases.get(i).entrySet())
-                string = string.replace(entry.getKey(), entry.getValue());
-        return string;
-    }
-
     /** Returns a List of all indexes where the subString starts
      *
      * @param mainString The String to check inside
@@ -121,9 +138,7 @@ public class TextUtil {
     public static @NotNull ArrayList<Integer> getStringOccurrences(@NotNull String mainString, @NotNull String subString) {
         ArrayList<Integer> occurrences = new ArrayList<>();
         for (int index = mainString.indexOf(subString); index >= 0; index = mainString.indexOf(subString, index + 1))
-        {
             occurrences.add(index);
-        }
         return occurrences;
     }
 

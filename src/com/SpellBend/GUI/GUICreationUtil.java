@@ -1,10 +1,12 @@
-package com.SpellBend.util;
+package com.SpellBend.GUI;
 
 import com.SpellBend.data.Elements;
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.ElementObj;
 import com.SpellBend.data.Enums;
 import com.SpellBend.data.Maps;
 import com.SpellBend.playerData.*;
+import com.SpellBend.util.Item;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -15,10 +17,10 @@ import java.util.ArrayList;
 public class GUICreationUtil {
     private final static Inventory DEFAULT_SHOP = createDefaultShop();
 
-    private static @NotNull String[] createOwnageLore(@NotNull Player player, @NotNull Enums.Element element) {
+    private static @NotNull String[] createElementOwnageLore(@NotNull Player player, @NotNull Enums.Element element) {
         if (SpellsOwned.getSpellsOwned(player, element) == 0) {
             int price = Maps.elementToPriceMap.get(element);
-            return new String[]{"§8-----------", "§e$ §b" + price + " §3Gems", (Gems.getGems(player)>price) ? "§2You can buy this." : "§cYou can't §ebuy §cthis yet!"};
+            return new String[]{"§8----------------", "§e$ §b" + price + " §3Gems", (Gems.getGems(player)>=price) ? "§2You can buy this." : "§cYou can't §ebuy §cthis yet!"};
         }
         return new String[]{"§8----------------", "§a§lSHIFT CLICK TO EQUIP"};
     }
@@ -29,8 +31,14 @@ public class GUICreationUtil {
         ArrayList<ElementObj> elementList = Elements.elementList;
         /*int x = i%7;
         int y = i/7;
-        shop.setItem(10+(9*y)+x, elementList.get(i).getItem());*/
-        for (int i = 0;i<elementList.size();i++) shop.setItem(10+(9*(i/7))+(i%7), elementList.get(i).getItem());
+        shop.setItem(1+9+(9*y)+x, elementList.get(i).getItem());*/
+        for (int i = 0;i<elementList.size();i++)
+            shop.setItem(10+(9*(i/7))+(i%7),
+                    Item.edit(elementList.get(i).getItem(),
+                            101,
+                            createElementOwnageLore(player, elementList.get(i).getElement()),
+                            PersistentDataKeys.itemActionKey,
+                            "openShop" + elementList.get(i).getElement()));
 
         //Patron Cosmetics
         if (Ranks.hasRank(player, "patron")) shop.setItem(37, Item.create(Material.ENDER_CHEST, "§b§lPATRON COSMETICS", 301));
@@ -44,14 +52,15 @@ public class GUICreationUtil {
         return shop;
     }
 
-    public static @NotNull Inventory createElementGUI(@NotNull Player player, @NotNull ElementObj element) {
+    public static @NotNull Inventory createElementGUI(@NotNull Player player, @NotNull Enums.Element element) {
+        ElementObj elementObj = Elements.getElementByEnum(element);
         Inventory inv = createDefaultElementGUI("§c§lEmber");
 
-        inv.setItem(12, Item.edit(element.getSpellItem(0), new String[]{""}));
-        inv.setItem(14, element.getSpellItem(1));
-        inv.setItem(22, element.getSpellItem(2));
-        inv.setItem(30, element.getSpellItem(3));
-        inv.setItem(32, element.getSpellItem(4));
+        inv.setItem(12, Item.edit(elementObj.getSpellItem(0), new String[]{""}));
+        inv.setItem(14, elementObj.getSpellItem(1));
+        inv.setItem(22, elementObj.getSpellItem(2));
+        inv.setItem(30, elementObj.getSpellItem(3));
+        inv.setItem(32, elementObj.getSpellItem(4));
         inv.setItem(18, Item.create(Material.ARROW, "Back"));
 
         return inv;

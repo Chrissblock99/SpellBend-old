@@ -17,6 +17,7 @@ public class ElementObj {
         this.name = name;
         this.element = element;
         this.item = item;
+        if (spells.size() != 5) throw new IllegalArgumentException("Spell List must be of length 5!");
         this.spells = spells;
         this.price = price;
         this.index = index;

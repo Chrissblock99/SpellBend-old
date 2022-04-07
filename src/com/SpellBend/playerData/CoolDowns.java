@@ -1,6 +1,7 @@
 package com.SpellBend.playerData;
 
 import com.SpellBend.data.Lists;
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.data.Enums;
 import com.SpellBend.util.math.MathUtil;
@@ -12,9 +13,12 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CoolDowns {
+    public static final SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
+
     public static void loadCoolDowns(@NotNull Player player) {
         if (!player.isOnline()) {
             Bukkit.getLogger().warning(player.getDisplayName() + " is not online when trying to load CoolDowns, skipping loading!");
@@ -29,12 +33,12 @@ public class CoolDowns {
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
             //noinspection ConstantConditions
-            coolDownEntries = new ArrayList<>(Arrays.asList(data.get(playerDataUtil.coolDownsKey, PersistentDataType.STRING).split(", ")));
+            coolDownEntries = new ArrayList<>(Arrays.asList(data.get(PersistentDataKeys.coolDownsKey, PersistentDataType.STRING).split(", ")));
             //noinspection RedundantCollectionOperation
             if (coolDownEntries.contains("")) coolDownEntries.remove("");
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have coolDowns set up, setting coolDowns to \"\"!");
-            data.set(playerDataUtil.coolDownsKey, PersistentDataType.STRING, "");
+            data.set(PersistentDataKeys.coolDownsKey, PersistentDataType.STRING, "");
             persistentPlayerSessionStorage.coolDowns.put(player.getUniqueId(), new HashMap<>());
             return;
         }
@@ -49,8 +53,8 @@ public class CoolDowns {
             for (String string : infoStrings) Bukkit.getLogger().info(string);
 
             try {
-                coolDowns.put(Enums.SpellType.valueOf(entry[0]), new CoolDownEntry(Float.parseFloat(infoStrings[0]), playerDataUtil.timeParser.parse(infoStrings[1]), infoStrings[2]));
-                Bukkit.getLogger().info(entry[0] + ": " + new CoolDownEntry(Float.parseFloat(infoStrings[0]), playerDataUtil.timeParser.parse(infoStrings[1]), infoStrings[2]));
+                coolDowns.put(Enums.SpellType.valueOf(entry[0]), new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
+                Bukkit.getLogger().info(entry[0] + ": " + new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
             } catch (NumberFormatException exception) {
                 Bukkit.getLogger().warning("String \"" + infoStrings[0] + "\" is supposed to be a Float but isn't! " + exception);
             } catch (IllegalArgumentException exception) {
@@ -246,7 +250,7 @@ public class CoolDowns {
             }
             stringBuilder
                     .append(entry.getKey().toString()).append(": ")
-                    .append(info.timeInS).append("; ").append(playerDataUtil.timeParser.format(info.startDate)).append("; ").append(info.coolDownType)
+                    .append(info.timeInS).append("; ").append(timeParser.format(info.startDate)).append("; ").append(info.coolDownType)
                     .append(", ");
             hasEntries = true;
         }
@@ -255,7 +259,7 @@ public class CoolDowns {
             stringBuilder.delete(length-2,length);
         }
 
-        player.getPersistentDataContainer().set(playerDataUtil.coolDownsKey, PersistentDataType.STRING, stringBuilder.toString());
+        player.getPersistentDataContainer().set(PersistentDataKeys.coolDownsKey, PersistentDataType.STRING, stringBuilder.toString());
         persistentPlayerSessionStorage.coolDowns.remove(player.getUniqueId());
     }
 }

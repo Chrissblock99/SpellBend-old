@@ -71,26 +71,7 @@ public class FilterTexts {
         aliasesMap.put("l]", "d");
         aliasesMap.put("l}", "d");
         aliasesMap.put("l>", "d");
-        aliasesMap.put("|(", "k");
-        aliasesMap.put("|[", "k");
-        aliasesMap.put("|{", "k");
         aliasesMap.put("|<", "k");
-        aliasesMap.put("i(", "k");
-        aliasesMap.put("i[", "k");
-        aliasesMap.put("i{", "k");
-        aliasesMap.put("i<", "k");
-        aliasesMap.put("1(", "k");
-        aliasesMap.put("1[", "k");
-        aliasesMap.put("1{", "k");
-        aliasesMap.put("1<", "k");
-        aliasesMap.put("!(", "k");
-        aliasesMap.put("![", "k");
-        aliasesMap.put("!{", "k");
-        aliasesMap.put("!<", "k");
-        aliasesMap.put("l(", "k");
-        aliasesMap.put("l[", "k");
-        aliasesMap.put("l{", "k");
-        aliasesMap.put("l<", "k");
         aliasesMap.put("()", "o");
         aliasesMap.put("(]", "o");
         aliasesMap.put("(}", "o");
@@ -355,8 +336,10 @@ public class FilterTexts {
         filteredMap.put("nigg", allowedList);
 
         allowedList.add(new AllowedWord("night", 0, 3, 2));
+        allowedList.add(new AllowedWord("enigma", 1, 3, 2));
         //noinspection unchecked
         filteredMap.put("nig", (ArrayList<AllowedWord>) allowedList.clone());
+        allowedList.clear();
 
         filteredMap.put("dick", allowedList);
 
@@ -376,7 +359,9 @@ public class FilterTexts {
 
         filteredMap.put("porn", allowedList);
 
-        filteredMap.put("rape", allowedList);
+        allowedList.add(new AllowedWord("grape", 1, 4, 0));
+        //noinspection unchecked
+        filteredMap.put("rape", (ArrayList<AllowedWord>) allowedList.clone());
 
         filteredMap.put("raping", allowedList);
 

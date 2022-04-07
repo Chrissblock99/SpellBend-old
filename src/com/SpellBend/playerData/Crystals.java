@@ -1,5 +1,6 @@
 package com.SpellBend.playerData;
 
+import com.SpellBend.data.PersistentDataKeys;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -19,10 +20,10 @@ public class Crystals {
 
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
-            persistentPlayerSessionStorage.crystals.put(player.getUniqueId(), data.get(playerDataUtil.crystalsKey, PersistentDataType.INTEGER));
+            persistentPlayerSessionStorage.crystals.put(player.getUniqueId(), data.get(PersistentDataKeys.crystalsKey, PersistentDataType.INTEGER));
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have Crystals set up, setting Crystals to 0!");
-            data.set(playerDataUtil.crystalsKey, PersistentDataType.INTEGER, 0);
+            data.set(PersistentDataKeys.crystalsKey, PersistentDataType.INTEGER, 0);
             persistentPlayerSessionStorage.crystals.put(player.getUniqueId(), 0);
         }
     }
@@ -46,7 +47,7 @@ public class Crystals {
 
     public static void saveCrystals(@NotNull Player player) {
         if (persistentPlayerSessionStorage.crystals.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.crystalsKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.crystals.get(player.getUniqueId()));
+            player.getPersistentDataContainer().set(PersistentDataKeys.crystalsKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.crystals.get(player.getUniqueId()));
             persistentPlayerSessionStorage.crystals.remove(player.getUniqueId());
             return;
         }

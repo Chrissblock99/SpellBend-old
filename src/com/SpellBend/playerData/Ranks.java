@@ -1,6 +1,7 @@
 package com.SpellBend.playerData;
 
 import com.SpellBend.data.Lists;
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.RankObj;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
@@ -28,13 +29,13 @@ public class Ranks {
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
             //noinspection ConstantConditions
-            ArrayList<String> ranksArray = new ArrayList<>(Arrays.asList(data.get(playerDataUtil.ranksKey, PersistentDataType.STRING).split(", ")));
+            ArrayList<String> ranksArray = new ArrayList<>(Arrays.asList(data.get(PersistentDataKeys.ranksKey, PersistentDataType.STRING).split(", ")));
             //noinspection RedundantCollectionOperation
             if (ranksArray.contains("")) ranksArray.remove("");
             persistentPlayerSessionStorage.ranks.put(player.getUniqueId(), ranksArray);
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have Ranks set up, setting Ranks to \"player\"");
-            data.set(playerDataUtil.ranksKey, PersistentDataType.STRING, "player");
+            data.set(PersistentDataKeys.ranksKey, PersistentDataType.STRING, "player");
             persistentPlayerSessionStorage.ranks.put(player.getUniqueId(), new ArrayList<>(List.of("player")));
         }
     }
@@ -124,7 +125,7 @@ public class Ranks {
 
     public static void saveRanks(@NotNull Player player) {
         if (persistentPlayerSessionStorage.ranks.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.ranksKey, PersistentDataType.STRING, String.join(", ", persistentPlayerSessionStorage.ranks.get(player.getUniqueId())));
+            player.getPersistentDataContainer().set(PersistentDataKeys.ranksKey, PersistentDataType.STRING, String.join(", ", persistentPlayerSessionStorage.ranks.get(player.getUniqueId())));
             persistentPlayerSessionStorage.ranks.remove(player.getUniqueId());
             return;
         }

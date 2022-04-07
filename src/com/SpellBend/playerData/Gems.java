@@ -1,5 +1,6 @@
 package com.SpellBend.playerData;
 
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,10 +21,10 @@ public class Gems {
 
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
-            persistentPlayerSessionStorage.gems.put(player.getUniqueId(), data.get(playerDataUtil.gemsKey, PersistentDataType.INTEGER));
+            persistentPlayerSessionStorage.gems.put(player.getUniqueId(), data.get(PersistentDataKeys.gemsKey, PersistentDataType.INTEGER));
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have Gems set up, setting Gems to 150!");
-            data.set(playerDataUtil.gemsKey, PersistentDataType.INTEGER, 150);
+            data.set(PersistentDataKeys.gemsKey, PersistentDataType.INTEGER, 150);
             persistentPlayerSessionStorage.gems.put(player.getUniqueId(), 150);
         }
     }
@@ -48,7 +49,7 @@ public class Gems {
 
     public static void saveGems(@NotNull Player player) {
         if (persistentPlayerSessionStorage.gems.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.gemsKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.gems.get(player.getUniqueId()));
+            player.getPersistentDataContainer().set(PersistentDataKeys.gemsKey, PersistentDataType.INTEGER, persistentPlayerSessionStorage.gems.get(player.getUniqueId()));
             persistentPlayerSessionStorage.gems.remove(player.getUniqueId());
             return;
         }

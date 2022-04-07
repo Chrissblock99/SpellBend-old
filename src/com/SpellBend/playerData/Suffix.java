@@ -1,5 +1,6 @@
 package com.SpellBend.playerData;
 
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,10 +21,10 @@ public class Suffix {
 
         PersistentDataContainer data = player.getPersistentDataContainer();
         try {
-            persistentPlayerSessionStorage.suffix.put(player.getUniqueId(), data.get(playerDataUtil.suffixKey, PersistentDataType.STRING));
+            persistentPlayerSessionStorage.suffix.put(player.getUniqueId(), data.get(PersistentDataKeys.suffixKey, PersistentDataType.STRING));
         } catch (NullPointerException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " did not have Suffix set up, setting Suffix to \"\"!");
-            data.set(playerDataUtil.suffixKey, PersistentDataType.STRING, player.getDisplayName());
+            data.set(PersistentDataKeys.suffixKey, PersistentDataType.STRING, player.getDisplayName());
             persistentPlayerSessionStorage.suffix.put(player.getUniqueId(), player.getDisplayName());
         }
     }
@@ -44,7 +45,7 @@ public class Suffix {
 
     public static void saveSuffix(@NotNull Player player) {
         if (persistentPlayerSessionStorage.suffix.containsKey(player.getUniqueId())) {
-            player.getPersistentDataContainer().set(playerDataUtil.suffixKey, PersistentDataType.STRING, persistentPlayerSessionStorage.suffix.get(player.getUniqueId()));
+            player.getPersistentDataContainer().set(PersistentDataKeys.suffixKey, PersistentDataType.STRING, persistentPlayerSessionStorage.suffix.get(player.getUniqueId()));
             persistentPlayerSessionStorage.suffix.remove(player.getUniqueId());
             return;
         }

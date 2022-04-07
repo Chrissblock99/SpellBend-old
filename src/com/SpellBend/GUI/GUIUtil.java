@@ -1,4 +1,4 @@
-package com.SpellBend.util;
+package com.SpellBend.GUI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
