@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class badge {
-    private HashMap<String, subCommand> subCommands = new HashMap<>();
+    private final HashMap<String, subCommand> subCommands = new HashMap<>();
 
     public badge() {
         subCommands.put("add", (sender, arguments) -> {

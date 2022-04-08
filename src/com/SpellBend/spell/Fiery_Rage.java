@@ -1,6 +1,7 @@
 package com.SpellBend.spell;
 
 import com.SpellBend.PluginMain;
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.data.Enums;
 import com.SpellBend.util.math.MathUtil;
@@ -29,7 +30,7 @@ public class Fiery_Rage extends Spell implements killable {
     public Fiery_Rage(@NotNull Player player, @NotNull ItemStack item) {
         this.player = player;
         instance = this;
-        spellType = Enums.SpellType.valueOf(item.getItemMeta().getPersistentDataContainer().get(SpellHandler.spellTypeKey, PersistentDataType.STRING));
+        spellType = Enums.SpellType.valueOf(item.getItemMeta().getPersistentDataContainer().get(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING));
         windup();
     }
 

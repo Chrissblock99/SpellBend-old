@@ -182,121 +182,15 @@ public class FilterTexts {
         return aliasesList;
     }
 
-    /*private static @NotNull ArrayList<HashMap<String, String>> createAliasedAliasesList() {
-        ArrayList<HashMap<String, String>> aliasesList = new ArrayList<>();
-        HashMap<String, String> aliasesMap = new HashMap<>();
-
-        aliasesMap.put("4", "a");
-        aliasesMap.put("8", "b");
-        aliasesMap.put("§(", "c");
-        aliasesMap.put("3", "e");
-        aliasesMap.put("6", "g");
-        aliasesMap.put("9", "g");
-        aliasesMap.put("!", "i");
-        aliasesMap.put("|", "i");
-        aliasesMap.put("/", "i");
-        aliasesMap.put("\\", "i");
-        aliasesMap.put("1", "i");
-        aliasesMap.put("0", "o");
-        aliasesMap.put("5", "s");
-        aliasesMap.put("2", "z");
-
-        //noinspection unchecked
-        aliasesList.add((HashMap<String, String>) aliasesMap.clone());
-        aliasesMap.clear();
-
-        aliasesMap.put("/\\", "a");
-        aliasesMap.put("§|§)", "d");
-        aliasesMap.put("|<", "k");
-        aliasesMap.put("§(§)", "o");
-        aliasesMap.put("\\/", "v");
-
-        //noinspection unchecked
-        aliasesList.add((HashMap<String, String>) aliasesMap.clone());
-        aliasesMap.clear();
-
-        aliasesMap.put("/-/", "h");
-        aliasesMap.put("\\-\\", "h");
-        aliasesMap.put("§|-§|", "h");
-        aliasesMap.put("§|\\§|", "n");
-        aliasesMap.put("§|/§|", "n");
-
-        aliasesList.add(aliasesMap);
-
-        return aliasesList;
-    }
-
-    private static @NotNull ArrayList<HashMap<String, String>> dealiasAliasesList(@NotNull ArrayList<HashMap<String, String>> aliasedAliasesList) {
-        for (HashMap<String, String> aliasedAliases : aliasedAliasesList) {
-            for (Map.Entry<String, String> alias : aliasedAliases.entrySet()) {
-                if (!alias.getKey().contains("§")) continue;
-                aliasedAliases.remove(alias.getKey());
-
-                ArrayList<Integer> StringPossToDealias = TextUtil.getStringOccurrences(alias.getKey(), "§");
-                byte[] base = new byte[StringPossToDealias.size()];
-                for (int i = 0;i<base.length;i++) //noinspection ConstantConditions
-                    base[i] = (byte) aliasesAliases.get(String.valueOf(alias.getKey().charAt(StringPossToDealias.get(i)+1))).size();
-                NumArrayBase possibilities = new NumArrayBase(base);
-                int product = 1;
-                for (byte b : base) product *= b;
-                Bukkit.getLogger().info("§b" + product);
-
-                for (int i = 0;i<product;i++) {
-                    ArrayList<Byte> possibilitiesList = possibilities.getValue();
-                    StringBuilder stringBuilder = new StringBuilder(alias.getKey());
-                    for (int n = possibilitiesList.size()-1;n>=0;n--)
-                        stringBuilder.replace(StringPossToDealias.get(n), StringPossToDealias.get(n)+2, aliasedAliases.get(String.valueOf(alias.getKey().charAt(n+1))));
-                    aliasedAliases.put(stringBuilder.toString(), alias.getValue());
-
-                    possibilities.add(1);
-                }
-            }
-        }
-
-        return aliasedAliasesList;
-    }
-
-    private static @NotNull HashMap<String, ArrayList<String>> createAliasesAliasesList() {
-        HashMap<String, ArrayList<String>> aliasedAliasesMap = new HashMap<>();
-        ArrayList<String> aliasedAliasesList = new ArrayList<>();
-
-        aliasedAliasesList.add("i");
-        aliasedAliasesList.add("1");
-        aliasedAliasesList.add("!");
-        aliasedAliasesList.add("|");
-        aliasedAliasesList.add("l");
-        aliasedAliasesList.add("/");
-        aliasedAliasesList.add("\\");
-
-        //noinspection unchecked
-        aliasedAliasesMap.put("|", (ArrayList<String>) aliasedAliasesList.clone());
-        aliasedAliasesList.clear();
-
-        aliasedAliasesList.add(")");
-        aliasedAliasesList.add("}");
-        aliasedAliasesList.add("]");
-        aliasedAliasesList.add(">");
-
-        //noinspection unchecked
-        aliasedAliasesMap.put(")", (ArrayList<String>) aliasedAliasesList.clone());
-        aliasedAliasesList.clear();
-
-        aliasedAliasesList.add("(");
-        aliasedAliasesList.add("{");
-        aliasedAliasesList.add("[");
-        aliasedAliasesList.add("<");
-
-        aliasedAliasesMap.put("(", aliasedAliasesList);
-
-        return aliasedAliasesMap;
-    }*/
-
     @SuppressWarnings("SpellCheckingInspection")
     private static @NotNull HashMap<String, ArrayList<AllowedWord>> createFilteredMap() {
         HashMap<String, ArrayList<AllowedWord>> filteredMap = new HashMap<>();
         ArrayList<AllowedWord> allowedList = new ArrayList<>();
 
-        filteredMap.put("ez", allowedList);
+        allowedList.add(new AllowedWord("freeze", 3, 2, 1));
+        //noinspection unchecked
+        filteredMap.put("ez", (ArrayList<AllowedWord>) allowedList.clone());
+        allowedList.clear();
 
         allowedList.add(new AllowedWord("documentary", 2, 3, 6));
         //noinspection unchecked

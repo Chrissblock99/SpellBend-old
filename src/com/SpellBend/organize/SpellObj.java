@@ -1,6 +1,9 @@
 package com.SpellBend.organize;
 
+import com.SpellBend.playerData.Gold;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class SpellObj {
     private final String name;
@@ -11,6 +14,10 @@ public class SpellObj {
         this.name = name;
         this.item = item;
         this.price = price;
+    }
+
+    public boolean playerCanBuy(@NotNull Player player) {
+        return Gold.getGold(player)>=price;
     }
 
     public String getName() {

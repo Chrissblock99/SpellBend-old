@@ -4,7 +4,7 @@ import com.SpellBend.data.Elements;
 import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.ElementObj;
 import com.SpellBend.data.Enums;
-import com.SpellBend.data.Maps;
+import com.SpellBend.organize.SpellObj;
 import com.SpellBend.playerData.*;
 import com.SpellBend.util.Item;
 import org.bukkit.Material;
@@ -17,14 +17,23 @@ import java.util.ArrayList;
 public class GUICreationUtil {
     private final static Inventory DEFAULT_SHOP = createDefaultShop();
 
-    private static @NotNull String[] createElementOwnageLore(@NotNull Player player, @NotNull Enums.Element element) {
-        if (SpellsOwned.getSpellsOwned(player, element) == 0) {
-            int price = Maps.elementToPriceMap.get(element);
-            return new String[]{"§8----------------", "§e$ §b" + price + " §3Gems", (Gems.getGems(player)>=price) ? "§2You can buy this." : "§cYou can't §ebuy §cthis yet!"};
-        }
+    private static @NotNull String[] createElementOwnageLore(@NotNull Player player, @NotNull ElementObj element) {
+        if (!element.playerOwns(player))
+            return new String[]{"§8----------------", "§a$ §b" + element.getPrice() + " §3Gems",
+                    (element.playerCanBuy(player)) ? "§6You can§e buy§6 this!" : "§cYou can't §e buy§c this yet!"};
         return new String[]{"§8----------------", "§a§lSHIFT CLICK TO EQUIP"};
     }
 
+    private static @NotNull String[] createSpellOwnageLore(@NotNull Player player, @NotNull Enums.Element element, int nth, @NotNull SpellObj spell) {
+        if (SpellsOwned.getSpellsOwned(player, element) >= nth+1)
+            return new String[]{"§8----------------", "§a§lCLICK TO EQUIP"};
+        if (SpellsOwned.getSpellsOwned(player, element) != nth)
+            //noinspection ConstantConditions
+            return new String[]{"§8----------------", "§cYou must learn " + Elements.getElementByEnum(element).getSpellItem(nth-1).getItemMeta().getDisplayName() + "§c first!"};
+        return new String[]{"§8----------------", "§a$ §e" + spell.getPrice() + " §6Gold"};
+    }
+
+    @SuppressWarnings("CommentedOutCode")
     public static @NotNull Inventory createShop(@NotNull Player player) {
         Inventory shop = DEFAULT_SHOP;
 
@@ -32,13 +41,19 @@ public class GUICreationUtil {
         /*int x = i%7;
         int y = i/7;
         shop.setItem(1+9+(9*y)+x, elementList.get(i).getItem());*/
-        for (int i = 0;i<elementList.size();i++)
+        for (int i = 0;i<elementList.size();i++) {
+            ElementObj elementObj = elementList.get(i);
             shop.setItem(10+(9*(i/7))+(i%7),
                     Item.edit(elementList.get(i).getItem(),
                             101,
-                            createElementOwnageLore(player, elementList.get(i).getElement()),
+                            createElementOwnageLore(player, elementList.get(i)),
                             PersistentDataKeys.itemActionKey,
-                            "openShop" + elementList.get(i).getElement()));
+                            (elementObj.playerOwns(player)) ?
+                                    "openShop" + elementList.get(i).getElement() :
+                                    (!elementObj.playerCanBuy(player)) ?
+                                            "sendMessage§9§lSHOP §8»§c Not enough Gems! Need §b" + elementObj.getPrice() + "§c more!" :
+                                            "buyElement" + elementObj.getElement()));
+        }
 
         //Patron Cosmetics
         if (Ranks.hasRank(player, "patron")) shop.setItem(37, Item.create(Material.ENDER_CHEST, "§b§lPATRON COSMETICS", 301));
@@ -54,37 +69,26 @@ public class GUICreationUtil {
 
     public static @NotNull Inventory createElementGUI(@NotNull Player player, @NotNull Enums.Element element) {
         ElementObj elementObj = Elements.getElementByEnum(element);
-        Inventory inv = createDefaultElementGUI("§c§lEmber");
+        //noinspection ConstantConditions
+        Inventory inv = createDefaultElementGUI(elementObj.getItem().getItemMeta().getDisplayName());
+        int length = elementObj.getSpells().size();
+        int[] positions = {12, 14, 22, 30, 32, 33, 34, 35}; //the last 3 are there for the case that we ever do more than 5 spells per Element
 
-        inv.setItem(12, Item.edit(elementObj.getSpellItem(0), new String[]{""}));
-        inv.setItem(14, elementObj.getSpellItem(1));
-        inv.setItem(22, elementObj.getSpellItem(2));
-        inv.setItem(30, elementObj.getSpellItem(3));
-        inv.setItem(32, elementObj.getSpellItem(4));
-        inv.setItem(18, Item.create(Material.ARROW, "Back"));
-
-        return inv;
-    }
-
-    public static @NotNull Inventory createEmberGUI(Player player) {
-        Inventory inv = createDefaultElementGUI("§c§lEmber");
-
-        inv.setItem(12, Item.create(Material.GOLDEN_HOE, "§c§lMagma Burst", 101));
-        inv.setItem(14, Item.create(Material.GOLDEN_HORSE_ARMOR, "§c§lEmber Blast", 101));
-        inv.setItem(22, Item.create(Material.GOLDEN_SHOVEL, "§c§lScorching Column", 101));
-        inv.setItem(30, Item.create(Material.GOLDEN_SWORD, "§c§lBlazing Spin", 101));
-        inv.setItem(32, Item.create(Material.CAMPFIRE, "§c§lFiery Rage", 101));
-        return inv;
-    }
-
-    public static @NotNull Inventory createWaterGUI(Player player) {
-        Inventory inv = createDefaultElementGUI("§9§lWater");
-
-        inv.setItem(12, Item.create(Material.DIAMOND_HORSE_ARMOR, "§9§lHydro Blast", 101));
-        inv.setItem(14, Item.create(Material.DIAMOND_HOE, "§9§lWater Spray", 101));
-        inv.setItem(22, Item.create(Material.DIAMOND_SHOVEL, "§9§lWater Torrent", 101));
-        inv.setItem(30, Item.create(Material.HEART_OF_THE_SEA, "§9§lSea Shield", 101));
-        inv.setItem(32, Item.create(Material.COD, "§9§lRising Tide", 101));
+        for (int i = 0;i<length;i++) {
+            SpellObj spell = elementObj.getSpell(i);
+            //noinspection ConstantConditions
+            inv.setItem(positions[i], Item.editAddLore(spell.getItem(),
+                    101,
+                    createSpellOwnageLore(player, element, i, spell),
+                    PersistentDataKeys.itemActionKey,
+                    (elementObj.playerOwnsSpell(player, i)) ?
+                            "giveSpell" + elementObj.getElement() + i :
+                            (SpellsOwned.getSpellsOwned(player, elementObj.getIndex()) != i) ?
+                                    "sendMessage§9§lSHOP §8»§c You must learn " + elementObj.getSpellItem(i-1).getItemMeta().getDisplayName() + "§c first!" :
+                                    (!spell.playerCanBuy(player)) ?
+                                            "sendMessage§9§lSHOP §8»§c Not enough Gold! Need §e" + spell.getPrice() + "§c more!" :
+                                            "buySpell" + elementObj.getElement() + i));
+        }
 
         return inv;
     }
@@ -98,20 +102,20 @@ public class GUICreationUtil {
         return defaultShop;
     }
 
-    private static @NotNull Inventory createDefaultElementGUI(String name) {
+    private static @NotNull Inventory createDefaultElementGUI(@NotNull String name) {
         Inventory defaultElementGUI = GUIUtil.outlinedGUI(Item.create(Material.BLUE_STAINED_GLASS_PANE, "§t", 501), 45, name);
 
         /*Sign*/ defaultElementGUI.setItem(4, Item.create(Material.OAK_SIGN, "§r§lClick on a move", new String[]{
                 "§fto purchase it!",
                 "§8---------------",
-                "§7Click on §f§lglowing moves",
+                "§7Click on§f§l glowing moves",
                 "§7to purchase them!",
                 "",
-                "§f§lDrag §7or §f§lshift click §7moves",
+                "§f§lDrag §7or§f§l shift click §7moves",
                 "§7to unequip them!"
         }, 501, "ItemType", "GUIDeco"));
 
-        /*Back*/ defaultElementGUI.setItem(18, Item.create(Material.ARROW, "§7§lBack", 301));
+        /*Back*/ defaultElementGUI.setItem(18, Item.create(Material.ARROW, "§7§lBack", 301, PersistentDataKeys.itemActionKey, "openShop"));
         return defaultElementGUI;
     }
 }

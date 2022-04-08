@@ -1,7 +1,11 @@
 package com.SpellBend.organize;
 
 import com.SpellBend.data.Enums;
+import com.SpellBend.playerData.Gems;
+import com.SpellBend.playerData.SpellsOwned;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -23,9 +27,25 @@ public class ElementObj {
         this.index = index;
     }
 
-    public ItemStack getSpellItem(int index) {return spells.get(index).getItem();}
+    public boolean playerOwns(@NotNull Player player) {
+        return SpellsOwned.getSpellsOwned(player, index)>0;
+    }
 
-    public SpellObj getSpell(int index) {return spells.get(index);}
+    public boolean playerCanBuy(@NotNull Player player) {
+        return Gems.getGems(player) >= price;
+    }
+
+    public boolean playerOwnsSpell(@NotNull Player player, int nth) {
+        return SpellsOwned.getSpellsOwned(player, index) >= nth+1;
+    }
+
+    public ItemStack getSpellItem(int index) {
+        return spells.get(index).getItem();
+    }
+
+    public SpellObj getSpell(int index) {
+        return spells.get(index);
+    }
 
     public String getName() {return name;}
 

@@ -26,7 +26,7 @@ public class PluginMain extends JavaPlugin {
         new shop();
         new spawn();
         new random();
-        new playerDataBoard();
+        playerDataBoard.start();
         new rank();
         new badge();
         new nick();

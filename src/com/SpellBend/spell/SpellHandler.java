@@ -1,11 +1,10 @@
 package com.SpellBend.spell;
 
-import com.SpellBend.PluginMain;
 import com.SpellBend.data.Enums;
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.playerData.CoolDowns;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -18,9 +17,6 @@ import java.util.*;
 public class SpellHandler {
     private static final ArrayList<String> spellNames = createSpellNamesList();
     private static final ArrayList<String> spellTypes = createSpellTypesList();
-    private static final PluginMain plugin = PluginMain.getInstance();
-    public static final NamespacedKey spellNameKey = new NamespacedKey(plugin, "spellName"); //<- DO NOT CHANGE
-    public static final NamespacedKey spellTypeKey = new NamespacedKey(plugin, "spellType"); //<- DO NOT CHANGE
     public static HashMap<UUID, Float> stunTime = new HashMap<>();
     public static HashMap<UUID, ArrayList<Spell>> activeSpells = new HashMap<>();
 
@@ -105,10 +101,10 @@ public class SpellHandler {
         int CMD = item.getItemMeta().getCustomModelData();
         if (!(CMD > 0 && CMD < 101)) return false;
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        if (data.has(spellNameKey, PersistentDataType.STRING) && data.has(spellNameKey, PersistentDataType.STRING)) {
-            if (spellNames.contains(item.getItemMeta().getPersistentDataContainer().get(spellNameKey, PersistentDataType.STRING))) {
-                if (data.has(spellTypeKey, PersistentDataType.STRING)) {
-                    if (spellTypes.contains(data.get(spellTypeKey, PersistentDataType.STRING))) return true;
+        if (data.has(PersistentDataKeys.spellNameKey, PersistentDataType.STRING) && data.has(PersistentDataKeys.spellNameKey, PersistentDataType.STRING)) {
+            if (spellNames.contains(item.getItemMeta().getPersistentDataContainer().get(PersistentDataKeys.spellNameKey, PersistentDataType.STRING))) {
+                if (data.has(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING)) {
+                    if (spellTypes.contains(data.get(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING))) return true;
                     else Bukkit.getLogger().warning("Item " + item.getItemMeta().getDisplayName() + "§e has a valid spellName Attribute but not a valid spellType Attribute!");
                 } else Bukkit.getLogger().warning("Item " + item.getItemMeta().getDisplayName() + "§e has a valid spellName Attribute but does not have a spellType Attribute!");
             }
@@ -127,22 +123,22 @@ public class SpellHandler {
         }
         //noinspection ConstantConditions
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        if (!data.has(spellNameKey, PersistentDataType.STRING)) {
+        if (!data.has(PersistentDataKeys.spellNameKey, PersistentDataType.STRING)) {
             Bukkit.getLogger().warning("PersistentDataContainer of SpellItem, " + player.getDisplayName() + " tried to activate, does not have a spellName attribute, skipping activation!");
             return;
         }
 
-        String spellName = item.getItemMeta().getPersistentDataContainer().get(spellNameKey, PersistentDataType.STRING);
+        String spellName = item.getItemMeta().getPersistentDataContainer().get(PersistentDataKeys.spellNameKey, PersistentDataType.STRING);
         if (!spellNames.contains(spellName)) {
             Bukkit.getLogger().warning("Spell " + spellName + player.getDisplayName() + " tried to activate is not registered, skipping activation!");
             return;
         }
         Enums.SpellType spellType;
-        if (!data.has(spellTypeKey, PersistentDataType.STRING)) {
+        if (!data.has(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING)) {
             Bukkit.getLogger().warning("PersistentDataContainer of SpellItem, " + player.getDisplayName() + " tried to activate, does not have a spellType attribute, skipping activation!");
             return;
         }
-        String spellTypeString = data.get(spellTypeKey, PersistentDataType.STRING);
+        String spellTypeString = data.get(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING);
         if (!spellTypes.contains(spellTypeString)) {
             Bukkit.getLogger().warning("PersistentDataContainer of SpellItem, " + player.getDisplayName() + " tried to activate, does not have a valid spellType attribute, skipping activation!");
             return;
@@ -156,7 +152,6 @@ public class SpellHandler {
 
         try {
             activeSpells.get(player.getUniqueId()).add((Spell) Class.forName("com.SpellBend.spell." + spellName).getDeclaredConstructor(new Class[]{Player.class, ItemStack.class}).newInstance(player, item));
-            playerDataBoard.registerPlayer(player, spellType);
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
             Bukkit.getLogger().warning("An Error occurred in the SpellHandler when instancing " + spellName + " for " + player.getDisplayName() + ": " + exception);
         }

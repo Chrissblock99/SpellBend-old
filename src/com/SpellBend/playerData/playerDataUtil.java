@@ -4,7 +4,6 @@ import com.SpellBend.data.Elements;
 import com.SpellBend.data.Enums;
 import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.*;
-import com.SpellBend.spell.SpellHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -150,9 +149,9 @@ public class playerDataUtil {
     public static @Nullable Enums.SpellType getHeldSpellType(@NotNull Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null) return null;
-        if (!item.getItemMeta().getPersistentDataContainer().has(SpellHandler.spellTypeKey, PersistentDataType.STRING)) return null;
+        if (!item.getItemMeta().getPersistentDataContainer().has(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING)) return null;
         try {
-            return Enums.SpellType.valueOf(item.getItemMeta().getPersistentDataContainer().get(SpellHandler.spellTypeKey, PersistentDataType.STRING));
+            return Enums.SpellType.valueOf(item.getItemMeta().getPersistentDataContainer().get(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING));
         } catch (IllegalArgumentException exception) {
             Bukkit.getLogger().warning(player.getDisplayName() + " has item " + item.getItemMeta().getDisplayName() + "§e that has an invalid SpellType!");
             return null;

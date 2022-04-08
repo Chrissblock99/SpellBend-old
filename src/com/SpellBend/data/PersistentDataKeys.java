@@ -6,6 +6,9 @@ import org.bukkit.NamespacedKey;
 public class PersistentDataKeys {
     private final static PluginMain plugin = PluginMain.getInstance();
 
+    public static final NamespacedKey spellNameKey = new NamespacedKey(plugin, "spellName"); //<- DO NOT CHANGE
+    public static final NamespacedKey spellTypeKey = new NamespacedKey(plugin, "spellType"); //<- DO NOT CHANGE
+
     public final static NamespacedKey gemsKey = new NamespacedKey(plugin, "gems");
     public final static NamespacedKey goldKey = new NamespacedKey(plugin, "gold");
     public final static NamespacedKey spellsOwnedKey = new NamespacedKey(plugin, "spellsOwned");

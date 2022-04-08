@@ -11,41 +11,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.logging.Logger;
 
 public class inventoryClick implements Listener {
-    private static Logger logger = Bukkit.getLogger();
 
     public inventoryClick() {
         EventUtil.register(this);
     }
-    
-    private static void log(@NotNull String message) {
-        logger.info(message);
-    }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null) {
-            log("§bItem is null");
-            return;
-        }
-        if (!event.getCurrentItem().hasItemMeta()) {
-            log("§bItem has no meta!");
-            return;
-        }
+        if (event.getCurrentItem() == null) return;
+        if (!event.getCurrentItem().hasItemMeta()) return;
         ItemMeta meta = event.getCurrentItem().getItemMeta();
-        if (meta == null) {
-            log("§bMeta is null!");
-            return;
-        }
-        if (!meta.hasCustomModelData()) {
-            log("§bNo CustomModelData!");
-            return;
-        }
+        if (meta == null) return;
+        if (!meta.hasCustomModelData()) return;
         int CMD = meta.getCustomModelData();
 
         if (CMD > 100 && CMD <= 400) {
@@ -59,6 +40,6 @@ public class inventoryClick implements Listener {
         }
         if (CMD > 400 && CMD <= 700) {
             event.setCancelled(true);
-        } else log("§bItem has no clickable CustomModelData!");
+        }
     }
 }

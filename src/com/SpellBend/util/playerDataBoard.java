@@ -20,7 +20,7 @@ public class playerDataBoard {
                  //final might cause problems
     private static final HashMap<UUID, Enums.SpellType> playersHoldingCooldownedItem = new HashMap<>();
 
-    public playerDataBoard() {
+    public static void start() {
         if (!Bukkit.getOnlinePlayers().isEmpty())                  //creating boards for players already online
             for (Player player : Bukkit.getOnlinePlayers())
                 createBoard(player);
@@ -66,7 +66,7 @@ public class playerDataBoard {
             line = obj.getScore("  §b§nSpellBend§b.minehut.gg"); line.setScore(3);
             line = obj.getScore("§3§m-------------§r   "); line.setScore(2);
 
-            if (type != null && CoolDowns.getCoolDown(player, type)[0]>0.1f) {
+            if (type != null && CoolDowns.getCoolDown(player, type)[0]>0.0001f) {
                 line = obj.getScore("§7" + type.toString().charAt(0) + type.toString().substring(1).toLowerCase()); line.setScore(1);
 
                 float[] CDInfo = CoolDowns.getCoolDown(player, type);

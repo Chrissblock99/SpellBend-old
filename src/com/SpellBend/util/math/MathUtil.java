@@ -67,4 +67,9 @@ public class MathUtil {
             return false;
         }
     }
+
+    public static int additiveArrayValue(int[] a) {
+        for (int i = 1;i<a.length;i++) a[0] += a[i];
+        return a[0];
+    }
 }

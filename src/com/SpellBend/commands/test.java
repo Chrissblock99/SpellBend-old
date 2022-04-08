@@ -1,5 +1,6 @@
 package com.SpellBend.commands;
 
+import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.data.Enums;
 import com.SpellBend.data.Lists;
@@ -12,6 +13,7 @@ import com.SpellBend.playerData.DmgMods;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -33,8 +35,8 @@ public class test {
                 }
 
                 Inventory inv = ((Player) sender).getInventory();
-                inv.addItem(Item.create(Material.CAMPFIRE, "§c§lFiery Rage", 1, new String[]{"spellName", "spellType"}, new String[]{"Fiery_Rage", "AURA"}));
-                inv.addItem(Item.create(Material.GOLDEN_HORSE_ARMOR, "§c§lEmber Blast", 1, new String[]{"spellName", "spellType"}, new String[]{"Ember_Blast", "BLAST"}));
+                inv.addItem(Item.create(Material.CAMPFIRE, "§c§lFiery Rage", 1, new NamespacedKey[]{PersistentDataKeys.spellNameKey, PersistentDataKeys.spellTypeKey}, new String[]{"Fiery_Rage", "AURA"}));
+                inv.addItem(Item.create(Material.GOLDEN_HORSE_ARMOR, "§c§lEmber Blast", 1, new NamespacedKey[]{PersistentDataKeys.spellNameKey, PersistentDataKeys.spellTypeKey}, new String[]{"Ember_Blast", "BLAST"}));
                 return true;
             }
         });
