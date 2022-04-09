@@ -20,7 +20,7 @@ public class playerInteractBlock implements Listener {
             //spellHandling
             if (event.hasItem()) if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 //noinspection ConstantConditions
-                if (SpellHandler.itemIsSpell(event.getItem())) SpellHandler.activateSpell(event.getPlayer(), event.getItem());
+                if (SpellHandler.itemIsRegisteredSpell(event.getItem())) SpellHandler.activateSpell(event.getPlayer(), event.getItem());
             }
         }
     }

@@ -197,6 +197,8 @@ public class FilterTexts {
         filteredMap.put("cum", (ArrayList<AllowedWord>) allowedList.clone());
         allowedList.clear();
 
+        filteredMap.put("hentai", allowedList);
+
         filteredMap.put("sex", allowedList);
 
         filteredMap.put("bitch", allowedList);

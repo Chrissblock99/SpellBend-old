@@ -3,13 +3,13 @@ package com.SpellBend.spell;
 import com.SpellBend.data.Enums;
 import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.playerData.CoolDowns;
-import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -93,21 +93,36 @@ public class SpellHandler {
         return spellNamesList;
     }
 
-
-    public static boolean itemIsSpell(@NotNull ItemStack item) {
-        if (!item.hasItemMeta()) return false;
-        //noinspection ConstantConditions
+    public static boolean itemIsSpell(@Nullable ItemStack item) {
+        if (item == null) return false;
+        if (item.getItemMeta() == null) return false;
         if (!item.getItemMeta().hasCustomModelData()) return false;
         int CMD = item.getItemMeta().getCustomModelData();
-        if (!(CMD > 0 && CMD < 101)) return false;
+        if (!(CMD > 0 && CMD <= 200)) return false;
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-        if (data.has(PersistentDataKeys.spellNameKey, PersistentDataType.STRING) && data.has(PersistentDataKeys.spellNameKey, PersistentDataType.STRING)) {
+        if (data.has(PersistentDataKeys.spellNameKey, PersistentDataType.STRING)) {
+            if (data.has(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING)) {
+                if (spellTypes.contains(data.get(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING))) return true;
+                else Bukkit.getLogger().warning("Item " + item.getItemMeta().getDisplayName() + "§e has a valid spellName Attribute but not a valid spellType Attribute!");
+            } else Bukkit.getLogger().warning("Item " + item.getItemMeta().getDisplayName() + "§e has a valid spellName Attribute but does not have a spellType Attribute!");
+        }
+        return false;
+    }
+
+    public static boolean itemIsRegisteredSpell(@Nullable ItemStack item) {
+        if (item == null) return false;
+        if (item.getItemMeta() == null) return false;
+        if (!item.getItemMeta().hasCustomModelData()) return false;
+        int CMD = item.getItemMeta().getCustomModelData();
+        if (!(CMD > 0 && CMD <= 200)) return false;
+        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+        if (data.has(PersistentDataKeys.spellNameKey, PersistentDataType.STRING)) {
             if (spellNames.contains(item.getItemMeta().getPersistentDataContainer().get(PersistentDataKeys.spellNameKey, PersistentDataType.STRING))) {
                 if (data.has(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING)) {
                     if (spellTypes.contains(data.get(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING))) return true;
                     else Bukkit.getLogger().warning("Item " + item.getItemMeta().getDisplayName() + "§e has a valid spellName Attribute but not a valid spellType Attribute!");
                 } else Bukkit.getLogger().warning("Item " + item.getItemMeta().getDisplayName() + "§e has a valid spellName Attribute but does not have a spellType Attribute!");
-            }
+            } else Bukkit.getLogger().info("Item " + item.getItemMeta().getDisplayName() + "§f is not a Registered Spell!");
         }
         return false;
     }

@@ -4,6 +4,7 @@ import com.SpellBend.data.Lists;
 import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.CoolDownEntry;
 import com.SpellBend.data.Enums;
+import com.SpellBend.util.dataUtil;
 import com.SpellBend.util.math.MathUtil;
 import com.SpellBend.util.playerDataBoard;
 import org.bukkit.Bukkit;
@@ -85,7 +86,7 @@ public class CoolDowns {
             loadCoolDowns(player);
         }
         persistentPlayerSessionStorage.coolDowns.get(player.getUniqueId()).put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
-        if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+        if (dataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
     }
 
     /**
@@ -118,7 +119,7 @@ public class CoolDowns {
         if (coolDowns.containsKey(spellType)) {
             if (coolDowns.get(spellType).getRemainingCoolDownTime() <= 0.1f) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
-                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+                if (dataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
                 return;
             }
             CoolDownEntry oldValues = coolDowns.get(spellType);
@@ -126,12 +127,12 @@ public class CoolDowns {
                     new long[]{Lists.getCoolDownTypeByName(oldValues.coolDownType).typeInt*(-1), (long) oldValues.timeInS*1000-(new Date().getTime()-oldValues.startDate.getTime())},
                     new long[]{Lists.getCoolDownTypeByName(CDType).typeInt *(-1), (long) timeInSeconds*1000})) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
-                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+                if (dataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
             }
             return;
         }
         persistentPlayerSessionStorage.coolDowns.get(player.getUniqueId()).put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
-        if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+        if (dataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
     }
 
 
@@ -152,7 +153,7 @@ public class CoolDowns {
         if (coolDowns.containsKey(spellType)) {
             if (coolDowns.get(spellType).getRemainingCoolDownTime() <= 0.1f) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
-                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+                if (dataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
                 return;
             }
             CoolDownEntry oldValues = coolDowns.get(spellType);
@@ -163,12 +164,12 @@ public class CoolDowns {
                     new long[]{Lists.getCoolDownTypeByName(oldValues.coolDownType).typeInt*(-1), (long) oldValues.timeInS*1000-(new Date().getTime()-oldValues.startDate.getTime())},
                     new long[]{Lists.getCoolDownTypeByName(CDType).typeInt *(-1), (long) timeInSeconds*1000})) {
                 coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
-                if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+                if (dataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
             }
             return;
         }
         coolDowns.put(spellType, new CoolDownEntry(timeInSeconds, new Date(), CDType));
-        if (playerDataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
+        if (dataUtil.getHeldSpellType(player) == spellType) playerDataBoard.registerPlayer(player, spellType);
     }
 
     /**

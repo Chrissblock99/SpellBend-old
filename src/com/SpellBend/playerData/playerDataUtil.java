@@ -1,16 +1,11 @@
 package com.SpellBend.playerData;
 
-import com.SpellBend.data.Elements;
-import com.SpellBend.data.Enums;
 import com.SpellBend.data.PersistentDataKeys;
 import com.SpellBend.organize.*;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class playerDataUtil {
     /**Sets up all the PersistentData of the player
@@ -83,79 +78,6 @@ public class playerDataUtil {
                 + ((Suffix.getSuffix(player).equals("")) ? "" : ("§8[§7" + Suffix.getSuffix(player) + "§8] "))
                 + ((Badges.getBadgesString(player).equals("")) ? "" : ("§3[" + Badges.getBadgesString(player) + "§3] "))
                 + "§7[§b" + player.getLevel() + "§7]";
-    }
-
-    /**Buys the specified spell for the player doing safety checks
-     *
-     * @param player The player to buy a spell
-     * @param element The element to buy
-     * @return If the element was bought or not
-     */
-    public static boolean buyElement(@NotNull Player player, Enums.Element element) {
-        ElementObj Element = Elements.getElementByEnum(element);
-        if (SpellsOwned.getSpellsOwned(player, element) != 0) {
-            Bukkit.getLogger().warning(player.getDisplayName() + " somehow had access to the buy function of " + element + " after buying it!");
-            //noinspection ConstantConditions
-            player.sendMessage("§9SHOP §8» §cYou already own " + Element.getItem().getItemMeta().getDisplayName() + "§c!");
-            return false;
-        }
-        int price = Element.getPrice();
-        if (Gems.getGems(player)<price) {
-            player.sendMessage("§9SHOP §8» §cNot Enough §bGems§c! Need §b" + (price - Gems.getGems(player)) + "§c more!");
-            return false;
-        }
-
-        SpellsOwned.setSpellsOwned(player, element, 1);
-        Gems.addGems(player, -price);
-        //noinspection ConstantConditions
-        player.sendMessage("§9SHOP §8» §ePurchased " + Element.getItem().getItemMeta().getDisplayName() + " §6for §b" + price + " Gems§e!");
-        return true;
-    }
-
-    /**Buys the specified spell for the player doing safety checks
-     *
-     * @param player The player to buy a spell
-     * @param element The element to buy the spell from
-     * @param index The spell to buy
-     * @return If the spell was bought or not
-     */
-    public static boolean buySpell(@NotNull Player player, Enums.Element element, int index) {
-        SpellObj Spell = Elements.getElementByEnum(element).getSpell(index);
-        if (SpellsOwned.getSpellsOwned(player, element) == index && index != 0) {  //TODO overthink if this actually works because i hae no clue
-            Bukkit.getLogger().warning(player.getDisplayName() + " somehow had access to the buy function of " + Spell.getName() + " after buying it!");
-            //noinspection ConstantConditions
-            player.sendMessage("§9SHOP §8» §cYou already own " + Spell.getItem().getItemMeta().getDisplayName() + "§c!");
-            return false;
-        }
-        int price = Spell.getPrice();
-        if (Gold.getGold(player)<price) {
-            player.sendMessage("§9SHOP §8» §cNot Enough §eGold§c! Need §e" + (price - Gold.getGold(player)) + "§c more!");
-            return false;
-        }
-
-        SpellsOwned.setSpellsOwned(player, element, index+1);
-        Gold.addGold(player, -price);
-        //noinspection ConstantConditions
-        player.sendMessage("§9SHOP §8» §ePurchased " + Spell.getItem().getItemMeta().getDisplayName() + " §6for §e" + price + " Gold§e!");
-        return true;
-    }
-
-    /**Returns the SpellType of the item the player is holding
-     * and null if it isn't a Spell
-     *
-     * @param player The player to get the SpellType from
-     * @return The SpellType of the current hold item
-     */
-    public static @Nullable Enums.SpellType getHeldSpellType(@NotNull Player player) {
-        ItemStack item = player.getInventory().getItemInMainHand();
-        if (item.getItemMeta() == null) return null;
-        if (!item.getItemMeta().getPersistentDataContainer().has(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING)) return null;
-        try {
-            return Enums.SpellType.valueOf(item.getItemMeta().getPersistentDataContainer().get(PersistentDataKeys.spellTypeKey, PersistentDataType.STRING));
-        } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning(player.getDisplayName() + " has item " + item.getItemMeta().getDisplayName() + "§e that has an invalid SpellType!");
-            return null;
-        }
     }
 
     /**Returns the highest ranking of the players badges and Ranks

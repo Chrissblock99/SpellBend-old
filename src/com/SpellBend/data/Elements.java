@@ -72,10 +72,70 @@ public class Elements {
                         new String[]{"Fiery_Rage", "AURA"}
                         ), 250));
         //noinspection unchecked
-        elementList.add(new ElementObj("Ember", Enums.Element.EMBER, Item.create(Material.FIRE_CHARGE, "§c§lEmber"), ((ArrayList<SpellObj>) spellList.clone()), 150, 0));
+        elementList.add(new ElementObj("Ember", Enums.Element.EMBER, Item.create(Material.FIRE_CHARGE, "§c§lEmber"),
+                ((ArrayList<SpellObj>) spellList.clone()), 150, 0));
         spellList.clear();
 
 
+        spellList.add(new SpellObj( "Hydro_Blast",
+                Item.create(Material.DIAMOND_HORSE_ARMOR,
+                        "§9§lHydro Blast",
+                        new String[]{
+                                "§8---------------",
+                                "§6User casts a§e rapid burst",
+                                "§eof magma§6 that deals§e low",
+                                "§edamage."},
+                        new NamespacedKey[]{PersistentDataKeys.spellNameKey, PersistentDataKeys.spellTypeKey},
+                        new String[]{"Hydro_Blast", "BLAST"}
+                ), 0));
+        spellList.add(new SpellObj( "Water_Spray",
+                Item.create(Material.DIAMOND_HOE,
+                        "§9§lWater Spray",
+                        new String[]{
+                                "§8---------------",
+                                "",
+                                "",
+                                ""},
+                        new NamespacedKey[]{PersistentDataKeys.spellNameKey, PersistentDataKeys.spellTypeKey},
+                        new String[]{"Water_Spray", "MULTI_PROJECTILE"}
+                ), 50));
+        spellList.add(new SpellObj( "Water_Torrent",
+                Item.create(Material.DIAMOND_SHOVEL,
+                        "§9§lWater Torrent",
+                        new String[]{
+                                "§8---------------",
+                                "",
+                                "",
+                                ""},
+                        new NamespacedKey[]{PersistentDataKeys.spellNameKey, PersistentDataKeys.spellTypeKey},
+                        new String[]{"Water_Torrent", "AOE"}
+                ), 150));
+        spellList.add(new SpellObj( "Sea_Shield",
+                Item.create(Material.HEART_OF_THE_SEA,
+                        "§9§lSea Shield",
+                        new String[]{
+                                "§8---------------",
+                                "",
+                                "",
+                                ""},
+                        new NamespacedKey[]{PersistentDataKeys.spellNameKey, PersistentDataKeys.spellTypeKey},
+                        new String[]{"Sea_Shield", "SHIELD"}
+                ), 200));
+        spellList.add(new SpellObj( "Rising_Tide",
+                Item.create(Material.COD,
+                        "§9§lRising Tide",
+                        new String[]{
+                                "§8---------------",
+                                "",
+                                "",
+                                ""},
+                        new NamespacedKey[]{PersistentDataKeys.spellNameKey, PersistentDataKeys.spellTypeKey},
+                        new String[]{"Rising Tide", "TRANSPORT"}
+                ), 250));
+        //noinspection unchecked
+        elementList.add(new ElementObj("Water", Enums.Element.WATER, Item.create(Material.WATER_BUCKET, "§9§lWater"),
+                ((ArrayList<SpellObj>) spellList.clone()), 150, 1));
+        spellList.clear();
 
         return elementList;
     }

@@ -88,8 +88,8 @@ public class GUIActionHandler {
 
     public static void giveSpell(@NotNull Player player, @NotNull Enums.Element element, int nth) {
         ItemStack item = Item.edit(Elements.getElementByEnum(element).getSpellItem(nth), 1);
-        if (dataUtil.spellsInside(player.getInventory())<5) {
-            if (!player.getInventory().contains(item))
+        if (dataUtil.spellsInsideInventory(player.getInventory())<5) {
+            if (dataUtil.inventoryNotContainsSpellName(player.getInventory(), item))
                 player.getInventory().addItem(item);
             else player.sendMessage("§9§lSHOP §8»§c You already have this spell equipped!");
         } else player.sendMessage("§9§lSHOP §8»§c Unequip a spell first! §8(§7Drag into Shop§8)");
@@ -114,8 +114,9 @@ public class GUIActionHandler {
         SpellObj spellObj = Elements.getElementByEnum(element).getSpell(nth);
 
         Gold.addGold(player, -Elements.getElementByEnum(element).getSpell(nth).getPrice());
-        if (dataUtil.spellsInside(player.getInventory()) < 5)
-            player.getInventory().addItem(Item.edit(spellObj.getItem(), 1));
+        if (dataUtil.spellsInsideInventory(player.getInventory()) < 5)
+            if (dataUtil.inventoryNotContainsSpellName(player.getInventory(), spellObj.getItem()))
+                player.getInventory().addItem(Item.edit(spellObj.getItem(), 1));
         //noinspection ConstantConditions
         player.sendMessage("§9§lSHOP §8»§e Learnt " + spellObj.getItem().getItemMeta().getDisplayName() + " §6for §e" + spellObj.getPrice() + " Gold!");
         player.openInventory(GUICreationUtil.createElementGUI(player, element));
@@ -131,7 +132,7 @@ public class GUIActionHandler {
             SpellsOwned.setSpellsOwned(player, element, 5);
             Gold.addGold(player, -650);
             for (SpellObj spellObj : elementObj.getSpells())
-                if (dataUtil.spellsInside(player.getInventory()) < 5)
+                if (dataUtil.spellsInsideInventory(player.getInventory()) < 5)
                     player.getInventory().addItem(Item.edit(spellObj.getItem(), 1));
         }
 

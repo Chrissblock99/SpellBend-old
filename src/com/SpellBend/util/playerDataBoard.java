@@ -125,7 +125,7 @@ public class playerDataBoard {
             line = obj.getScore("  §b§nSpellBend§b.minehut.gg"); line.setScore(3);
             line = obj.getScore("§3§m-------------§r   "); line.setScore(2);
 
-            Enums.SpellType type = playerDataUtil.getHeldSpellType(player);
+            Enums.SpellType type = dataUtil.getHeldSpellType(player);
             if (type != null && CoolDowns.getCoolDown(player, type)[0]>0.1f) {
                 line = obj.getScore("§7" + type.toString().charAt(0) + type.toString().substring(1).toLowerCase()); line.setScore(1);
 
