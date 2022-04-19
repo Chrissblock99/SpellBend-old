@@ -23,4 +23,16 @@ public class Enums {          //Mana:★
         SHIELD,
         AURA
     }
+
+    public enum Rule {
+        RACIAL_SLURS,
+        NSFW,
+        SPAM,
+        CHAT_FLOOD,
+        TOXICITY,
+        TARGETING,
+        DISRUPTIVE_TACTICS,
+        IMPERSONATING,
+        HACKS
+    }
 }
