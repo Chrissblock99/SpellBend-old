@@ -6,7 +6,9 @@ import game.SpellBend.spell.SpellHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -111,6 +113,98 @@ public class dataUtil {
         if (item == null) return false;
         if (item.getItemMeta() == null) return false;
         return item.getItemMeta().getDisplayName().contains("Click on a");
+    }
+
+    /**Returns the inventory the item clicked will be in after the click
+     * returns null if the item goes on cursor
+     * or somewhere else
+     * Example: dropping items
+     *
+     * IMPORTANT:
+     * if The ClickType is SWAP_OFFHAND or NUMBER_KEY the bottom inventory is returned
+     *
+     * @param invView The inventoryView
+     * @param clickedInv The clicked inventory
+     * @param clickType The clickType
+     * @return The items destination inventory
+     */
+    public static @Nullable Inventory getItemClickedDestination(@NotNull InventoryView invView, @NotNull Inventory clickedInv, @NotNull ClickType clickType) {
+        if (clickType.equals(ClickType.SHIFT_LEFT) || clickType.equals(ClickType.SHIFT_RIGHT)) {
+            if (clickedInv.equals(invView.getBottomInventory())) {
+                Bukkit.getLogger().info("§bclicked Destination is Top");
+                return invView.getTopInventory();
+            }
+            if (clickedInv.equals(invView.getTopInventory())) {
+                Bukkit.getLogger().info("§bclicked Destination is Bottom");
+                return invView.getBottomInventory();
+            }
+            throw new IllegalArgumentException("The clicked inventory is not contained in the inventory view!");
+        }
+
+        if (clickType.equals(ClickType.NUMBER_KEY) || clickType.equals(ClickType.SWAP_OFFHAND))
+            return invView.getBottomInventory();
+        Bukkit.getLogger().info("§bclicked destination is null");
+
+        /*if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT))
+            return null;
+
+        if (clickType.equals(ClickType.WINDOW_BORDER_LEFT) || clickType.equals(ClickType.WINDOW_BORDER_RIGHT))
+            return null;
+
+        if (clickType.equals(ClickType.DROP) || clickType.equals(ClickType.CONTROL_DROP))
+            return null;
+
+        if (clickType.equals(ClickType.DOUBLE_CLICK))
+            return null;
+
+        if (clickType.equals(ClickType.MIDDLE))
+            return null;
+
+        //unknown what the hell stuff
+        if (clickType.equals(ClickType.CREATIVE) || clickType.equals(ClickType.UNKNOWN))
+            return null;*/
+        return null;
+    }
+
+    /**Returns the inventory the item on cursor will be in after the click
+     * returns null if the item remains on cursor
+     * or goes somewhere else
+     * Example:
+     * if middle click with empty hand on an item the current item goes "nowhere"
+     *
+     * @param clickedInv The clicked inventory
+     * @param clickType The clickType
+     * @return The items destination inventory
+     */
+    public static @Nullable Inventory getItemOnCursorDestination(@NotNull Inventory clickedInv, @NotNull ClickType clickType) {
+        if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT)) {
+            Bukkit.getLogger().info("§bcursor destination is clickedInv");
+            return clickedInv;
+        }
+        Bukkit.getLogger().info("§bcursor destination is null");
+
+        /*if (clickType.equals(ClickType.SHIFT_LEFT) || clickType.equals(ClickType.SHIFT_RIGHT))
+            return null;
+
+        if (clickType.equals(ClickType.NUMBER_KEY) || clickType.equals(ClickType.SWAP_OFFHAND))
+            return null;
+
+        if (clickType.equals(ClickType.WINDOW_BORDER_LEFT) || clickType.equals(ClickType.WINDOW_BORDER_RIGHT))
+            return null;
+
+        if (clickType.equals(ClickType.DROP) || clickType.equals(ClickType.CONTROL_DROP))
+            return null;
+
+        if (clickType.equals(ClickType.DOUBLE_CLICK))
+            return null;
+
+        if (clickType.equals(ClickType.MIDDLE))
+            return null;
+
+        //unknown what the hell stuff
+        if (clickType.equals(ClickType.CREATIVE) || clickType.equals(ClickType.UNKNOWN))
+            return null;*/
+        return null;
     }
 
     /**Returns the SpellType of the item the player is holding

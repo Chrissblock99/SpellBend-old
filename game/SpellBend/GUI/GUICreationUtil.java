@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class GUICreationUtil {
-    private final static Inventory DEFAULT_SHOP = createDefaultShop();
 
     private static @NotNull String[] createElementOwnageLore(@NotNull Player player, @NotNull ElementObj element) {
         if (!element.playerOwns(player))
@@ -37,7 +36,7 @@ public class GUICreationUtil {
 
     @SuppressWarnings("CommentedOutCode")
     public static @NotNull Inventory createShop(@NotNull Player player) {
-        Inventory shop = DEFAULT_SHOP;
+        Inventory shop = createDefaultShop();
 
         ArrayList<ElementObj> elementList = Elements.elementList;
         /*int x = i%7;

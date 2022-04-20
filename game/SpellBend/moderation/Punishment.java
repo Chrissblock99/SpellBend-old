@@ -2,6 +2,7 @@ package game.SpellBend.moderation;
 
 import game.SpellBend.util.TimeSpan;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@SerializableAs("Punishment")
 public class Punishment implements ConfigurationSerializable {
     private final TimeSpan time;
     private final String reason;
@@ -18,12 +20,21 @@ public class Punishment implements ConfigurationSerializable {
         this.reason = reason;
     }
 
+    public Punishment (@NotNull Punishment punishment) {
+        this.time = punishment.getTime();
+        this.reason = punishment.getReason();
+    }
+
     public String getReason() {
         return reason;
     }
 
     public TimeSpan getTime() {
         return time;
+    }
+
+    public Punishment getInstance() {
+        return this;
     }
 
     @Override

@@ -26,15 +26,55 @@ public class inventoryClick implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Inventory inv = event.getClickedInventory();
-        if (inv == null) return;
+        Bukkit.getLogger().info("InventoryClickedEvent");
+        Inventory clickedInv = event.getClickedInventory();
+        if (clickedInv == null) return;
         Player player = (Player) event.getWhoClicked();
-        if (dataUtil.inventoryIsShop(inv)) {
-            if (SpellHandler.itemIsSpell(player.getItemOnCursor()))
+        Bukkit.getLogger().info("§b-------------------------------------");
+        Inventory itemOnCursorDestination = dataUtil.getItemOnCursorDestination(event.getClickedInventory(), event.getClick());
+        Inventory itemClickedDestination = dataUtil.getItemClickedDestination(event.getView(), event.getClickedInventory(), event.getClick());
+        Bukkit.getLogger().info("§bchecking destinations for null");
+        if (itemOnCursorDestination == null && itemClickedDestination == null) return;
+        Bukkit.getLogger().info("§bnot null");
+
+        Bukkit.getLogger().info("§bchecking cursor destination");
+        if (itemOnCursorDestination != null && dataUtil.inventoryIsShop(itemOnCursorDestination)) {
+            Bukkit.getLogger().info("§bcursor Destination is Shop");
+            if (SpellHandler.itemIsSpell(player.getItemOnCursor())) {
+                Bukkit.getLogger().info("§bitem is Spell");
+                event.setCancelled(true);
                 player.setItemOnCursor(null);
-            else if (SpellHandler.itemIsSpell(event.getCurrentItem())) //yeah so this should only be triggered if the inv SHIFTED into is a shop not if the inv SHIFTED FROM is a shop
+                return;
+            } else event.setCancelled(true);
+        } else Bukkit.getLogger().info("§bisn't shop");
+
+        Bukkit.getLogger().info("§bchecking clicked destination");
+        if (itemClickedDestination != null && dataUtil.inventoryIsShop(itemClickedDestination)) {
+            Bukkit.getLogger().info("§bclicked Destination is Shop");
+            if (SpellHandler.itemIsSpell(event.getCurrentItem())) {
+                Bukkit.getLogger().info("§bitem is Spell");
+                event.setCancelled(true);
                 event.setCurrentItem(null);
+                return;
+            } else event.setCancelled(true);
+        } else Bukkit.getLogger().info("§bisn't shop");
+
+        /*if (dataUtil.inventoryIsShop(clickedInv)) {
+            if (SpellHandler.itemIsSpell(player.getItemOnCursor())) {
+                player.setItemOnCursor(null);
+                event.setCancelled(true);
+                return;
+            } else event.setCancelled(true);
         }
+
+        if (dataUtil.inventoryIsShop(event.getView().getTopInventory()) &&
+                !dataUtil.inventoryIsShop(clickedInv) &&
+                (event.getClick().equals(ClickType.SHIFT_LEFT) ||
+                        event.getClick().equals(ClickType.SHIFT_RIGHT))) {
+            if (SpellHandler.itemIsSpell(event.getCurrentItem()))
+                event.setCurrentItem(null);
+            else event.setCancelled(true);
+        }*/
 
         if (!dataUtil.itemIsClickable(event.getCurrentItem())) return;
         event.setCancelled(true);
