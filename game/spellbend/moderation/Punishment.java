@@ -30,6 +30,14 @@ public class Punishment implements ConfigurationSerializable {
         this.reason = punishment.getReason();
     }
 
+    public Date getStartDate() {
+        return time.getStartDate();
+    }
+
+    public Date getEndDate() {
+        return time.getEndDate();
+    }
+
     public Punishment getInstance() {
         return this;
     }
