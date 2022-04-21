@@ -166,22 +166,22 @@ public class SpellHandler {
 
 
         try {
-            activeSpells.get(player.getUniqueId()).add((Spell) Class.forName("com.SpellBend.spell." + spellName).getDeclaredConstructor(new Class[]{Player.class, ItemStack.class}).newInstance(player, item));
+            activeSpells.get(player.getUniqueId()).add((Spell) Class.forName("game.spellbend.spell." + spellName).getDeclaredConstructor(new Class[]{Player.class, ItemStack.class}).newInstance(player, item));
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException exception) {
             Bukkit.getLogger().warning("An Error occurred in the SpellHandler when instancing " + spellName + " for " + player.getDisplayName() + ": " + exception);
         }
     }
 
-    public static void stunPlayer(@NotNull Player player, int time) {
-        for (Spell spell : activeSpells.get(player.getUniqueId())) {
-            if (spell instanceof Stunable) ((Stunable) spell).onUserStun(time);
-        }
+    public static void stunPlayerSpells(@NotNull Player player, int time) {
+        for (Spell spell : activeSpells.get(player.getUniqueId()))
+            if (spell instanceof Stunable)
+                ((Stunable) spell).onUserStun(time);
     }
 
-    public static void killPlayer(@NotNull Player victim, @NotNull Player killer) {
-        for (Spell spell : activeSpells.get(victim.getUniqueId())) {
-            if (spell instanceof Killable) ((Killable) spell).onUserDeath(killer);
-        }
+    public static void killPlayerSpells(@NotNull Player victim, @NotNull Player killer) {
+        for (Spell spell : activeSpells.get(victim.getUniqueId()))
+            if (spell instanceof Killable)
+                ((Killable) spell).onUserDeath(killer);
     }
 
     public static void registerPlayer(@NotNull Player player) {

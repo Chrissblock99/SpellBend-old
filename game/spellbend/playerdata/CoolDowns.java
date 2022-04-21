@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CoolDowns {
-    public static final SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
+    //public static final SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
 
     public static void loadCoolDowns(@NotNull Player player) {
         if (!player.isOnline()) {
@@ -50,26 +50,16 @@ public class CoolDowns {
             String[] entry = coolDownEntry.split(": ");
             String[] infoStrings = entry[1].split("; ");
 
-            Bukkit.getLogger().info(entry[0]);
-            for (String string : infoStrings) Bukkit.getLogger().info(string);
-
             try {
-                coolDowns.put(Enums.SpellType.valueOf(entry[0]), new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
-                Bukkit.getLogger().info(entry[0] + ": " + new CoolDownEntry(Float.parseFloat(infoStrings[0]), timeParser.parse(infoStrings[1]), infoStrings[2]));
+                coolDowns.put(Enums.SpellType.valueOf(entry[0]), new CoolDownEntry(Float.parseFloat(infoStrings[0]), new Date(Long.parseLong(infoStrings[1])), infoStrings[2]));
             } catch (NumberFormatException exception) {
-                Bukkit.getLogger().warning("String \"" + infoStrings[0] + "\" is supposed to be a Float but isn't! " + exception);
+                Bukkit.getLogger().warning("String \"" + infoStrings[0] + "\" is supposed to be a Float but isn't! or\nString \"" + infoStrings[1] + "\" is supposed to be a Long but isn't!" + exception);
             } catch (IllegalArgumentException exception) {
                 Bukkit.getLogger().warning("String \"" + entry[0] + "\" is supposed to be a SpellType but isn't! " + exception);
-            } catch (ParseException exception) {
-                Bukkit.getLogger().warning("String \"" + infoStrings[1] + "\" is supposed to be a Date but isn't! " + exception);
             }
         }
 
         PersistentPlayerSessionStorage.coolDowns.put(player.getUniqueId(), coolDowns);
-        for (String coolDownEntry : coolDownEntries) {
-            String[] entry = coolDownEntry.split(": ");
-            Bukkit.getLogger().info(entry[0] + ": " + getCoolDownEntry(player, Enums.SpellType.valueOf(entry[0])));
-        }
     }
 
     /**Sets the cooldown of the player
@@ -251,7 +241,7 @@ public class CoolDowns {
             }
             stringBuilder
                     .append(entry.getKey().toString()).append(": ")
-                    .append(info.timeInS).append("; ").append(timeParser.format(info.startDate)).append("; ").append(info.coolDownType)
+                    .append(info.timeInS).append("; ").append(info.startDate.getTime()).append("; ").append(info.coolDownType)
                     .append(", ");
             hasEntries = true;
         }
