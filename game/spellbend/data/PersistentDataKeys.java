@@ -14,6 +14,7 @@ public class PersistentDataKeys {
     public final static NamespacedKey spellsOwnedKey = new NamespacedKey(plugin, "spellsOwned");
     public static final NamespacedKey coolDownsKey = new NamespacedKey(plugin, "coolDowns");
     public final static NamespacedKey dmgModsKey = new NamespacedKey(plugin, "dmgMods");
+    public static final NamespacedKey punishmentsKey = new NamespacedKey(plugin, "punishments");
     public final static NamespacedKey ranksKey = new NamespacedKey(plugin, "ranks");
     public final static NamespacedKey badgesKey = new NamespacedKey(plugin, "badges");
     public final static NamespacedKey nickKey = new NamespacedKey(plugin, "nick");

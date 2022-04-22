@@ -1,5 +1,6 @@
 package game.spellbend.playerdata;
 
+import game.spellbend.moderation.Punishment;
 import game.spellbend.organize.CoolDownEntry;
 import game.spellbend.data.Enums;
 
@@ -14,6 +15,7 @@ public class PersistentPlayerSessionStorage {
     public static HashMap<UUID, Double> health = new HashMap<>();
     public static HashMap<UUID, HashMap<Enums.SpellType, CoolDownEntry>> coolDowns = new HashMap<>();
     public static HashMap<UUID, Float[]> dmgMods = new HashMap<>();
+    public static HashMap<UUID, ArrayList<Punishment>> punishments = new HashMap<>();
     public static HashMap<UUID, ArrayList<String>> ranks = new HashMap<>();
     public static HashMap<UUID, ArrayList<String>> badges = new HashMap<>();
     public static HashMap<UUID, String> nick = new HashMap<>();

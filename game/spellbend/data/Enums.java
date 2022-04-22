@@ -28,6 +28,7 @@ public class Enums {          //Mana:★
         RACIAL_SLURS,
         NSFW,
         SPAM,
+        COMBAT_LOG,
         CHAT_FLOOD,
         TOXICITY,
         TARGETING,

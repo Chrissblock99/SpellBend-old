@@ -13,11 +13,13 @@ import game.spellbend.util.DataUtil;
 import game.spellbend.util.math.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GUIActionHandler {
-    public static void runItemAction(@NotNull String itemAction, @NotNull Player player) {
+    public static void runItemAction(@NotNull String itemAction, @Nullable ClickType clickType, @NotNull Player player) {
         if (itemAction.contains("giveSpell")) {
             String currentAction = itemAction.replace("giveSpell", "");
             String nth = TextUtil.removeOtherStrings(currentAction, new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"});
@@ -38,7 +40,30 @@ public class GUIActionHandler {
 
 
         if (itemAction.contains("openShop")) {
-            openShop(player, itemAction.replace("openShop", ""));
+            String currentAction = itemAction.replace("openShop", "");
+            if (currentAction.isEmpty()) {
+                openShop(player, null);
+                return;
+            }
+
+            if (clickType != null) {
+                if (clickType.equals(ClickType.SHIFT_RIGHT) || clickType.equals(ClickType.SHIFT_LEFT)) {
+                    try {
+                        addAllSpells(player, Enums.Element.valueOf(currentAction));
+                    } catch (IllegalArgumentException exception) {
+                        Bukkit.getLogger().warning(currentAction + " is not a valid Element");
+                        exception.printStackTrace();
+                    }
+                    return;
+                }
+            }
+
+            try {
+                openShop(player, Enums.Element.valueOf(currentAction));
+            } catch (IllegalArgumentException exception) {
+                Bukkit.getLogger().warning(currentAction + " is not a valid Element");
+                exception.printStackTrace();
+            }
             return;
         }
 
@@ -95,18 +120,13 @@ public class GUIActionHandler {
         } else player.sendMessage("§9§lSHOP §8»§c Unequip a spell first! §8(§7Drag into Shop§8)");
     }
 
-    public static void openShop(@NotNull Player player, @NotNull String itemAction) {
-        if (itemAction.isEmpty()) {
+    public static void openShop(@NotNull Player player, @Nullable Enums.Element element) {
+        if (element == null) {
             player.openInventory(GUICreationUtil.createShop(player));
             return;
         }
 
-        try {
-            player.openInventory(GUICreationUtil.createElementGUI(player, Enums.Element.valueOf(itemAction)));
-        } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning(itemAction + " is not a valid Element");
-            exception.printStackTrace();
-        }
+        player.openInventory(GUICreationUtil.createElementGUI(player, element));
     }
 
     public static void buySpell(@NotNull Player player, @NotNull Enums.Element element, int nth) {
@@ -130,14 +150,19 @@ public class GUIActionHandler {
         //SoundLib Shop.elementBought(player);
         if (MathUtil.additiveArrayValue(SpellsOwned.getAllSpellsOwned(player)) == 1) {
             SpellsOwned.setSpellsOwned(player, element, 5);
-            Gold.addGold(player, -650);
-            for (SpellObj spellObj : elementObj.getSpells())
-                if (DataUtil.spellsInsideInventory(player.getInventory()) < 5)
-                    player.getInventory().addItem(Item.edit(spellObj.getItem(), 1));
+            Gold.addGold(player, -DataUtil.calculateAddedPriceOfAllSpellsInElement(elementObj));
+            addAllSpells(player, element);
         }
 
         player.openInventory(GUICreationUtil.createElementGUI(player, element));
         //noinspection ConstantConditions
         player.sendMessage("§9§lSHOP §8»§e Purchased " + elementObj.getItem().getItemMeta().getDisplayName() + " §6for §b" + elementObj.getPrice() + " Gems§e!");
+    }
+
+
+    public static void addAllSpells(@NotNull Player player, @NotNull Enums.Element element) {
+        for (SpellObj spellObj : Elements.getElementByEnum(element).getSpells())
+            if (DataUtil.spellsInsideInventory(player.getInventory()) < 5)
+                player.getInventory().addItem(Item.edit(spellObj.getItem(), 1));
     }
 }

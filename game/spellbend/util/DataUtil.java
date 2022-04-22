@@ -2,6 +2,8 @@ package game.spellbend.util;
 
 import game.spellbend.data.Enums;
 import game.spellbend.data.PersistentDataKeys;
+import game.spellbend.organize.ElementObj;
+import game.spellbend.organize.SpellObj;
 import game.spellbend.spell.SpellHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -130,20 +132,15 @@ public class DataUtil {
      */
     public static @Nullable Inventory getItemClickedDestination(@NotNull InventoryView invView, @NotNull Inventory clickedInv, @NotNull ClickType clickType) {
         if (clickType.equals(ClickType.SHIFT_LEFT) || clickType.equals(ClickType.SHIFT_RIGHT)) {
-            if (clickedInv.equals(invView.getBottomInventory())) {
-                Bukkit.getLogger().info("§bclicked Destination is Top");
+            if (clickedInv.equals(invView.getBottomInventory()))
                 return invView.getTopInventory();
-            }
-            if (clickedInv.equals(invView.getTopInventory())) {
-                Bukkit.getLogger().info("§bclicked Destination is Bottom");
+            if (clickedInv.equals(invView.getTopInventory()))
                 return invView.getBottomInventory();
-            }
             throw new IllegalArgumentException("The clicked inventory is not contained in the inventory view!");
         }
 
         if (clickType.equals(ClickType.NUMBER_KEY) || clickType.equals(ClickType.SWAP_OFFHAND))
             return invView.getBottomInventory();
-        Bukkit.getLogger().info("§bclicked destination is null");
 
         /*if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT))
             return null;
@@ -177,11 +174,8 @@ public class DataUtil {
      * @return The items destination inventory
      */
     public static @Nullable Inventory getItemOnCursorDestination(@NotNull Inventory clickedInv, @NotNull ClickType clickType) {
-        if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT)) {
-            Bukkit.getLogger().info("§bcursor destination is clickedInv");
+        if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT))
             return clickedInv;
-        }
-        Bukkit.getLogger().info("§bcursor destination is null");
 
         /*if (clickType.equals(ClickType.SHIFT_LEFT) || clickType.equals(ClickType.SHIFT_RIGHT))
             return null;
@@ -223,5 +217,17 @@ public class DataUtil {
             Bukkit.getLogger().warning(player.getDisplayName() + " has item " + item.getItemMeta().getDisplayName() + "§e that has an invalid SpellType!");
             return null;
         }
+    }
+
+    /**Calculates the price of all Spells in the element added together
+     *
+     * @param element The element to calculate the added Spells price of
+     * @return The price
+     */
+    public static int calculateAddedPriceOfAllSpellsInElement(@NotNull ElementObj element) {
+        int price = 0;
+        for (SpellObj spell : element.getSpells())
+            price += spell.getPrice();
+        return price;
     }
 }

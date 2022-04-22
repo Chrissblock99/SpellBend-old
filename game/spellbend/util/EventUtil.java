@@ -14,6 +14,7 @@ public class EventUtil {
         new PlayerJoin();
         new PlayerChat();
         new InventoryClick();
+        new InventoryDrag();
         new PlayerLeave();
 
         new PlayerSwitchHeldItem();

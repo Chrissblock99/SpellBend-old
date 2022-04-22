@@ -16,11 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerDataBoard {
-                 //final might cause problems
     private static final HashMap<UUID, Enums.SpellType> playersHoldingCooldownedItem = new HashMap<>();
 
     public static void start() {
@@ -31,8 +29,16 @@ public class PlayerDataBoard {
         new BukkitRunnable(){
             @Override
             public void run() {
-                for (Map.Entry<UUID, Enums.SpellType> entry : playersHoldingCooldownedItem.entrySet())
-                    updateBoard(Objects.requireNonNull(Bukkit.getPlayer(entry.getKey())), entry.getValue());
+                for (Map.Entry<UUID, Enums.SpellType> entry : playersHoldingCooldownedItem.entrySet()) {
+                    Bukkit.getLogger().info("§b" + entry.getKey() + ": " + entry.getValue());
+                    Player player = Bukkit.getPlayer(entry.getKey());
+                    if (player == null) {
+                        playersHoldingCooldownedItem.remove(entry.getKey());
+                        Bukkit.getLogger().warning("UUID \"" + entry.getKey() + "\" registered in playersHoldingCooldownedItems is offline, removing from Map!");
+                        return;
+                    }
+                    updateBoard(player, entry.getValue());
+                }
             }
         }.runTaskTimer(PluginMain.getInstance(), 0, 2);
     }
@@ -42,8 +48,16 @@ public class PlayerDataBoard {
     }
 
     public static void deRegisterPlayer(@NotNull Player player) {
+        Bukkit.getLogger().info("§bBefore removing:");
+        for (Map.Entry<UUID, Enums.SpellType> entry : playersHoldingCooldownedItem.entrySet())
+            Bukkit.getLogger().info("§b" + entry.getKey() + ": " + entry.getValue());
+
         playersHoldingCooldownedItem.remove(player.getUniqueId());
         updateBoard(player);
+
+        Bukkit.getLogger().info("§bAfter removing:");
+        for (Map.Entry<UUID, Enums.SpellType> entry : playersHoldingCooldownedItem.entrySet())
+            Bukkit.getLogger().info("§b" + entry.getKey() + ": " + entry.getValue());
     }
 
     public static void deRegisterPlayer(@NotNull Player player, @Nullable Enums.SpellType type) {
@@ -53,7 +67,7 @@ public class PlayerDataBoard {
 
     public static void updateBoard(@NotNull Player player, @Nullable Enums.SpellType type) {
         try {
-            //noinspection ConstantConditions this can throw a NullPointerExcepttion if getScoreBoardManager() returns null, but it gets catched
+            //noinspection ConstantConditions    this can throw a NullPointerExcepttion if getScoreBoardManager() returns null, but it gets catched
             Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
             Objective obj = board.registerNewObjective("playerDataBoard", "dummy",  PlayerDataUtil.constructDisplayString(player));
             obj.setDisplaySlot(DisplaySlot.SIDEBAR);

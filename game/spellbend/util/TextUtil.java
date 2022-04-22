@@ -29,7 +29,7 @@ public class TextUtil {
      * @param message The String to filter if it contains bad words
      * @return The filtered String
      */
-    public static @NotNull String filterMessage(@NotNull String message) { //TODO make this work
+    public static @NotNull String filterMessage(@NotNull String message) {
         String startMessage = message;
 
         //Bukkit.getLogger().info("§ball");

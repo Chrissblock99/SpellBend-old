@@ -19,62 +19,34 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class InventoryClick implements Listener {
-
     public InventoryClick() {
         EventUtil.register(this);
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Bukkit.getLogger().info("InventoryClickedEvent");
         Inventory clickedInv = event.getClickedInventory();
         if (clickedInv == null) return;
         Player player = (Player) event.getWhoClicked();
-        Bukkit.getLogger().info("§b-------------------------------------");
         Inventory itemOnCursorDestination = DataUtil.getItemOnCursorDestination(event.getClickedInventory(), event.getClick());
         Inventory itemClickedDestination = DataUtil.getItemClickedDestination(event.getView(), event.getClickedInventory(), event.getClick());
-        Bukkit.getLogger().info("§bchecking destinations for null");
         if (itemOnCursorDestination == null && itemClickedDestination == null) return;
-        Bukkit.getLogger().info("§bnot null");
 
-        Bukkit.getLogger().info("§bchecking cursor destination");
         if (itemOnCursorDestination != null && DataUtil.inventoryIsShop(itemOnCursorDestination)) {
-            Bukkit.getLogger().info("§bcursor Destination is Shop");
             if (SpellHandler.itemIsSpell(player.getItemOnCursor())) {
-                Bukkit.getLogger().info("§bitem is Spell");
                 event.setCancelled(true);
                 player.setItemOnCursor(null);
-                return;
-            } else event.setCancelled(true);
-        } else Bukkit.getLogger().info("§bisn't shop");
-
-        Bukkit.getLogger().info("§bchecking clicked destination");
-        if (itemClickedDestination != null && DataUtil.inventoryIsShop(itemClickedDestination)) {
-            Bukkit.getLogger().info("§bclicked Destination is Shop");
-            if (SpellHandler.itemIsSpell(event.getCurrentItem())) {
-                Bukkit.getLogger().info("§bitem is Spell");
-                event.setCancelled(true);
-                event.setCurrentItem(null);
-                return;
-            } else event.setCancelled(true);
-        } else Bukkit.getLogger().info("§bisn't shop");
-
-        /*if (dataUtil.inventoryIsShop(clickedInv)) {
-            if (SpellHandler.itemIsSpell(player.getItemOnCursor())) {
-                player.setItemOnCursor(null);
-                event.setCancelled(true);
                 return;
             } else event.setCancelled(true);
         }
 
-        if (dataUtil.inventoryIsShop(event.getView().getTopInventory()) &&
-                !dataUtil.inventoryIsShop(clickedInv) &&
-                (event.getClick().equals(ClickType.SHIFT_LEFT) ||
-                        event.getClick().equals(ClickType.SHIFT_RIGHT))) {
-            if (SpellHandler.itemIsSpell(event.getCurrentItem()))
+        if (itemClickedDestination != null && DataUtil.inventoryIsShop(itemClickedDestination)) {
+            if (SpellHandler.itemIsSpell(event.getCurrentItem())) {
+                event.setCancelled(true);
                 event.setCurrentItem(null);
-            else event.setCancelled(true);
-        }*/
+                return;
+            } else event.setCancelled(true);
+        }
 
         if (!DataUtil.itemIsClickable(event.getCurrentItem())) return;
         event.setCancelled(true);
@@ -86,7 +58,7 @@ public class InventoryClick implements Listener {
         if (meta.getCustomModelData() <= 400) {
             PersistentDataContainer data = meta.getPersistentDataContainer();
             if (data.has(PersistentDataKeys.itemActionKey, PersistentDataType.STRING))
-                GUIActionHandler.runItemAction(Objects.requireNonNull(data.get(PersistentDataKeys.itemActionKey, PersistentDataType.STRING)), player);
+                GUIActionHandler.runItemAction(Objects.requireNonNull(data.get(PersistentDataKeys.itemActionKey, PersistentDataType.STRING)), event.getClick(), player);
             else Bukkit.getLogger().warning("Item " + meta.getDisplayName() + "§e from " + event.getWhoClicked().getName() +
                     " has a CustomModelData for clickable but not a PersistentData ItemAction!");
         }

@@ -14,7 +14,7 @@ public class Gems {
             Bukkit.getLogger().warning(player.getDisplayName() + " is not online when trying to load Gems, skipping loading!");
             return;
         }
-        if (PersistentPlayerSessionStorage.ranks.containsKey(player.getUniqueId())) {
+        if (PersistentPlayerSessionStorage.gems.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " is already loaded when loading Gems, skipping loading!");
             return;
         }

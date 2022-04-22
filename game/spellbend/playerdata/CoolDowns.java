@@ -13,13 +13,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CoolDowns {
-    //public static final SimpleDateFormat timeParser = new SimpleDateFormat("dd-M-yyyy hh:mm:ss.SSS");
-
     public static void loadCoolDowns(@NotNull Player player) {
         if (!player.isOnline()) {
             Bukkit.getLogger().warning(player.getDisplayName() + " is not online when trying to load CoolDowns, skipping loading!");

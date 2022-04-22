@@ -97,7 +97,12 @@ public class GUICreationUtil {
     private static @NotNull Inventory createDefaultShop() {
         Inventory defaultShop = GUIUtil.outlinedGUI(Item.create(Material.BLUE_STAINED_GLASS_PANE, "§t", 501), 45, "§9§lSHOP");
 
-        /*Sign*/ defaultShop.setItem(4, Item.create(Material.OAK_SIGN, "§r§lClick on an Element", new String[]{"§fto purchase it!"}, 501));
+        /*Sign*/ defaultShop.setItem(4, Item.create(Material.OAK_SIGN, "§r§lClick on an Element", new String[]{
+                "§fto purchase it!",
+                "§8---------------",
+                "§f§lDrag §7or§f§l shift click §7moves",
+                "§7into the shop to unequip them!"
+        }, 501));
         /*Cosmetics*/ defaultShop.setItem(40, Item.create(Material.CHEST, "§9§lCOSMETICS", 301));
 
         return defaultShop;
@@ -110,10 +115,10 @@ public class GUICreationUtil {
                 "§fto purchase it!",
                 "§8---------------",
                 "§7Click on§f§l glowing moves",
-                "§7to purchase them!",
+                "§7to equip them!",
                 "",
                 "§f§lDrag §7or§f§l shift click §7moves",
-                "§7to unequip them!"
+                "§7into the shop to unequip them!"
         }, 501, "ItemType", "GUIDeco"));
 
         /*Back*/ defaultElementGUI.setItem(18, Item.create(Material.ARROW, "§7§lBack", 301, PersistentDataKeys.itemActionKey, "openShop"));

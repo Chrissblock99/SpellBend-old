@@ -18,6 +18,7 @@ public class PlayerDataUtil {
         data.set(PersistentDataKeys.goldKey, PersistentDataType.INTEGER, 650);
         data.set(PersistentDataKeys.spellsOwnedKey, PersistentDataType.INTEGER_ARRAY, new int[]{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
         data.set(PersistentDataKeys.coolDownsKey, PersistentDataType.STRING, "");
+        data.set(PersistentDataKeys.punishmentsKey, PersistentDataType.STRING, "");
         data.set(PersistentDataKeys.dmgModsKey, PersistentDataType.STRING, "1, 1, 1");
         data.set(PersistentDataKeys.ranksKey, PersistentDataType.STRING, "player");
         data.set(PersistentDataKeys.badgesKey, PersistentDataType.STRING, "");
@@ -38,6 +39,7 @@ public class PlayerDataUtil {
         Health.loadHealth(player);
         CoolDowns.loadCoolDowns(player);
         DmgMods.loadDmgMods(player);
+        Punishments.loadPunishments(player);
         Ranks.loadRanks(player);
         Badges.loadBadges(player);
         Nick.loadNick(player);
@@ -57,6 +59,7 @@ public class PlayerDataUtil {
         Health.saveHealth(player);
         CoolDowns.saveCoolDowns(player);
         DmgMods.saveDmgMods(player);
+        Punishments.savePunishments(player);
         Ranks.saveRanks(player);
         Badges.saveBadges(player);
         Nick.saveNick(player);
