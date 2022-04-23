@@ -2,6 +2,7 @@ package game.spellbend.playerdata;
 
 import game.spellbend.data.PersistentDataKeys;
 import game.spellbend.organize.RankObj;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -33,19 +34,84 @@ public class PlayerDataUtil {
      * @param player The player to load the PersistentData of
      */
     public static void loadAll(@NotNull Player player) {
-        Gems.loadGems(player);
-        Gold.loadGold(player);
-        SpellsOwned.loadSpellsOwned(player);
-        Health.loadHealth(player);
-        CoolDowns.loadCoolDowns(player);
-        DmgMods.loadDmgMods(player);
-        Punishments.loadPunishments(player);
-        Ranks.loadRanks(player);
-        Badges.loadBadges(player);
-        Nick.loadNick(player);
-        Suffix.loadSuffix(player);
-        Crystals.loadCrystals(player);
-        CrystalShards.loadCrystalShards(player);
+        try {
+            Gems.loadGems(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Gems generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Gold.loadGold(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Gold generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            SpellsOwned.loadSpellsOwned(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s SpellsOwned generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Health.loadHealth(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Health generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            CoolDowns.loadCoolDowns(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Cooldowns generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            DmgMods.loadDmgMods(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s DmgMods generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Punishments.loadPunishments(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Punishments generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Ranks.loadRanks(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Ranks generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Badges.loadBadges(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Badges generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Nick.loadNick(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Nick generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Suffix.loadSuffix(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Suffix generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Crystals.loadCrystals(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Crystals generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            CrystalShards.loadCrystalShards(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s CrystalShards generated an exception!");
+            e.printStackTrace();
+        }
     }
 
     /**Saves all PersistentData of the player
@@ -53,19 +119,84 @@ public class PlayerDataUtil {
      * @param player The player to save the PersistentData of
      */
     public static void saveAll(@NotNull Player player) {
-        Gems.saveGems(player);
-        Gold.saveGold(player);
-        SpellsOwned.saveSpellsOwned(player);
-        Health.saveHealth(player);
-        CoolDowns.saveCoolDowns(player);
-        DmgMods.saveDmgMods(player);
-        Punishments.savePunishments(player);
-        Ranks.saveRanks(player);
-        Badges.saveBadges(player);
-        Nick.saveNick(player);
-        Suffix.saveSuffix(player);
-        Crystals.saveCrystals(player);
-        CrystalShards.saveCrystalShards(player);
+        try{
+            Gems.saveGems(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Gems generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Gold.saveGold(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Gold generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            SpellsOwned.saveSpellsOwned(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s SpellsOwned generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Health.saveHealth(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Health generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            CoolDowns.saveCoolDowns(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s CoolDowns generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            DmgMods.saveDmgMods(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s DmgMods generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Punishments.savePunishments(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Punishments generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Ranks.saveRanks(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Ranks generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Badges.saveBadges(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Badges generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Nick.saveNick(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Nick generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Suffix.saveSuffix(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Suffix generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            Crystals.saveCrystals(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Crystals generated an exception!");
+            e.printStackTrace();
+        }
+        try {
+            CrystalShards.saveCrystalShards(player);
+        } catch (Exception e) {
+            Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s CrystalShards generated an exception!");
+            e.printStackTrace();
+        }
     }
 
     /**Constructs a String containing the Players rank, name, badges, suffix and level

@@ -187,11 +187,13 @@ public class FilterTexts {
         HashMap<String, ArrayList<AllowedWord>> filteredMap = new HashMap<>();
         ArrayList<AllowedWord> allowedList = new ArrayList<>();
 
+        allowedList.add(new AllowedWord("freezing", 3, 2, 3));
         allowedList.add(new AllowedWord("freeze", 3, 2, 1));
         //noinspection unchecked
         filteredMap.put("ez", (ArrayList<AllowedWord>) allowedList.clone());
         allowedList.clear();
 
+        allowedList.add(new AllowedWord("accumulated", 2, 3, 6));
         allowedList.add(new AllowedWord("documentary", 2, 3, 6));
         //noinspection unchecked
         filteredMap.put("cum", (ArrayList<AllowedWord>) allowedList.clone());

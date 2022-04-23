@@ -30,9 +30,12 @@ public class Punishments {
         } catch (NumberFormatException exception) {
             Bukkit.getLogger().warning("\"" + arguments[0] + "\" is supposed to be a Long but isn't! or\n" +
                     "\"" + arguments[0] + "is supposed to be a Long but isn't!");
+            exception.printStackTrace();
             return null;
         } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning("\"" + arguments[2] + "\" is supposed to be a Rule enum but isn't!");
+            Bukkit.getLogger().warning("\"" + arguments[2] + "\" is supposed to be a Rule enum but isn't! or\n" +
+                    "\"" + arguments[0] + "; " + arguments[1] + "\" is not a valid TimeSpan because startDate is after endDate!");
+            exception.printStackTrace();
             return null;
         }
     }
@@ -52,9 +55,12 @@ public class Punishments {
         } catch (NumberFormatException exception) {
             Bukkit.getLogger().warning("\"" + arguments[0] + "\" is supposed to be a Long but isn't! or\n" +
                     "\"" + arguments[0] + "is supposed to be a Long but isn't!");
+            exception.printStackTrace();
             return null;
         } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning("\"" + arguments[2] + "\" is supposed to be a Rule enum but isn't!");
+            Bukkit.getLogger().warning("\"" + arguments[2] + "\" is supposed to be a Rule enum but isn't! or\n" +
+                    "\"" + arguments[0] + "; " + arguments[1] + "\" is not a valid TimeSpan because startDate is after endDate!");
+            exception.printStackTrace();
             return null;
         }
     }
@@ -74,9 +80,12 @@ public class Punishments {
         } catch (NumberFormatException exception) {
             Bukkit.getLogger().warning("\"" + arguments[0] + "\" is supposed to be a Long but isn't! or\n" +
                     "\"" + arguments[0] + "is supposed to be a Long but isn't!");
+            exception.printStackTrace();
             return null;
         } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning("\"" + arguments[2] + "\" is supposed to be a Rule enum but isn't!");
+            Bukkit.getLogger().warning("\"" + arguments[2] + "\" is supposed to be a Rule enum but isn't! or\n" +
+                    "\"" + arguments[0] + "; " + arguments[1] + "\" is not a valid TimeSpan because startDate is after endDate!");
+            exception.printStackTrace();
             return null;
         }
     }
@@ -97,10 +106,13 @@ public class Punishments {
         } catch (NumberFormatException exception) {
             Bukkit.getLogger().warning("\"" + arguments[0] + "\" is supposed to be a Long but isn't! or\n" +
                     "\"" + arguments[0] + "is supposed to be a Long but isn't!");
+            exception.printStackTrace();
             return null;
         } catch (IllegalArgumentException exception) {
             Bukkit.getLogger().warning("\"" + arguments[3] + "\" is supposed to be a Rule enum but isn't! or\n" +
-                    "\"" + arguments[2] + "\" is supposed to be a UUID but isn't!");
+                    "\"" + arguments[2] + "\" is supposed to be a UUID but isn't! or\n" +
+                    "\"" + arguments[0] + "; " + arguments[1] + "\" is not a valid TimeSpan because startDate is after endDate!");
+            exception.printStackTrace();
             return null;
         }
     }
@@ -108,6 +120,8 @@ public class Punishments {
     public static @NotNull String stringifyPunishments(@NotNull ArrayList<Punishment> punishments) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Punishment punishment : punishments) {
+            stringBuilder.append(", ");
+
             if (punishment instanceof Warn warn)
                 stringBuilder.append("Warn: ").append(stringifyWarn(warn));
             else if (punishment instanceof Mute mute)
@@ -120,12 +134,10 @@ public class Punishments {
                 Bukkit.getLogger().warning(punishment + " is not a known Punishment, discarding it in stringification!");
                 stringBuilder.replace(stringBuilder.length()-2, stringBuilder.length(), "");
             }
-
-            stringBuilder.append(", ");
         }
 
         if (stringBuilder.length() >= 2)
-            stringBuilder.replace(stringBuilder.length()-2, stringBuilder.length(), "");
+            stringBuilder.replace(0, 2, "");
         return stringBuilder.toString();
     }
 
@@ -144,7 +156,7 @@ public class Punishments {
                 default -> Bukkit.getLogger().warning("\"" + parts[1] + "\" is not a known Punishment!");
             }
             if (parsedPunishmentsList.remove(null))
-                Bukkit.getLogger().warning("Failed to parse \"" + parts[1] + "\" discarding it!");
+                Bukkit.getLogger().warning("Failed to parse Punishment \"" + parts[1] + "\" discarding it!");
         }
 
         return parsedPunishmentsList;
@@ -174,12 +186,47 @@ public class Punishments {
     }
 
     public static ArrayList<Punishment> getPunishments(@NotNull Player player) {
+        if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
+            Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
+            loadPunishments(player);
+        }
+        ArrayList<Punishment> punishments = PersistentPlayerSessionStorage.punishments.get(player.getUniqueId());
+        for (Punishment punishment : punishments)
+            if (punishment.getTime().getRemainingTimeInS() <= 0) {
+                Bukkit.getLogger().info("§bThe time of " + player.getDisplayName() + "'s punishment ran out, removing it!\n" + punishment);
+                punishments.remove(punishment);
+            }
+        return punishments;
+    }
+
+    public static void clearPunishments(@NotNull Player player) {
+        if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
+            Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
+            loadPunishments(player);
+        }
+        Bukkit.getLogger().info("§bClearing " + player.getDisplayName() + "'s punishments because method for that has been called!");
+        for (Punishment punishment : PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()))
+            Bukkit.getLogger().info("§b" + punishment);
+        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).clear();
+    }
+
+    public static void removePunishment(@NotNull Player player, @NotNull Punishment punishment) {
+        Bukkit.getLogger().info("§bRemoving " + player.getDisplayName() + "'s punishment because method for that has been called!\n" + punishment);
         if (PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
-            return PersistentPlayerSessionStorage.punishments.get(player.getUniqueId());
+            PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).remove(punishment);
         }
         Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
         loadPunishments(player);
-        return PersistentPlayerSessionStorage.punishments.get(player.getUniqueId());
+        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).remove(punishment);
+    }
+
+    public static void addPunishment(@NotNull Player player, @NotNull Punishment punishment) {
+        if (PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId()))
+            PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).add(punishment);
+
+        Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
+        loadPunishments(player);
+        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).add(punishment);
     }
 
     public static void savePunishments(@NotNull Player player) {
