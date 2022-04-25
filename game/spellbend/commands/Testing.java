@@ -1,6 +1,7 @@
 package game.spellbend.commands;
 
 import game.spellbend.data.Enums;
+import game.spellbend.data.Lists;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,6 +42,6 @@ public class Testing {
         });
 
 
-        new AdvancedCommandBase("testing", "/testing (this is the Usage String)", subCommands){}.setPermission("SpellBend.testing");
+        new AdvancedCommandBase("testing", "/testing (this is the Usage String)", subCommands){}.setRankingNeeded(Lists.getBadgeByName("dev").ranking);
     }
 }

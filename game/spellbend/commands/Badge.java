@@ -1,5 +1,6 @@
 package game.spellbend.commands;
 
+import game.spellbend.data.Lists;
 import game.spellbend.playerdata.Badges;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -120,6 +121,6 @@ public class Badge {
             public @NotNull String getUsage() {
                 return "/badge <add|remove|has> <badge> <player> or /badge list <player>";
             }
-        }.setPermission("SpellBend.badge");
+        }.setRankingNeeded(Lists.getRankByName("admin").ranking);
     }
 }

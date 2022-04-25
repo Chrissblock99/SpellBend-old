@@ -1,6 +1,7 @@
 package game.spellbend;
 
 import game.spellbend.commands.*;
+import game.spellbend.commands.WarnCommand;
 import game.spellbend.moderation.*;
 import game.spellbend.spell.SpellHandler;
 import game.spellbend.util.EventUtil;
@@ -30,15 +31,20 @@ public class PluginMain extends JavaPlugin {
             SpellHandler.registerPlayer(player);
         }
 
+        //noinspection InstantiationOfUtilityClass
+        new WarnCommand();
+        //noinspection InstantiationOfUtilityClass
+        new PunishmentsCommand();
+
         new Shop();
         new Spawn();
         new Random();
-        PlayerDataBoard.start();
         new Rank();
         new Badge();
         new Nick();
         new Test();
         new Testing();
+        PlayerDataBoard.start();
 
         EventUtil.registerAllEvents();
 

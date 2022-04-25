@@ -1,6 +1,7 @@
 package game.spellbend.commands;
 
 import game.spellbend.PluginMain;
+import game.spellbend.data.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -48,7 +49,7 @@ public class Spawn {
             public @NotNull String getUsage() {
                 return "/setspawn [x] [y] [z] [yaw] [pitch] [world]";
             }
-        }.setPermission("SpellBend.spawn.set");
+        }.setRankingNeeded(Lists.getRankByName("admin").ranking);
 
         new CommandBase("spawn", true) {
             @Override

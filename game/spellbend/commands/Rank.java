@@ -1,5 +1,6 @@
 package game.spellbend.commands;
 
+import game.spellbend.data.Lists;
 import game.spellbend.playerdata.Ranks;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -120,6 +121,6 @@ public class Rank {
             public @NotNull String getUsage() {
                 return "/rank <add|remove|has> <rank> <player> or /rank list <player>";
             }
-        }.setPermission("SpellBend.rank");
+        }.setRankingNeeded(Lists.getRankByName("admin").ranking);
     }
 }

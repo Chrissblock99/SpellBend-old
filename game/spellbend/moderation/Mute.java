@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-@ToString
+@ToString(callSuper=true)
 @EqualsAndHashCode(callSuper=true)
 @SerializableAs("Mute")
 public class Mute extends Punishment {

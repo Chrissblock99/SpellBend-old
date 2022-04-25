@@ -2,9 +2,7 @@ package game.spellbend.commands;
 
 import game.spellbend.organize.BadgeObj;
 import game.spellbend.organize.RankObj;
-import game.spellbend.playerdata.Badges;
-import game.spellbend.playerdata.Ranks;
-import game.spellbend.playerdata.PlayerDataUtil;
+import game.spellbend.util.DataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -70,37 +68,9 @@ public abstract class AdvancedCommandBase extends BukkitCommand implements Comma
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] arguments) {
-        if (sender instanceof Player) {
-            String ErrorMsg = "§cThere is no permission to gain access to this command!";
-            boolean shallReturn = true;
-
-            String permission = getPermission();
-            if (permission != null) {
-                if (sender.hasPermission(permission)) shallReturn = false;
-                else ErrorMsg = "§cYou do not have permission to use this command. " + permission;
-            }
-
-            if (rankNeeded != null) {
-                if (Ranks.hasRank(((Player) sender), rankNeeded.rankName)) shallReturn = false;
-                else ErrorMsg = "§cYou do not have the required Rank to use this command! " + rankNeeded.rankName;
-            }
-
-            if (badgeNeeded != null) {
-                if (Badges.hasBadge(((Player) sender), badgeNeeded.badgeName)) shallReturn = false;
-                else ErrorMsg = "§cYou do not have the required Badge to use this command! " + badgeNeeded.badgeName;
-            }
-
-            if (rankingNeeded != -1) {
-                if (PlayerDataUtil.getRanking(((Player) sender))>=rankingNeeded) shallReturn = false;
-                else ErrorMsg = "§cYou do not have the required Ranking to use this command! " + rankingNeeded;
-            }
-
-            if (shallReturn) {
-                sender.sendMessage(ErrorMsg);
-                return true;
-            }
-        } else if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("§4Only Players or the Console can use this command!");
+        String noPermissionMsg = DataUtil.senderHasPermission(sender, rankNeeded, badgeNeeded, rankingNeeded);
+        if (noPermissionMsg != null) {
+            sender.sendMessage(noPermissionMsg);
             return true;
         }
 

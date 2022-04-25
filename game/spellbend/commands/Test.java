@@ -224,6 +224,6 @@ public class Test {
         });
 
         new AdvancedCommandBase("test", "/test item or /test memory <spell|tasks [filter]> or /test value <dmgMod|cooldown> <valueName> <player>", subCommands){}
-                .setRankingNeeded(Lists.getBadgeByName("dev").ranking).setPermission("SpellBend.test");
+                .setRankingNeeded(Lists.getBadgeByName("dev").ranking);
     }
 }

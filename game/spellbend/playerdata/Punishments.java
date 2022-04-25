@@ -185,29 +185,33 @@ public class Punishments {
         PersistentPlayerSessionStorage.punishments.put(player.getUniqueId(), parsePunishments(punishments));
     }
 
+    public static void addPunishment(@NotNull Player player, @NotNull Punishment punishment) {
+        if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
+            Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
+            loadPunishments(player);
+        }
+        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).add(punishment);
+        Bukkit.getLogger().info("§bAdded " + punishment + " to " + player.getDisplayName() + ".");
+    }
+
     public static ArrayList<Punishment> getPunishments(@NotNull Player player) {
         if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
             loadPunishments(player);
         }
         ArrayList<Punishment> punishments = PersistentPlayerSessionStorage.punishments.get(player.getUniqueId());
-        for (Punishment punishment : punishments)
+        for (int i = punishments.size()-1;i>=0;i--) {
+            Punishment punishment = punishments.get(i);
             if (punishment.getTime().getRemainingTimeInS() <= 0) {
                 Bukkit.getLogger().info("§bThe time of " + player.getDisplayName() + "'s punishment ran out, removing it!\n" + punishment);
                 punishments.remove(punishment);
             }
+        }
         return punishments;
     }
 
-    public static void clearPunishments(@NotNull Player player) {
-        if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
-            Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
-            loadPunishments(player);
-        }
-        Bukkit.getLogger().info("§bClearing " + player.getDisplayName() + "'s punishments because method for that has been called!");
-        for (Punishment punishment : PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()))
-            Bukkit.getLogger().info("§b" + punishment);
-        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).clear();
+    public static boolean hasPunishment(@NotNull Player player, @NotNull Punishment punishment) {
+        return getPunishments(player).contains(punishment); //removing all run out Punishments and handling player not logged case
     }
 
     public static void removePunishment(@NotNull Player player, @NotNull Punishment punishment) {
@@ -220,13 +224,15 @@ public class Punishments {
         PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).remove(punishment);
     }
 
-    public static void addPunishment(@NotNull Player player, @NotNull Punishment punishment) {
-        if (PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId()))
-            PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).add(punishment);
-
-        Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
-        loadPunishments(player);
-        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).add(punishment);
+    public static void clearPunishments(@NotNull Player player) {
+        if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
+            Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
+            loadPunishments(player);
+        }
+        Bukkit.getLogger().info("§bClearing " + player.getDisplayName() + "'s punishments because method for that has been called!");
+        for (Punishment punishment : PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()))
+            Bukkit.getLogger().info("§b" + punishment);
+        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).clear();
     }
 
     public static void savePunishments(@NotNull Player player) {

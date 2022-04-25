@@ -187,6 +187,7 @@ public class FilterTexts {
         HashMap<String, ArrayList<AllowedWord>> filteredMap = new HashMap<>();
         ArrayList<AllowedWord> allowedList = new ArrayList<>();
 
+        allowedList.add(new AllowedWord("jeez", 2, 2, 0));
         allowedList.add(new AllowedWord("freezing", 3, 2, 3));
         allowedList.add(new AllowedWord("freeze", 3, 2, 1));
         //noinspection unchecked

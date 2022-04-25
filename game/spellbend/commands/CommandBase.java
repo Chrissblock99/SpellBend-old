@@ -3,9 +3,7 @@ package game.spellbend.commands;
 import game.spellbend.PluginMain;
 import game.spellbend.organize.BadgeObj;
 import game.spellbend.organize.RankObj;
-import game.spellbend.playerdata.Badges;
-import game.spellbend.playerdata.Ranks;
-import game.spellbend.playerdata.PlayerDataUtil;
+import game.spellbend.util.DataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -19,7 +17,7 @@ import java.util.List;
 
 public abstract class CommandBase extends BukkitCommand implements CommandExecutor {
     private List<String> delayedPlayers = null;
-    private long delay = 0;
+    private long delayInTicks = 0;
     private final int minArguments;
     private final int maxArguments;
     private final boolean playerOnly;
@@ -61,8 +59,8 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
         return null;
     }
 
-    public CommandBase enableDelay(int delay) {
-        this.delay = delay;
+    public CommandBase enableDelay(int delayInTicks) {
+        this.delayInTicks = delayInTicks;
         this.delayedPlayers = new ArrayList<>();
         return this;
     }
@@ -102,42 +100,13 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
             return true;
         }
 
-        if (sender instanceof Player) {
-            String ErrorMsg = "§cThere is no permission to gain access to this command!";
-            boolean shallReturn = true;
-
-            String permission = getPermission();
-            if (permission != null) {
-                if (sender.hasPermission(permission)) shallReturn = false;
-                else ErrorMsg = "§cYou do not have permission to use this command. " + permission;
-            }
-
-            if (rankNeeded != null) {
-                if (Ranks.hasRank(((Player) sender), rankNeeded.rankName)) shallReturn = false;
-                else ErrorMsg = "§cYou do not have the required Rank to use this command! " + rankNeeded.rankName;
-            }
-
-            if (badgeNeeded != null) {
-                if (Badges.hasBadge(((Player) sender), badgeNeeded.badgeName)) shallReturn = false;
-                else ErrorMsg = "§cYou do not have the required Badge to use this command! " + badgeNeeded.badgeName;
-            }
-
-            if (rankingNeeded != -1) {
-                if (PlayerDataUtil.getRanking(((Player) sender))>=rankingNeeded) shallReturn = false;
-                else ErrorMsg = "§cYou do not have the required Ranking to use this command! " + rankingNeeded;
-            }
-
-            if (shallReturn) {
-                sender.sendMessage(ErrorMsg);
-                return true;
-            }
-        } else if (!(sender instanceof ConsoleCommandSender)) {
-            sender.sendMessage("§4Only Players or the Console can use this command!");
+        String noPermissionMsg = DataUtil.senderHasPermission(sender, rankNeeded, badgeNeeded, rankingNeeded);
+        if (noPermissionMsg != null) {
+            sender.sendMessage(noPermissionMsg);
             return true;
         }
 
-        if (delayedPlayers != null && sender instanceof Player) {
-            Player player = (Player) sender;
+        if (delayedPlayers != null && sender instanceof Player player) {
             if (delayedPlayers.contains(player.getName())) {
                 player.sendMessage("§cPlease wait " + " before using this command again.");
                 return true;
@@ -148,7 +117,7 @@ public abstract class CommandBase extends BukkitCommand implements CommandExecut
             //instead of using a countdown
             //this would also require a removal from list on leave for efficiency reasons
             delayedPlayers.add(player.getName());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(PluginMain.getInstance(), () -> delayedPlayers.remove(player.getName()), delay);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(PluginMain.getInstance(), () -> delayedPlayers.remove(player.getName()), delayInTicks);
         }
 
         if (!onCommand(sender, arguments)) {

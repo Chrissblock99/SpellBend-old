@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Getter
-@ToString
+@ToString(callSuper=true)
 @EqualsAndHashCode(callSuper=true)
 @SerializableAs("HoldMsgs")
 public class HoldMsgs extends Punishment {

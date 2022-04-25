@@ -1,5 +1,6 @@
 package game.spellbend.commands;
 
+import game.spellbend.data.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,6 +51,6 @@ public class Nick {
             public @NotNull String getUsage() {
                 return "/nick <name> or /nick <player> <name>";
             }
-        }.setPermission("SpellBend.nick");
+        }.setRankingNeeded(Lists.getRankByName("patron").ranking);
     }
 }

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-@ToString
+@ToString(callSuper=true)
 @EqualsAndHashCode(callSuper = true)
 @SerializableAs("Warn")
 public class Warn extends Punishment implements ConfigurationSerializable {

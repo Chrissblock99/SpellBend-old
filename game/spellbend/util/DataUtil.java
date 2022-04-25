@@ -2,11 +2,18 @@ package game.spellbend.util;
 
 import game.spellbend.data.Enums;
 import game.spellbend.data.PersistentDataKeys;
+import game.spellbend.organize.BadgeObj;
 import game.spellbend.organize.ElementObj;
+import game.spellbend.organize.RankObj;
 import game.spellbend.organize.SpellObj;
+import game.spellbend.playerdata.Badges;
+import game.spellbend.playerdata.PlayerDataUtil;
+import game.spellbend.playerdata.Ranks;
 import game.spellbend.spell.SpellHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
@@ -229,5 +236,46 @@ public class DataUtil {
         for (SpellObj spell : element.getSpells())
             price += spell.getPrice();
         return price;
+    }
+
+    /**Checks if the sender has ANY of the passed in requirements and if not returns an Error message
+     * if the sender is a player who is an Operator is factored in
+     * if the sender has permission null is returned
+     * non ConsoleCommandSenders or Players will never have access
+     *
+     * @param sender The sender to check for permission
+     * @param rankNeeded A possibly required Rank
+     * @param badgeNeeded A possibly required Badge
+     * @param rankingNeeded A possible required Ranking
+     * @return The no permission message or null if has permission
+     */
+    public static @Nullable String senderHasPermission(@NotNull CommandSender sender, @Nullable RankObj rankNeeded, @Nullable BadgeObj badgeNeeded, int rankingNeeded) {
+        if (sender instanceof Player player) {
+            String errorMsg = "§cYou must be an Operator to gain access to this command/subCommand!";
+            boolean shallReturn = true;
+
+            if (rankNeeded != null) {
+                if (Ranks.hasRank(player, rankNeeded.rankName)) shallReturn = false;
+                else errorMsg = "§cYou do not have the required Rank to use this command/subCommand! " + rankNeeded.rankName;
+            }
+
+            if (badgeNeeded != null) {
+                if (Badges.hasBadge(player, badgeNeeded.badgeName)) shallReturn = false;
+                else errorMsg = "§cYou do not have the required Badge to use this command/subCommand! " + badgeNeeded.badgeName;
+            }
+
+            if (PlayerDataUtil.getRanking(player)>=rankingNeeded) shallReturn = false;
+            else errorMsg = "§cYou do not have the required Ranking to use this command/subCommand! " + rankingNeeded;
+
+            if (player.isOp())
+                shallReturn = false;
+
+            if (shallReturn) {
+                return errorMsg;
+            }
+        } else if (!(sender instanceof ConsoleCommandSender)) {
+            return "§4Only Players or the Console can use this command/subCommand!";
+        }
+        return null;
     }
 }
