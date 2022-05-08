@@ -4,11 +4,13 @@ import game.spellbend.data.Lists;
 import game.spellbend.moderation.*;
 import game.spellbend.playerdata.Punishments;
 import game.spellbend.util.DataUtil;
+import org.bukkit.BanEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -51,21 +53,11 @@ public class PunishmentsCommand {
         }.enableDelay(100);
     }
 
-    static boolean listPunishments(CommandSender sender, Player player) {
+    public static boolean listPunishments(CommandSender sender, Player player) {
         ArrayList<Punishment> punishments = Punishments.getPunishments(player);
         sender.sendMessage("§c" + player.getDisplayName() + "'s Punishments:");
-        for (Punishment punishment : punishments) {
-            if (punishment instanceof Warn warn)
-                sender.sendMessage("Warn: " + stringifyWarn(warn));
-            else if (punishment instanceof Mute mute)
-                sender.sendMessage("Mute: " + stringifyMute(mute));
-            else if (punishment instanceof Ban ban)
-                sender.sendMessage("Ban: " + stringifyBan(ban));
-            else if (punishment instanceof HoldMsgs holdMsgs)
-                sender.sendMessage("HoldMsgs: " + stringifyHoldMsgs(holdMsgs));
-            else
-                sender.sendMessage("Unknown Punishment: " + punishment);
-        }
+        for (Punishment punishment : punishments)
+            sender.sendMessage(stringifyPunishment(punishment));
         if (punishments.size() == 0)
             sender.sendMessage("none");
         return true;
@@ -75,21 +67,24 @@ public class PunishmentsCommand {
         return "§8from §f" + warn.getStartDate() + "§8 to §f" +
                 warn.getEndDate() + "§8 for §f" +
                 warn.getRule() + "§8 with reason §f" +
-                warn.getReason();
+                warn.getReason() + "§c ID: §f" +
+                warn.hashCode();
     }
 
     public static @NotNull String stringifyMute(@NotNull Mute mute) {
         return "§8from §f" + mute.getStartDate() + "§8 to §f" +
                 mute.getEndDate() + "§8 for §f" +
                 mute.getRule() + "§8 with reason §f" +
-                mute.getReason();
+                mute.getReason() + "§c ID: §f" +
+                mute.hashCode();
     }
 
-    public static @NotNull String stringifyBan(@NotNull Ban ban) {
-        return "§8from §f" + ban.getStartDate() + "§8 to §f" +
-                ban.getEndDate() + "§8 for §f" +
-                ban.getRule() + "§8 with reason §f" +
-                ban.getReason();
+    static @NotNull String stringifyBanEntry(BanEntry banEntry) {
+        return banEntry.getTarget() + "§8 is banned since §f" +
+                banEntry.getCreated() + "§8 till §f" +
+                banEntry.getExpiration() + "§8 with reason §f" +
+                banEntry.getReason() + "§8 by §f" +
+                banEntry.getSource();
     }
 
     public static @NotNull String stringifyHoldMsgs(@NotNull HoldMsgs holdMsgs) {
@@ -99,6 +94,61 @@ public class PunishmentsCommand {
                 holdMsgs.getEndDate() + "§8 for §f" +
                 holdMsgs.getRule() + "§8 with reason §f" +
                 holdMsgs.getReason() + "§8 msgChecker: §f" +
-                msgChecker;
+                msgChecker + "§c ID: §f" +
+                holdMsgs.hashCode();
+    }
+
+    public static @NotNull String stringifyPunishment(@NotNull Punishment punishment) {
+        if (punishment instanceof Warn warn)
+            return "Warn: " + stringifyWarn(warn);
+        if (punishment instanceof Mute mute)
+            return "Mute: " + stringifyMute(mute);
+        if (punishment instanceof HoldMsgs holdMsgs)
+            return "HoldMsgs: " + stringifyHoldMsgs(holdMsgs);
+        return "Unknown Punishment: " + punishment;
+    }
+
+    /**
+     *
+     * @param punishments The punishmentsList to get from
+     * @param arguments String[] which may have a 4th argument to specify which punishment to choose if hashCodes collide
+     * @param sender The CommandSender
+     * @return The punishment if only 1 entry in list <br>
+     * null if multiple, 0 entries or an error occurred <br>
+     * in this case the sender is notified
+     */
+    public static @Nullable Punishment getPunishmentFromSameHashCodeList(ArrayList<Punishment> punishments, String[] arguments, CommandSender sender) {
+        if (punishments.size() == 1)
+            return punishments.get(0);
+
+        if (punishments.size() == 0) {
+            sender.sendMessage("§cThere is no Punishment with that ID!");
+            return null;
+        }
+
+        if (arguments.length == 4) {
+            int nth;
+            try {
+                nth = Integer.parseInt(arguments[3]);
+            } catch (NumberFormatException nfe) {
+                sender.sendMessage(arguments[3] + " is not a valid number!");
+                return null;
+            }
+
+            if (nth >= 0 && nth < punishments.size())
+                return punishments.get(nth);
+            else {
+                sender.sendMessage("§cThat index does not exist! Valid indexes:");
+                for (int i = 0;i<punishments.size();i++)
+                    sender.sendMessage("§c" + i + ": §f" + stringifyPunishment(punishments.get(i)));
+                return null;
+            }
+            //this point of the if is unreachable as we return before
+        }
+
+        sender.sendMessage("§cThere are multiple Punishments with that ID! Please repeat the command with an index argument of the following:");
+        for (int i = 0;i<punishments.size();i++)
+            sender.sendMessage("§c" + i + ": §f" + stringifyPunishment(punishments.get(i)));
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package game.spellbend.events;
 
+import game.spellbend.commands.HoldMsgsCommand;
 import game.spellbend.organize.RankObj;
 import game.spellbend.spell.SpellHandler;
 import game.spellbend.util.EventUtil;
@@ -25,5 +26,7 @@ public class PlayerLeave implements Listener {
         PlayerDataBoard.deRegisterPlayer(player);
         SpellHandler.deRegisterPlayer(player);
         PlayerDataUtil.saveAll(player);
+
+        HoldMsgsCommand.getPlayerIDMessageMap().remove(player.getUniqueId());
     }
 }

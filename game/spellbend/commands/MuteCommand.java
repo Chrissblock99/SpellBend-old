@@ -2,9 +2,11 @@ package game.spellbend.commands;
 
 import game.spellbend.data.Enums;
 import game.spellbend.data.Lists;
-import game.spellbend.moderation.*;
-import game.spellbend.playerdata.Punishments;
+import game.spellbend.moderation.HoldMsgs;
+import game.spellbend.moderation.Mute;
+import game.spellbend.moderation.Punishment;
 import game.spellbend.organize.TimeSpan;
+import game.spellbend.playerdata.Punishments;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,31 +16,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class WarnCommand {
-    public WarnCommand() {
-        new CommandBase("warn", 2, -1) {
+public class MuteCommand {
+    public MuteCommand() {
+        new CommandBase("mute", 2, -1) {
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
                 if (arguments[0].equals("list")) {
                     if (arguments.length == 2)
-                        return listWarns(sender, arguments);
+                        return listMutes(sender, arguments);
                     else {
-                        sender.sendMessage("§c/warn list <player> can only take 2 arguments!");
+                        sender.sendMessage("§c/mute list <player> can only take 2 arguments!");
                         return true;
                     }
                 }
 
                 if (arguments[0].equals("remove")) {
                     if (arguments.length == 3 || arguments.length == 4)
-                        return removeWarn(sender, arguments);
+                        return removeMute(sender, arguments);
                     else {
-                        sender.sendMessage("§c/warn remove <player> <ID> [index] can only take 3 or 4 arguments!");
+                        sender.sendMessage("§c/mute remove <player> <ID> [index] can only take 3 or 4 arguments!");
                         return true;
                     }
                 }
 
                 if (arguments.length >= 4)
-                    return giveWarn(sender, arguments);
+                    return giveMute(sender, arguments);
                 sender.sendMessage("§cNo subCommand found! valid subcommands:");
                 sendUsage(sender);
                 return true;
@@ -47,14 +49,14 @@ public class WarnCommand {
             @Override
             public @NotNull String getUsage() {
                 return """
-                        /warn <player> <timeInSeconds> <rule> <reason>
-                        /warn list <player>
-                        /warn remove <player> <ID> [index]""";
+                        /mute <player> <timeInSeconds> <rule> <reason>
+                        /mute list <player>
+                        /mute remove <player> <ID> [index]""";
             }
         }.setRankingNeeded(Lists.getRankByName("helper").ranking);
     }
 
-    public static boolean listWarns(CommandSender sender, String[] arguments) {
+    public static boolean listMutes(CommandSender sender, String[] arguments) {
         Player player = Bukkit.getPlayerExact(arguments[1]);
         if (player == null) {
             sender.sendMessage("§cPlayer \"" + arguments[1] + "\" is not online or doesn't exist!");
@@ -62,16 +64,16 @@ public class WarnCommand {
         }
 
         ArrayList<Punishment> punishments = Punishments.getPunishments(player);
-        punishments.removeIf(p -> !(p instanceof Warn));
-        sender.sendMessage("§c" + player.getDisplayName() + "'s Warns:");
+        punishments.removeIf(p -> !(p instanceof Mute));
+        sender.sendMessage("§c" + player.getDisplayName() + "'s Mutes:");
         for (Punishment punishment : punishments)
-            sender.sendMessage(PunishmentsCommand.stringifyWarn((Warn) punishment));
+            sender.sendMessage(PunishmentsCommand.stringifyMute((Mute) punishment));
         if (punishments.size() == 0)
             sender.sendMessage("none");
         return true;
     }
 
-    public static boolean giveWarn(CommandSender sender, String[] arguments) {
+    public static boolean giveMute(CommandSender sender, String[] arguments) {
         Player player = Bukkit.getPlayerExact(arguments[0]);
         if (player == null) {
             sender.sendMessage("§cPlayer \"" + arguments[0] + "\" is not online or doesn't exist!");
@@ -107,19 +109,19 @@ public class WarnCommand {
         String reason = String.join(" ", restArgs);
 
 
-        Warn warn = new Warn(new TimeSpan(new Date(), new Date(new Date().getTime() + timeInMS)), rule, reason);
-        Punishments.addPunishment(player, warn);
-        if (!Punishments.hasPunishment(player, warn)) {
-            sender.sendMessage("§cWarning failed! Adding the warn to " + arguments[0] + " did not add it??");
+        Mute mute = new Mute(new TimeSpan(new Date(), new Date(new Date().getTime() + timeInMS)), rule, reason);
+        Punishments.addPunishment(player, mute);
+        if (!Punishments.hasPunishment(player, mute)) {
+            sender.sendMessage("§cMuting failed! Adding the mute to " + arguments[0] + " did not add it??");
             return true;
         }
-        player.sendMessage("§cYou have been warned for §e" + rule.toString().replace("_", " ").toLowerCase() + "§c with reason §e" + reason + "\n" +
-                "The warn will stay for " + timeInMS/1000 + " seconds.");
-        sender.sendMessage("§aSuccessfully warned §f" + arguments[0] + "§a for §f" + timeInMS/1000 + "§a seconds for §e" + arguments[2] + "§c ID: §f" + warn.hashCode() + "§a with reason §e" + reason);
+        player.sendMessage("§cYou have been muted for §e" + rule.toString().replace("_", " ").toLowerCase() + "§c with reason §e" + reason + "\n" +
+                "The mute will stay for " + timeInMS/1000 + " seconds.");
+        sender.sendMessage("§aSuccessfully muted §f" + arguments[0] + "§a for §f" + timeInMS/1000 + "§a seconds for §e" + arguments[2] + "§c ID: §f" + mute.hashCode() + "§a with reason §e" + reason);
         return true;
     }
 
-    public static boolean removeWarn(CommandSender sender, String[] arguments) {
+    public static boolean removeMute(CommandSender sender, String[] arguments) {
         Player player = Bukkit.getPlayerExact(arguments[1]);
         if (player == null) {
             sender.sendMessage("§cPlayer \"" + arguments[1] + "\" is not online or doesn't exist!");
@@ -134,21 +136,21 @@ public class WarnCommand {
             return true;
         }
 
-        ArrayList<Punishment> warnList = new ArrayList<>();
+        ArrayList<Punishment> muteList = new ArrayList<>();
         for (Punishment punishment : Punishments.getPunishment(player, ID))
-            if (punishment instanceof Warn warn)
-                warnList.add(warn);
-        Punishment punishment = PunishmentsCommand.getPunishmentFromSameHashCodeList(warnList, arguments, sender);
+            if (punishment instanceof Mute mute)
+                muteList.add(mute);
+        Punishment punishment = PunishmentsCommand.getPunishmentFromSameHashCodeList(muteList, arguments, sender);
 
         if (punishment == null)
             return true;
 
         Punishments.removePunishment(player, punishment);
         if (Punishments.getPunishments(player).contains(punishment)) {
-            sender.sendMessage("§cRemoving the warn failed! Removing the warn from " + arguments[1] + " did not remove it??");
+            sender.sendMessage("§cRemoving the mute failed! Removing the mute from " + arguments[1] + " did not remove it??");
             return true;
         }
-        sender.sendMessage("§aSuccessfully removed the warn from §f" + arguments[1]);
+        sender.sendMessage("§aSuccessfully removed the mute from §f" + arguments[1]);
         return true;
     }
 }

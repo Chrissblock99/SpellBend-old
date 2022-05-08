@@ -21,7 +21,6 @@ public class PluginMain extends JavaPlugin {
         ConfigurationSerialization.registerClass(Punishment.class);
         ConfigurationSerialization.registerClass(Warn.class);
         ConfigurationSerialization.registerClass(Mute.class);
-        ConfigurationSerialization.registerClass(Ban.class);
         ConfigurationSerialization.registerClass(HoldMsgs.class);
         saveDefaultConfig();
 
@@ -31,6 +30,12 @@ public class PluginMain extends JavaPlugin {
             SpellHandler.registerPlayer(player);
         }
 
+        //noinspection InstantiationOfUtilityClass
+        new BanCommand();
+        //noinspection InstantiationOfUtilityClass
+        new MuteCommand();
+        //noinspection InstantiationOfUtilityClass
+        new HoldMsgsCommand();
         //noinspection InstantiationOfUtilityClass
         new WarnCommand();
         //noinspection InstantiationOfUtilityClass

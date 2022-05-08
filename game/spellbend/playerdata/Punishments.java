@@ -4,7 +4,7 @@ import game.spellbend.data.Enums;
 import game.spellbend.data.PersistentDataKeys;
 import game.spellbend.moderation.*;
 import game.spellbend.util.TextUtil;
-import game.spellbend.util.TimeSpan;
+import game.spellbend.organize.TimeSpan;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -65,31 +65,6 @@ public class Punishments {
         }
     }
 
-    public static @NotNull String stringifyBan(@NotNull Ban ban) {
-        return ban.getStartDate().getTime() + "; " +
-                ban.getEndDate().getTime() + "; " +
-                ban.getRule() + "; " +
-                TextUtil.removeStrings(ban.getReason(), new String[]{", ", ": ", "; "});
-    }
-
-    public static @Nullable Ban parseBan(@NotNull String ban) {
-        String[] arguments = ban.split("; ");
-        if (arguments.length != 4) throw new IllegalStateException("Arguments length to construct Ban Object is not 4!");
-        try {
-            return new Ban(new TimeSpan(new Date(Long.parseLong(arguments[0])), new Date(Long.parseLong(arguments[1]))), Enums.Rule.valueOf(arguments[2]), arguments[3]);
-        } catch (NumberFormatException exception) {
-            Bukkit.getLogger().warning("\"" + arguments[0] + "\" is supposed to be a Long but isn't! or\n" +
-                    "\"" + arguments[0] + "is supposed to be a Long but isn't!");
-            exception.printStackTrace();
-            return null;
-        } catch (IllegalArgumentException exception) {
-            Bukkit.getLogger().warning("\"" + arguments[2] + "\" is supposed to be a Rule enum but isn't! or\n" +
-                    "\"" + arguments[0] + "; " + arguments[1] + "\" is not a valid TimeSpan because startDate is after endDate!");
-            exception.printStackTrace();
-            return null;
-        }
-    }
-
     public static @NotNull String stringifyHoldMsgs(@NotNull HoldMsgs holdMsgs) {
         return holdMsgs.getStartDate().getTime() + "; " +
                 holdMsgs.getEndDate().getTime() + "; " +
@@ -102,7 +77,11 @@ public class Punishments {
         String[] arguments = holdMsgs.split("; ");
         if (arguments.length != 5) throw new IllegalStateException("Arguments length to construct warn Object is not 5!");
         try {
-            return new HoldMsgs(new TimeSpan(new Date(Long.parseLong(arguments[0])), new Date(Long.parseLong(arguments[1]))), UUID.fromString(arguments[2]), Enums.Rule.valueOf(arguments[3]), arguments[4]);
+            if (arguments[2].equals("null"))
+                return new HoldMsgs(new TimeSpan(new Date(Long.parseLong(arguments[0])), new Date(Long.parseLong(arguments[1]))),
+                        null, Enums.Rule.valueOf(arguments[3]), arguments[4]);
+            return new HoldMsgs(new TimeSpan(new Date(Long.parseLong(arguments[0])), new Date(Long.parseLong(arguments[1]))),
+                    UUID.fromString(arguments[2]), Enums.Rule.valueOf(arguments[3]), arguments[4]);
         } catch (NumberFormatException exception) {
             Bukkit.getLogger().warning("\"" + arguments[0] + "\" is supposed to be a Long but isn't! or\n" +
                     "\"" + arguments[0] + "is supposed to be a Long but isn't!");
@@ -126,8 +105,6 @@ public class Punishments {
                 stringBuilder.append("Warn: ").append(stringifyWarn(warn));
             else if (punishment instanceof Mute mute)
                 stringBuilder.append("Mute: ").append(stringifyMute(mute));
-            else if (punishment instanceof Ban ban)
-                stringBuilder.append("Ban: ").append(stringifyBan(ban));
             else if (punishment instanceof HoldMsgs holdMsgs)
                 stringBuilder.append("HoldMsgs: ").append(stringifyHoldMsgs(holdMsgs));
             else {
@@ -151,7 +128,6 @@ public class Punishments {
             switch (parts[0]) {
                 case "Warn" -> parsedPunishmentsList.add(parseWarn(parts[1]));
                 case "Mute" -> parsedPunishmentsList.add(parseMute(parts[1]));
-                case "Ban" -> parsedPunishmentsList.add(parseBan(parts[1]));
                 case "HoldMsgs" -> parsedPunishmentsList.add(parseHoldMsgs(parts[1]));
                 default -> Bukkit.getLogger().warning("\"" + parts[1] + "\" is not a known Punishment!");
             }
@@ -194,6 +170,13 @@ public class Punishments {
         Bukkit.getLogger().info("§bAdded " + punishment + " to " + player.getDisplayName() + ".");
     }
 
+    public static ArrayList<Punishment> getPunishment(@NotNull Player player, int hashCode) {
+        //noinspection unchecked
+        ArrayList<Punishment> punishments = (ArrayList<Punishment>) getPunishments(player).clone(); //removing all run out Punishments and handling player not logged case
+        punishments.removeIf(punishment -> punishment.hashCode() != hashCode);
+        return punishments;
+    }
+
     public static ArrayList<Punishment> getPunishments(@NotNull Player player) {
         if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
@@ -210,18 +193,28 @@ public class Punishments {
         return punishments;
     }
 
+    @SuppressWarnings("rawtypes")
+    public static boolean playerHasPunishmentType(@NotNull Player player, @NotNull Class type) {
+        for (Punishment punishment : getPunishments(player))
+            if (type.isInstance(punishment))
+                return true;
+        return false;
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean hasPunishment(@NotNull Player player, @NotNull Punishment punishment) {
         return getPunishments(player).contains(punishment); //removing all run out Punishments and handling player not logged case
     }
 
     public static void removePunishment(@NotNull Player player, @NotNull Punishment punishment) {
-        Bukkit.getLogger().info("§bRemoving " + player.getDisplayName() + "'s punishment because method for that has been called!\n" + punishment);
-        if (PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
-            PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).remove(punishment);
+        if (!PersistentPlayerSessionStorage.punishments.containsKey(player.getUniqueId())) {
+            Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
+            loadPunishments(player);
         }
-        Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToPunishments map, now fixing!");
-        loadPunishments(player);
-        PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).remove(punishment);
+        Bukkit.getLogger().info("§bRemoving " + player.getDisplayName() + "'s punishment because the method for that has been called!\n" + punishment);
+        if (PersistentPlayerSessionStorage.punishments.get(player.getUniqueId()).remove(punishment))
+            Bukkit.getLogger().info("§bRemoved.");
+        else Bukkit.getLogger().warning("The Object was not contained in the players list!");
     }
 
     public static void clearPunishments(@NotNull Player player) {

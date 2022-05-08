@@ -1,6 +1,7 @@
 package game.spellbend.util;
 
 import game.spellbend.data.Enums;
+import game.spellbend.data.Lists;
 import game.spellbend.data.PersistentDataKeys;
 import game.spellbend.organize.BadgeObj;
 import game.spellbend.organize.ElementObj;
@@ -23,6 +24,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class DataUtil {
     /**
@@ -135,7 +139,7 @@ public class DataUtil {
      * @param invView The inventoryView
      * @param clickedInv The clicked inventory
      * @param clickType The clickType
-     * @return The items destination inventory
+     * @return The item's destination inventory
      */
     public static @Nullable Inventory getItemClickedDestination(@NotNull InventoryView invView, @NotNull Inventory clickedInv, @NotNull ClickType clickType) {
         if (clickType.equals(ClickType.SHIFT_LEFT) || clickType.equals(ClickType.SHIFT_RIGHT)) {
@@ -149,7 +153,7 @@ public class DataUtil {
         if (clickType.equals(ClickType.NUMBER_KEY) || clickType.equals(ClickType.SWAP_OFFHAND))
             return invView.getBottomInventory();
 
-        /*if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT))
+        /*noinspection CommentedOutCode if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT))
             return null;
 
         if (clickType.equals(ClickType.WINDOW_BORDER_LEFT) || clickType.equals(ClickType.WINDOW_BORDER_RIGHT))
@@ -178,13 +182,13 @@ public class DataUtil {
      *
      * @param clickedInv The clicked inventory
      * @param clickType The clickType
-     * @return The items destination inventory
+     * @return The item's destination inventory
      */
     public static @Nullable Inventory getItemOnCursorDestination(@NotNull Inventory clickedInv, @NotNull ClickType clickType) {
         if (clickType.equals(ClickType.LEFT) || clickType.equals(ClickType.RIGHT))
             return clickedInv;
 
-        /*if (clickType.equals(ClickType.SHIFT_LEFT) || clickType.equals(ClickType.SHIFT_RIGHT))
+        /*noinspection CommentedOutCode if (clickType.equals(ClickType.SHIFT_LEFT) || clickType.equals(ClickType.SHIFT_RIGHT))
             return null;
 
         if (clickType.equals(ClickType.NUMBER_KEY) || clickType.equals(ClickType.SWAP_OFFHAND))
@@ -247,7 +251,7 @@ public class DataUtil {
      * @param rankNeeded A possibly required Rank
      * @param badgeNeeded A possibly required Badge
      * @param rankingNeeded A possible required Ranking
-     * @return The no permission message or null if has permission
+     * @return The no permission message or null if sender has permission
      */
     public static @Nullable String senderHasPermission(@NotNull CommandSender sender, @Nullable RankObj rankNeeded, @Nullable BadgeObj badgeNeeded, int rankingNeeded) {
         if (sender instanceof Player player) {
@@ -277,5 +281,32 @@ public class DataUtil {
             return "§4Only Players or the Console can use this command/subCommand!";
         }
         return null;
+    }
+
+    /**
+     *
+     * @return All staff online (ranking higher or equal to helpers ranking)
+     */
+    public static ArrayList<Player> getOnlineStaff() {
+        ArrayList<Player> onlineStaff = new ArrayList<>();
+        int lowestStaffRanking = Lists.getRankByName("helper").ranking;
+        for (Player player : Bukkit.getOnlinePlayers())
+            if (PlayerDataUtil.getRanking(player) >= lowestStaffRanking)
+                onlineStaff.add(player);
+        onlineStaff.sort(Comparator.comparingInt(PlayerDataUtil::getRanking));
+        return onlineStaff;
+    }
+
+    /**
+     *
+     * @return All Staffs with moderating permissions (helper, mod, admin, owner)
+     */
+    public static ArrayList<Player> getOnlineModeratingPersons() {
+        ArrayList<Player> onlineStaff = getOnlineStaff();
+        onlineStaff.removeIf((player) -> {
+            ArrayList<String> ranks = Ranks.getRanks(player);
+            return !(ranks.contains("helper") || ranks.contains("mod") || ranks.contains("admin") || ranks.contains("owner"));
+        });
+        return onlineStaff;
     }
 }

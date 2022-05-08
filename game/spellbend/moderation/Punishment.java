@@ -1,6 +1,6 @@
 package game.spellbend.moderation;
 
-import game.spellbend.util.TimeSpan;
+import game.spellbend.organize.TimeSpan;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

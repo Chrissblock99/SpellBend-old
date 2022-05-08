@@ -1,4 +1,4 @@
-package game.spellbend.util;
+package game.spellbend.organize;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
