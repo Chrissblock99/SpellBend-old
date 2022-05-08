@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import game.spellbend.util.essentialscodecopy.DateUtil;
 
 import java.util.*;
 
@@ -60,7 +60,7 @@ public class HoldMsgsCommand {
             @Override
             public @NotNull String getUsage() {
                 return """
-                        /holdmsgs <player> <timeInSeconds> <rule> <reason>
+                        /holdmsgs <player> <time> <rule> <reason>
                         /holdmsgs list <player>
                         /holdmsgs confirm <player>
                         /holdmsgs remove <player> <ID> [index]""";
@@ -92,15 +92,11 @@ public class HoldMsgsCommand {
             return true;
         }
 
-        long timeInMS;
+        Date endDate;
         try {
-            timeInMS = Long.parseLong(arguments[1])*1000L;
-        } catch (NumberFormatException nfe) {
-            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Number!");
-            return true;
-        }
-        if (timeInMS <= 0) {
-            sender.sendMessage("§fTime " + arguments[1] + " cannot be negative or 0!");
+            endDate = new Date(DateUtil.parseDateDiff(arguments[1], true));
+        } catch (Exception e) {
+            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Time!");
             return true;
         }
 
@@ -124,15 +120,15 @@ public class HoldMsgsCommand {
         if (sender instanceof Player msgCheckerPlayer)
             msgChecker = msgCheckerPlayer.getUniqueId();
 
-        HoldMsgs holdMsgs = new HoldMsgs(new TimeSpan(new Date(), new Date(new Date().getTime() + timeInMS)), msgChecker, rule, reason);
+        HoldMsgs holdMsgs = new HoldMsgs(new TimeSpan(new Date(), endDate), msgChecker, rule, reason);
         Punishments.addPunishment(player, holdMsgs);
         if (!Punishments.hasPunishment(player, holdMsgs)) {
             sender.sendMessage("§cHoldMsg-ing failed! Adding the holdMsgs to " + arguments[0] + " did not add it??");
             return true;
         }
         player.sendMessage("§cYour messages will be put on control for §e" + rule.toString().replace("_", " ").toLowerCase() + "§c with reason §e" + reason + "\n" +
-                "The holdMsgs will stay for " + timeInMS/1000 + " seconds.");
-        sender.sendMessage("§aSuccessfully holdMsgs-ed §f" + arguments[0] + "§a for §f" + timeInMS/1000 + "§a seconds for §e" + arguments[2] + "§c ID: §f" + holdMsgs.hashCode() + "§a with reason §e" + reason);
+                "The holdMsgs will stay till " + endDate);
+        sender.sendMessage("§aSuccessfully holdMsgs-ed §f" + arguments[0] + "§a till §f" + endDate + "§a for §e" + arguments[2] + "§c ID: §f" + holdMsgs.hashCode() + "§a with reason §e" + reason);
         return true;
     }
 

@@ -2,11 +2,11 @@ package game.spellbend.commands;
 
 import game.spellbend.data.Enums;
 import game.spellbend.data.Lists;
-import game.spellbend.moderation.HoldMsgs;
 import game.spellbend.moderation.Mute;
 import game.spellbend.moderation.Punishment;
 import game.spellbend.organize.TimeSpan;
 import game.spellbend.playerdata.Punishments;
+import game.spellbend.util.essentialscodecopy.DateUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -49,7 +49,7 @@ public class MuteCommand {
             @Override
             public @NotNull String getUsage() {
                 return """
-                        /mute <player> <timeInSeconds> <rule> <reason>
+                        /mute <player> <time> <rule> <reason>
                         /mute list <player>
                         /mute remove <player> <ID> [index]""";
             }
@@ -80,15 +80,11 @@ public class MuteCommand {
             return true;
         }
 
-        long timeInMS;
+        Date endDate;
         try {
-            timeInMS = Long.parseLong(arguments[1])*1000L;
-        } catch (NumberFormatException nfe) {
-            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Number!");
-            return true;
-        }
-        if (timeInMS <= 0) {
-            sender.sendMessage("§fTime " + arguments[1] + " cannot be negative or 0!");
+            endDate = new Date(DateUtil.parseDateDiff(arguments[1], true));
+        } catch (Exception e) {
+            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Time!");
             return true;
         }
 
@@ -109,15 +105,15 @@ public class MuteCommand {
         String reason = String.join(" ", restArgs);
 
 
-        Mute mute = new Mute(new TimeSpan(new Date(), new Date(new Date().getTime() + timeInMS)), rule, reason);
+        Mute mute = new Mute(new TimeSpan(new Date(), endDate), rule, reason);
         Punishments.addPunishment(player, mute);
         if (!Punishments.hasPunishment(player, mute)) {
             sender.sendMessage("§cMuting failed! Adding the mute to " + arguments[0] + " did not add it??");
             return true;
         }
         player.sendMessage("§cYou have been muted for §e" + rule.toString().replace("_", " ").toLowerCase() + "§c with reason §e" + reason + "\n" +
-                "The mute will stay for " + timeInMS/1000 + " seconds.");
-        sender.sendMessage("§aSuccessfully muted §f" + arguments[0] + "§a for §f" + timeInMS/1000 + "§a seconds for §e" + arguments[2] + "§c ID: §f" + mute.hashCode() + "§a with reason §e" + reason);
+                "The mute will stay till " + endDate);
+        sender.sendMessage("§aSuccessfully muted §f" + arguments[0] + "§a till §f" + endDate + "§a for §e" + arguments[2] + "§c ID: §f" + mute.hashCode() + "§a with reason §e" + reason);
         return true;
     }
 

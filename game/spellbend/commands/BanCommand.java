@@ -2,6 +2,7 @@ package game.spellbend.commands;
 
 import game.spellbend.data.Enums;
 import game.spellbend.data.Lists;
+import game.spellbend.util.essentialscodecopy.DateUtil;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -45,7 +46,7 @@ public class BanCommand {
 
             @Override
             public @NotNull String getUsage() {
-                return "/ban <player> <timeInSeconds> <rule> <reason>\n" +
+                return "/ban <player> <time> <rule> <reason>\n" +
                         "/ban list <player>";
             }
         }.setRankingNeeded(Lists.getRankByName("helper").ranking);
@@ -66,15 +67,11 @@ public class BanCommand {
     public static boolean giveBan(CommandSender sender, String[] arguments) {
         String player = arguments[0];
 
-        long timeInMS;
+        Date endDate;
         try {
-            timeInMS = Long.parseLong(arguments[1])*1000L;
-        } catch (NumberFormatException nfe) {
-            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Number!");
-            return true;
-        }
-        if (timeInMS <= 0) {
-            sender.sendMessage("§fTime " + arguments[1] + " cannot be negative or 0!");
+            endDate = new Date(DateUtil.parseDateDiff(arguments[1], true));
+        } catch (Exception e) {
+            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Time!");
             return true;
         }
 
@@ -94,12 +91,11 @@ public class BanCommand {
         restArgs.remove(0);
         String reason = String.join(" ", restArgs);
 
-        Date endDate = new Date(new Date().getTime() + timeInMS);
         Bukkit.getBanList(BanList.Type.NAME).addBan(player, rule + " " + reason, endDate, sender.getName());
         Player playerToKick = Bukkit.getPlayerExact(player);
         if (playerToKick != null)
             playerToKick.kickPlayer("You have been banned for:\n" + rule + " " + reason + "\nYour ban will expire " + endDate);
-        sender.sendMessage("§aBanned §f" + player + "§a for §f" + timeInMS/1000 + "§a seconds for §e" + arguments[2] + "§a with reason §e" + reason);
+        sender.sendMessage("§aBanned §f" + player + "§a till §f" + endDate + "§a for §e" + arguments[2] + "§a with reason §e" + reason);
         return true;
     }
 

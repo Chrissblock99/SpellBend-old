@@ -5,6 +5,7 @@ import game.spellbend.data.Lists;
 import game.spellbend.moderation.*;
 import game.spellbend.playerdata.Punishments;
 import game.spellbend.organize.TimeSpan;
+import game.spellbend.util.essentialscodecopy.DateUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class WarnCommand {
             @Override
             public @NotNull String getUsage() {
                 return """
-                        /warn <player> <timeInSeconds> <rule> <reason>
+                        /warn <player> <time> <rule> <reason>
                         /warn list <player>
                         /warn remove <player> <ID> [index]""";
             }
@@ -78,15 +79,11 @@ public class WarnCommand {
             return true;
         }
 
-        long timeInMS;
+        Date endDate;
         try {
-            timeInMS = Long.parseLong(arguments[1])*1000L;
-        } catch (NumberFormatException nfe) {
-            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Number!");
-            return true;
-        }
-        if (timeInMS <= 0) {
-            sender.sendMessage("§fTime " + arguments[1] + " cannot be negative or 0!");
+            endDate = new Date(DateUtil.parseDateDiff(arguments[1], true));
+        } catch (Exception e) {
+            sender.sendMessage("§f\"" + arguments[1] + "\" is not a valid Time!");
             return true;
         }
 
@@ -107,15 +104,15 @@ public class WarnCommand {
         String reason = String.join(" ", restArgs);
 
 
-        Warn warn = new Warn(new TimeSpan(new Date(), new Date(new Date().getTime() + timeInMS)), rule, reason);
+        Warn warn = new Warn(new TimeSpan(new Date(), endDate), rule, reason);
         Punishments.addPunishment(player, warn);
         if (!Punishments.hasPunishment(player, warn)) {
             sender.sendMessage("§cWarning failed! Adding the warn to " + arguments[0] + " did not add it??");
             return true;
         }
         player.sendMessage("§cYou have been warned for §e" + rule.toString().replace("_", " ").toLowerCase() + "§c with reason §e" + reason + "\n" +
-                "The warn will stay for " + timeInMS/1000 + " seconds.");
-        sender.sendMessage("§aSuccessfully warned §f" + arguments[0] + "§a for §f" + timeInMS/1000 + "§a seconds for §e" + arguments[2] + "§c ID: §f" + warn.hashCode() + "§a with reason §e" + reason);
+                "The warn will stay till " + endDate);
+        sender.sendMessage("§aSuccessfully warned §f" + arguments[0] + "§a till §f" + endDate + "§a for §e" + arguments[2] + "§c ID: §f" + warn.hashCode() + "§a with reason §e" + reason);
         return true;
     }
 
