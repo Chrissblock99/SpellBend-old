@@ -53,7 +53,7 @@ public class PlayerDataUtil {
             e.printStackTrace();
         }
         try {
-            Health.loadHealth(player);
+            Health.registerPlayer(player);
         } catch (Exception e) {
             Bukkit.getLogger().warning("The loading of " + player.getDisplayName() + "'s Health generated an exception!");
             e.printStackTrace();
@@ -138,7 +138,7 @@ public class PlayerDataUtil {
             e.printStackTrace();
         }
         try {
-            Health.saveHealth(player);
+            Health.deRegisterPlayer(player);
         } catch (Exception e) {
             Bukkit.getLogger().warning("The saving of " + player.getDisplayName() + "'s Health generated an exception!");
             e.printStackTrace();

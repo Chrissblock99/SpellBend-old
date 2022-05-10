@@ -171,9 +171,10 @@ public class Punishments {
     }
 
     public static ArrayList<Punishment> getPunishment(@NotNull Player player, int hashCode) {
-        //noinspection unchecked
-        ArrayList<Punishment> punishments = (ArrayList<Punishment>) getPunishments(player).clone(); //removing all run out Punishments and handling player not logged case
-        punishments.removeIf(punishment -> punishment.hashCode() != hashCode);
+        ArrayList<Punishment> punishments = new ArrayList<>(1);
+        for ( Punishment punishment : getPunishments(player)) //removing all run out Punishments and handling player not logged case
+            if (punishment.hashCode() == hashCode)
+                punishments.add(punishment);
         return punishments;
     }
 

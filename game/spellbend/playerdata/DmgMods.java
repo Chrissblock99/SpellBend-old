@@ -35,13 +35,19 @@ public class DmgMods {
         }
     }
 
+    /**
+     *
+     * @param player The player to get DamageMods from
+     * @param modName The damageMod name "all" is possible
+     * @return The dmgMod
+     */
     public static float getDmgMod(@NotNull Player player, String modName) {
         if (!PersistentPlayerSessionStorage.dmgMods.containsKey(player.getUniqueId())) {
             Bukkit.getLogger().warning(player.getDisplayName() + " was not logged in UUIDToDmgMods map now fixing!");
             loadDmgMods(player);
         }
         Float[] dmgMods = PersistentPlayerSessionStorage.dmgMods.get(player.getUniqueId());
-        if (modName.equals("all")) {
+        if (modName.equalsIgnoreCase("all")) {
             float result = 1;
             for (float num : dmgMods) {
                 result *= num;
